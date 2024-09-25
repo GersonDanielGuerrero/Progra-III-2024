@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api',
+    'usuarios',
+    'menu',
+    'ventas',
+    'info',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +98,7 @@ REST_FRAMEWORK = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'api.Usuario'
+AUTH_USER_MODEL = 'usuarios.Usuario'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
