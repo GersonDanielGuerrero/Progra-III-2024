@@ -27,12 +27,17 @@ class Usuario(AbstractBaseUser):
     contraseña = models.CharField(max_length=50)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     
+    objects = UserManager()
+    
     USERNAME_FIELD = 'correo'
     PASSWORD_FIELD = 'contraseña'
     REQUIRED_FIELDS = ['nombre', 'apellido','contraseña']
     
     def __str__(self):
         return self.correo
+    
+    def get_by_natural_key(self, correo):
+        return self.get(correo=correo)
     
     class Meta:
         db_table = 'usuarios'

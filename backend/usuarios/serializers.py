@@ -20,7 +20,7 @@ class RegistroSerializer(serializers.ModelSerializer):
         return data
     def create(self, validated_data):
         
-        contraseña = validated_data.pop('contraseña')
+        contraseña = validated_data['contraseña']
         
         usuario = Usuario(correo = validated_data['correo'], nombre = validated_data['nombre'],
                         apellido = validated_data['apellido'], telefono = validated_data['telefono'])
