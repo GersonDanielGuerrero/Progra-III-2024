@@ -69,7 +69,6 @@ export default {
     },
     methods: {
         metodoClick() {
-            alert(this.icono)
             this.$emit('metodo_click')
         }
     },
