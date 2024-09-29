@@ -11,6 +11,9 @@
 </template>
 
 <style scoped>
+    * {
+        font-family: "Arial Black", Gadget, sans-serif;
+    }
     .btn-componente {
         margin: auto;
         background-color: #ffad00;
