@@ -1,15 +1,18 @@
 <template>
     <div>
         <button 
-        :id="btnRegister" 
-        class="btn-register"
-        @click="metodoClick">Registrar
-    <i class="icon" v-if="icon">{{ icon }}</i></button>
+        :id="id" 
+        class="btn-componente"
+        @click="metodoClick">
+        <slot class="contenido"/>
+        <img  :src="icono" v-if="icono" class="icon">
+        </button>
     </div>
 </template>
 
 <style scoped>
-    .btn-register {
+    .btn-componente {
+        margin: auto;
         background-color: #ffad00;
         color: #000;
         border: none;
@@ -18,15 +21,26 @@
         width: 200px;
         margin-top: 20px;
         border-radius: 5px;
+        display:grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        justify-items: center;
+        position: relative;
+    }
+    
+    .contenido {
+        grid-column: 1/2;
+        text-align: center;
     }
 
-    .btn-register i.icon {
-        margin-right: 10px;
-        color: #fff;
+    .icon {
+        color: #000;
+        width: 30px;
+        height: 30px;
+        grid-column: 2/3;
     }
-
-    .btn-register:hover {
-        opacity: 0.9;
+    .btn-componete:hover {
+        opacity: 0.7;
     }
 
 
@@ -44,10 +58,20 @@ export default {
         }
     },
     props: {
-        
+        id: {
+            type: String,
+            default: null,
+        },
+        icono: {
+            type: String,
+            default: null,
+        },
     },
     methods: {
-        
+        metodoClick() {
+            alert(this.icono)
+            this.$emit('metodo_click')
+        }
     },
     computed: {
         
