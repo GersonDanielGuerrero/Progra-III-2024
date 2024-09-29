@@ -2,17 +2,42 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 # Create your models here.
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+    
+    def create_user(self, correo, nombre, apellido, contraseña):
+        if not correo:
+            raise ValueError('El correo es obligatorio')
+        if not nombre:
+            raise ValueError('El nombre es obligatorio')
+        if not apellido:
+            raise ValueError('El apellido es obligatorio')
+        
+        usuario = self.model(correo=self.normalize_email(correo), nombre=nombre, apellido=apellido)
+        usuario.set_password(contraseña)
+        usuario.save(using=self._db)
+        return usuario
+        
 class Usuario(AbstractBaseUser):
-    correo = models.EmailField(max_length=200, unique=True)
+    username = None
+    correo = models.EmailField(max_length=200, unique=True, error_messages={'unique': 'Ya existe una cuenta registrada con este correo'})
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
-    telefono = models.CharField(max_length=9)
-    contraseña = models.CharField(max_length=128)
+    telefono = models.CharField(max_length=9, blank=True, null=True)
+    contraseña = models.CharField(max_length=50)
     fecha_registro = models.DateTimeField(auto_now_add=True)
+    
+    objects = UserManager()
     
     USERNAME_FIELD = 'correo'
     PASSWORD_FIELD = 'contraseña'
-    REQUIRED_FIELDS = ['nombre', 'apellido', 'telefono','contraseña']
+    REQUIRED_FIELDS = ['nombre', 'apellido','contraseña']
+    
+    def __str__(self):
+        return self.correo
+    
+    def get_by_natural_key(self, correo):
+        return self.get(correo=correo)
     
     class Meta:
         db_table = 'usuarios'
