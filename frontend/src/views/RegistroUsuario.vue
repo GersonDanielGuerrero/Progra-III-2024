@@ -5,38 +5,52 @@
         </div>
         <form class="register-form">
             <CajaTexto 
-            v-bind:placeholder="'Nombres'"
-            v-bind:icon-src="''">
-            </CajaTexto>
+            placeholder="Nombres"
+            type="text"
+            v-model="form.nombres"
+            />
 
             <CajaTexto
-            v-bind:placeholder="'Apellidos'"
-            v-bind:icon-src="''">
-                
-            </CajaTexto>
+            placeholder="Apellidos"
+            type="text"
+            v-model="form.apellidos"
+            />
 
             <CajaTexto
-            v-bind:placeholder="'Correo Electronico'"
-            v-bind:icon-src="''"
-            v-bind:is-half="true">
-            </CajaTexto>
+            placeholder="Telefono"
+            type="tel"
+            v-model="form.telefono"
+            />
 
             <CajaTexto
-            v-bind:placeholder="'Contraseña'"
-            v-bind:icon-src="''">
-            </CajaTexto>
+            placeholder="Correo Electronico"
+            type="email"
+            v-model="form.correo"
+            />
+
+            <CajaTexto
+            placeholder="Contraseña"
+            type="password"
+            v-model="form.contraseña"
+            />
 
             <CajaTexto 
-            v-bind:placeholder="'Confirmar Contraseña'"
-            v-bind:icon-src="''">
-            </CajaTexto>
+            placeholder="Confirmar Contraseña"
+            type="password"
+            v-model="form.confirmar_contraseña"
+            />
 
-            <BotonComp v-bind:label="'Registrar'" v-bind:icon-src="''"></BotonComp>
+            <BotonComp @metodo_click="Registrarse">Registrar</BotonComp>
         </form>
     </div>
 </template>
 
 <style scoped>
+.pagina{
+    background-color: #000;
+    padding: 0;
+}
+
 .container{
     text-align: center;
 }
