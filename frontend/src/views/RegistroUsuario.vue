@@ -1,13 +1,14 @@
-<template>
+<template class = "pagina">
     <div class="container">
         <div class="logo">
             <img src="../../public/imagenes/logo_color.png" alt="Good Burguer Logo" />
         </div>
         <form class="register-form">
             <CajaTexto 
-            v-bind:placeholder="'Nombres'"
-            v-bind:icon-src="''">
-            </CajaTexto>
+            placeholder="Nombres"
+            type="text"
+            v-model="form.nombres"
+            />
 
             <CajaTexto
             v-bind:placeholder="'Apellidos'"
@@ -37,7 +38,18 @@
 </template>
 
 <style scoped>
+.pagina{
+    background-color: #000;
+    padding : 0;
+}
 .container{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    flex-direction: column;
     text-align: center;
 }
 
@@ -61,16 +73,28 @@ import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 export default {
     name: 'RegistroUsuario',
+    components: {
+        BotonComp,
+        CajaTexto
+    },
     data() {
         return {
-            
+            form:{
+                nombres: '',
+                apellidos: '',
+                correo: '',
+                contrasena: '',
+                confirmarContrasena: ''
+            }
         }
     },
     props: {
         
     },
     methods: {
-        
+        clic(){
+            alert(this.form.nombres);
+        }
     },
     computed: {
         
