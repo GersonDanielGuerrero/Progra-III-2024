@@ -1,4 +1,4 @@
-<template>
+<template class = "pagina">
     <div class="container">
         <div class="logo">
             <img src="../../public/imagenes/logo_color.png" alt="Good Burguer Logo" />
@@ -52,6 +52,13 @@
 }
 
 .container{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    flex-direction: column;
     text-align: center;
 }
 
@@ -75,16 +82,28 @@ import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 export default {
     name: 'RegistroUsuario',
+    components: {
+        BotonComp,
+        CajaTexto
+    },
     data() {
         return {
-            
+            form:{
+                nombres: '',
+                apellidos: '',
+                correo: '',
+                contrasena: '',
+                confirmarContrasena: ''
+            }
         }
     },
     props: {
         
     },
     methods: {
-        
+        clic(){
+            alert(this.form.nombres);
+        }
     },
     computed: {
         
