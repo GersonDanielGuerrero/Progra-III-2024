@@ -17,6 +17,7 @@
             />
 
             <CajaTexto
+            class="mitad-ancho"
             placeholder="Telefono"
             type="tel"
             v-model="form.telefono"
@@ -51,6 +52,10 @@
     padding: 0;
 }
 
+.mitad-ancho{
+    width: 50%;
+}
+
 .container{
     margin: auto;
     display: flex;
@@ -68,7 +73,9 @@
 }
 
 .register-form{
-    width: 400px;
+    width: 50%;
+    min-width: 300px;
+    max-width: 800px;
     background-color: #000;
     padding: 20px;
     border-radius: 8px;
@@ -92,8 +99,8 @@ export default {
                 nombres: '',
                 apellidos: '',
                 correo: '',
-                contrasena: '',
-                confirmarContrasena: ''
+                contraseña: '',
+                confirmar_contraseña: ''
             }
         }
     },
@@ -101,8 +108,9 @@ export default {
         
     },
     methods: {
-        clic(){
-            alert(this.form.nombres);
+        Registrarse(){
+            //mostrar datos del formulario
+            alert(JSON.stringify(this.form));
         }
     },
     computed: {
