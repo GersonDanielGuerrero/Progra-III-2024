@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import Usuario, Direccion, Rol
+from .models import Usuario, UserManager, Direccion, Rol
 
 class RegistroSerializer(serializers.ModelSerializer):
     confirmar_contraseña = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    contraseña = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     class Meta:
         model = Usuario
         fields = ['correo','nombre', 'apellido', 'telefono', 'contraseña', 'confirmar_contraseña']
@@ -19,11 +20,13 @@ class RegistroSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'contraseña': 'Las contraseñas no coinciden'})
         return data
     def create(self, validated_data):
-        
-        contraseña = validated_data['contraseña']
-        
-        usuario = Usuario(correo = validated_data['correo'], nombre = validated_data['nombre'],
-                        apellido = validated_data['apellido'], telefono = validated_data['telefono'])
+        contraseña = validated_data.pop('contraseña')
+        usuario = Usuario(
+            correo=validated_data['correo'],
+            nombre=validated_data['nombre'],
+            apellido=validated_data['apellido'],
+            telefono=validated_data['telefono']
+        )
         usuario.set_password(contraseña)
         usuario.save()
         return usuario
