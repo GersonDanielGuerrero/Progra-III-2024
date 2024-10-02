@@ -7,13 +7,13 @@
             <CajaTexto 
             placeholder="Nombres"
             type="text"
-            v-model="form.nombres"
+            v-model="form.nombre"
             />
 
             <CajaTexto
             placeholder="Apellidos"
             type="text"
-            v-model="form.apellidos"
+            v-model="form.apellido"
             />
 
             <CajaTexto
@@ -41,7 +41,7 @@
             v-model="form.confirmar_contraseña"
             />
 
-            <BotonComp @metodo_click="Registrarse">Registrar</BotonComp>
+            <BotonComp @metodo_click="registrarUsuario">Registrar</BotonComp>
         </form>
     </div>
 </template>
