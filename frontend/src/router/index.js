@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Registro from "../views/RegistroUsuario.vue";
 import Login from "../views/LogIn.vue";
 import Principal from "../views/PaginaPrincipal.vue";
+import RegistroUsuario from "../views/RegistroUsuario.vue";
 
 const routes = [
     {
@@ -13,7 +13,7 @@ const routes = [
     {
         path: "/registro",
         name: "Registro",
-        component: Registro,
+        component: RegistroUsuario,
     },
     {
         path: "/login",
