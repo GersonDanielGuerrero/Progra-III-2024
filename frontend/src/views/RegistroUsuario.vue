@@ -1,32 +1,85 @@
-<template>
-    <div class="bodi">
-        <div class="midiv">
-            <CajaTexto v-model="form.nombre" placeholder="Nombres" type="text"/>
-            <CajaTexto v-model="form.apellido" placeholder="Apellidos" type="text" />
-            <CajaTexto v-model="form.telefono" placeholder="Teléfono" type="tel"/>
-            <CajaTexto v-model="form.correo" placeholder="Correo electrónico" type="email"/>
-            <CajaTexto v-model="form.contraseña" placeholder="Contraseña" type="password"/>
-            <CajaTexto v-model="form.confirmar_contraseña" placeholder="Confirmar contraseña" type="password"/>
-            <BotonComp @metodo_click="registrarUsuario">Registrarse</BotonComp>
+<template class = "pagina">
+    <div class="container">
+        <div class="logo">
+            <img src="../../public/imagenes/logo_color.png" alt="Good Burguer Logo" />
         </div>
+        <form class="register-form">
+            <CajaTexto 
+            placeholder="Nombres"
+            type="text"
+            v-model="form.nombres"
+            />
+
+            <CajaTexto
+            placeholder="Apellidos"
+            type="text"
+            v-model="form.apellidos"
+            />
+
+            <CajaTexto
+            class="mitad-ancho"
+            placeholder="Telefono"
+            type="tel"
+            v-model="form.telefono"
+            />
+
+            <CajaTexto
+            placeholder="Correo Electronico"
+            type="email"
+            v-model="form.correo"
+            />
+
+            <CajaTexto
+            placeholder="Contraseña"
+            type="password"
+            v-model="form.contraseña"
+            />
+
+            <CajaTexto 
+            placeholder="Confirmar Contraseña"
+            type="password"
+            v-model="form.confirmar_contraseña"
+            />
+
+            <BotonComp @metodo_click="Registrarse">Registrar</BotonComp>
+        </form>
     </div>
 </template>
 
 <style scoped>
-    
-    .bodi{
-        background-color: black;
-    }
-    .midiv{
-        width: 50%;
-        margin: 0 auto;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
+.pagina{
+    background-color: #000;
+    padding: 0;
+}
 
+.mitad-ancho{
+    width: 50%;
+}
+
+.container{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    flex-direction: column;
+    text-align: center;
+}
+
+.logo img{
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.register-form{
+    width: 50%;
+    min-width: 300px;
+    max-width: 800px;
+    background-color: #000;
+    padding: 20px;
+    border-radius: 8px;
+}
 </style>
 
 <!-- C U I D A D I T O -->
