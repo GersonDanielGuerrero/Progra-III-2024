@@ -20,8 +20,10 @@
             type="password"
             required
           />
-
+            <div class="form-header">
             <span>¿Olvidaste tu contraseña?</span>
+          </div>
+           
 
           
           <BotonComp @metodo_click="iniciar_sesion">Iniciar sesión</BotonComp>
@@ -82,7 +84,7 @@ form{
 }
 
 .form-wrapper h2{
-    color: #fff;
+    color: #ffffff;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -94,7 +96,7 @@ form{
 
 .form-wrapper :where(label, p, small, a){
     font-size: 0.92rem;
-    color: #fff;
+    color: #fcfcfc;
 }
 
 
@@ -111,7 +113,7 @@ form{
 .form-container {
     display: inline-flex;
     position: relative;
-    color: #fcfcfc;
+    color: #ffffff;
    
 }
 
@@ -137,35 +139,33 @@ form{
 .form-divider::after{
     content: "";
     flex: 1;
-    background-color: rgb(255, 249, 249);
+    background-color: rgb(254, 254, 254);
     margin: 0 1px;
 }
 
 .form-divider span{
     padding: 0 190px;
     font-size: 0.92rem;
-    color: rgb(255, 255, 255);
+    color: rgb(255, 253, 253);
 
 }
 
-.form-control{
-    display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 3px 0;
-  color: #ffb005;
+.form-header{
+  color: #0597ff;
+
 
 }
 
-.form-control span{
-    width: 1000px;
-    text-align: relative;
-    margin-right: -319px;
-    font-size: 0.92rem;
-}
 .caja-texto{
     width: 40vw;
     max-width: 600px;
+}
+img{
+    width: 200px;
+    margin-bottom: 40px;
+    margin: 40px 0;
+    
+
 }
 </style>
 
