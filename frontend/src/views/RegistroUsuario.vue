@@ -3,17 +3,19 @@
         <div class="logo">
             <img src="../../public/imagenes/logo_color.png" alt="Good Burguer Logo" />
         </div>
-        <form class="register-form">
+        <form class="register-form" @submit.prevent>
             <CajaTexto 
             placeholder="Nombres"
             type="text"
             v-model="form.nombre"
+            :invalido="this.errores.nombre"
             />
 
             <CajaTexto
             placeholder="Apellidos"
             type="text"
             v-model="form.apellido"
+            :invalido="this.errores.apellido"
             />
 
             <CajaTexto
@@ -21,26 +23,30 @@
             placeholder="Telefono"
             type="tel"
             v-model="form.telefono"
+            :invalido="this.errores.telefono"
             />
 
             <CajaTexto
             placeholder="Correo Electronico"
             type="email"
             v-model="form.correo"
+            :invalido="this.errores.correo"
             />
 
             <CajaTexto
             placeholder="Contraseña"
             type="password"
             v-model="form.contraseña"
+            :invalido="this.errores.contraseña"
             />
 
             <CajaTexto 
             placeholder="Confirmar Contraseña"
             type="password"
             v-model="form.confirmar_contraseña"
+            :invalido="this.errores.confirmar_contraseña"
             />
-
+          <p style="color: red;">{{ msgError }}</p>
             <BotonComp @metodo_click="registrarUsuario">Registrar</BotonComp>
         </form>
     </div>
@@ -114,26 +120,23 @@ export default {
       this.errores = {}; // Limpiar errores previos
       if (this.validarFormulario()) {
         try {
-          // Llama al método de la clase ApiService para registrar al usuario
           const response = await ApiService.registrarUsuario(this.form);
 
-          // Si la respuesta es 200, registra al usuario y obtiene el pinche token
-          if (response) {
+          if (!response.error) {
+            // Usuario registrado con éxito, ahora intentamos iniciar sesión
             const respuestaLogin = await ApiService.iniciarSesion({
               correo: this.form.correo,
               password: this.form.contraseña,
             });
 
-            // Si la respuesta del login es exitosa pues almacena el token
-            if (respuestaLogin) {
-              localStorage.setItem('token', respuestaLogin.token);
-              this.$router.push('/pagina-principal'); // Redirige a la página principal (según yo)
+            if (respuestaLogin.error) {
+              this.msgError = respuestaLogin.mensaje["correo"];
             }
           } else {
-            this.msgError = 'El correo ya está registrado o los datos no son válidos.';
+            this.msgError = response.mensaje.correo;
           }
         } catch (error) {
-          this.msgError = error.message; // Guarda el mensaje de error para mostrarlo digo yo
+          this.msgError = error.message; // Guarda el mensaje de error para mostrarlo
           console.error('Error en el registro o login:', error);
         }
       } else {
@@ -153,7 +156,7 @@ export default {
       ];
 
       camposRequeridos.forEach((campo) => {
-        if (this.form[campo].trim().length === 0) {
+        if (typeof this.form[campo] === 'string' && this.form[campo].trim().length === 0) {
           this.errores[campo] = `El campo "${this.capitalizarNombreCampo(campo)}" es obligatorio.`;
           esValido = false;
         }
@@ -161,11 +164,11 @@ export default {
 
       // Validaciones específicas
       if (this.form.nombre.length < 3 || this.form.nombre.length > 50) {
-        this.errores.nombre = "El nombre debe tener entre 3 y 50 caracteres.";
+        this.errores.nombres = "El nombre debe tener entre 3 y 50 caracteres.";
         esValido = false;
       }
       if (this.form.apellido.length < 3 || this.form.apellido.length > 50) {
-        this.errores.apellido = "El apellido debe tener entre 3 y 50 caracteres.";
+        this.errores.apellidos = "El apellido debe tener entre 3 y 50 caracteres.";
         esValido = false;
       }
       if (!this.validarTelefono(this.form.telefono)) {
