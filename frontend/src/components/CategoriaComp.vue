@@ -15,23 +15,23 @@ export default {
       categories: [
         {
           name: 'Burgers',
-          image: 'ruta/a/tu/imagen/burgers.png' 
+          image: 'ruta/a/la/imagen/burgers.png' 
         },
         {
           name: 'Snacks',
-          image: 'ruta/a/tu/imagen/snacks.png' 
+          image: 'ruta/a/la/imagen/snacks.png' 
         },
         {
           name: 'Bebidas',
-          image: 'ruta/a/tu/imagen/bebidas.png' 
+          image: 'ruta/a/la/imagen/bebidas.png' 
         },
         {
           name: 'Combos',
-          image: 'ruta/a/tu/imagen/combos.png' 
+          image: 'ruta/a/la/imagen/combos.png' 
         },
         {
           name: 'Promociones',
-          image: 'ruta/a/tu/imagen/promociones.png' 
+          image: 'ruta/a/la/imagen/promociones.png' 
         }
       ]
     };
