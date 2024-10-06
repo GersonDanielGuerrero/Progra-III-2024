@@ -9,6 +9,7 @@
             type="text"
             v-model="form.nombre"
             :invalido="this.errores.nombre"
+            :msg_error="this.errores.nombre"
             />
 
             <CajaTexto
@@ -16,6 +17,7 @@
             type="text"
             v-model="form.apellido"
             :invalido="this.errores.apellido"
+            :msg_error="this.errores.apellido"
             />
 
             <CajaTexto
@@ -24,6 +26,7 @@
             type="tel"
             v-model="form.telefono"
             :invalido="this.errores.telefono"
+            :msg_error="this.errores.telefono"
             />
 
             <CajaTexto
@@ -31,6 +34,7 @@
             type="email"
             v-model="form.correo"
             :invalido="this.errores.correo"
+            :msg_error="this.errores.correo"
             />
 
             <CajaTexto
@@ -38,6 +42,7 @@
             type="password"
             v-model="form.contraseña"
             :invalido="this.errores.contraseña"
+            :msg_error="this.errores.contraseña"
             />
 
             <CajaTexto 
@@ -45,6 +50,7 @@
             type="password"
             v-model="form.confirmar_contraseña"
             :invalido="this.errores.confirmar_contraseña"
+            :msg_error="this.errores.confirmar_contraseña"
             />
           <p style="color: red;">{{ msgError }}</p>
             <BotonComp @metodo_click="registrarUsuario">Registrar</BotonComp>

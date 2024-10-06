@@ -6,8 +6,8 @@
         @input="$emit('update:modelValue', $event.target.value)"
     />
     <img class="icono" :src="icono" v-if="icono">
-    <p class="msg-error" v-if="msg_error">{{msg_error}}</p>
-    </div>
+</div>
+<p class="msg-error" v-if="msg_error">{{msg_error}}</p>
 </template>
 
 <style scoped>
@@ -18,7 +18,7 @@
 .msg-error {
     color: red;
     margin: 10px;
-    padding-left: 5px;
+    margin-right: auto;
 }
 .input-group {
 position: relative;
