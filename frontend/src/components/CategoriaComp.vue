@@ -1,50 +1,28 @@
 <template>
-   <div class="menu-categories">
-    <div class="category" v-for="category in categories" :key="category.name">
-      <img :src="category.image" alt="category.name" class="category-image" />
-      <h3>{{ category.name }}</h3>
+    <div class="category">
+      <img :src="categoria.imagen" :alt="categoria.nombre" class="category-image" />
+      <h3>{{ categoria.nombre }}</h3>
     </div>
-  </div>
 </template>
 
-<style scoped>
 <script>
 export default {
+  name: 'CategoriaComp',
   data() {
     return {
-      categories: [
-        {
-          name: 'Burgers',
-          image: 'ruta/a/la/imagen/burgers.png' 
-        },
-        {
-          name: 'Snacks',
-          image: 'ruta/a/la/imagen/snacks.png' 
-        },
-        {
-          name: 'Bebidas',
-          image: 'ruta/a/la/imagen/bebidas.png' 
-        },
-        {
-          name: 'Combos',
-          image: 'ruta/a/la/imagen/combos.png' 
-        },
-        {
-          name: 'Promociones',
-          image: 'ruta/a/la/imagen/promociones.png' 
-        }
-      ]
+
     };
-  }
+  },
+  props: {
+    categoria: {
+      type: Object,
+      required: true
+    }
+  },
 };
 </script>
 
-<style>
-.menu-categories {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px;
-}
+<style scoped>
 
 .category {
   text-align: center;
@@ -55,26 +33,3 @@ export default {
   height: auto;
 }
 </style>
-
-
-<script>
-export default {
-    name: 'CategoriaComp',
-    data() {
-        return {
-            
-        }
-    },
-    props: {
-        
-    },
-    methods: {
-        
-    },
-    computed: {
-        
-    },
-
-}
-
-</script>
