@@ -35,7 +35,7 @@ export default {
 
 .category h3 {
   position: absolute;
-  top: 50%;
+  top: 55px;
   left: 50%;
   transform: translate(-50%, -299%);
 }
@@ -47,7 +47,7 @@ export default {
   border-radius: 500px;
   margin-bottom: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 20%;
+  width: 149px;
   height: auto;
 }
 </style>
