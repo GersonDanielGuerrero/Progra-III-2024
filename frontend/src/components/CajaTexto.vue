@@ -1,5 +1,5 @@
 <template>
-    <div class="input-group" :class="{invalido : invalido}">
+    <div class="input-group w-100" :class="{invalido : invalido}">
     <input 
         v-bind="$attrs"
         :value="modelValue"
@@ -22,8 +22,6 @@
 }
 .input-group {
 position: relative;
-margin-bottom: 15px;
-width: 100%;
 }
 
 .input-group input {
