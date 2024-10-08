@@ -59,6 +59,31 @@ class ApiService {
         return { error: true, mensaje: error.message };
       }
     }
+    async obtenerProductos(categoria, filtro = "") {
+      try {
+        const queryParams = filtro ? `?categoria=${categoria}&filtro=${filtro}` : `?categoria=${categoria}`;
+        const respuesta = await fetch(`${this.baseURL}/menu/productos/${queryParams}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        const datos = await respuesta.json();
+  
+        if (respuesta.status === 200) {
+          return { error: false, datos: datos };
+        }
+  
+        this.msgError = datos.mensaje;
+        return { error: true, mensaje: datos.mensaje };
+  
+      } catch (error) {
+        console.error("Error al obtener productos:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
+      }
+    }
   }
   
   // Exportar una instancia de la clase con la URL base
