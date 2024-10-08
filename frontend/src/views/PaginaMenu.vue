@@ -68,6 +68,8 @@
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 import ProductoComp from '@/components/ProductoComp.vue';
+import useAuthStore from '@/stores/auth'; 
+import ApiService from '@/services/ApiService'; 
 
 export default {
     name: 'PaginaMenu',
@@ -78,30 +80,44 @@ export default {
     },
     data() {
         return {
-            categoria: 'burgers',
-            productos:[
-            {
-            id:1,
-            nombre:"Cheeseburger",
-            tipo_descuento:"porcentaje",
-            descuento:0,
-            url_foto:"https://th.bing.com/th/id/OIP.JGigDSijh-lKRw6YaZQGVwHaDs?w=342&h=174&c=7&r=0&o=5&pid=1.7"
-            },
-            {
-            id:2,
-            nombre:"Doble carne",
-            tipo_descuento:"porcentaje",
-            descuento:0,
-            url_foto:"https://th.bing.com/th/id/OIP.IDr8Ipp1_QAlSbQIiw5YegHaHa?rs=1&pid=ImgDetMain"
-            },
-            ]
+            categoria: 'burgers', 
+            productos: [ 
+                {
+                    id: 1,
+                    nombre: "Cheeseburger",
+                    tipo_descuento: "porcentaje",
+                    descuento: 0,
+                    url_foto: "https://th.bing.com/th/id/OIP.JGigDSijh-lKRw6YaZQGVwHaDs?w=342&h=174&c=7&r=0&o=5&pid=1.7"
+                },
+                {
+                    id: 2,
+                    nombre: "Doble carne",
+                    tipo_descuento: "porcentaje",
+                    descuento: 0,
+                    url_foto: "https://th.bing.com/th/id/OIP.IDr8Ipp1_QAlSbQIiw5YegHaHa?rs=1&pid=ImgDetMain"
+                },
+            ],
+            authStore: useAuthStore(), // Inicializa el store de autenticación
+            usuario: this.authStore.usuario, // Obtiene el usuario actual del store
+            filtro: '', // Inicializa el filtro vacio
         }
     },
     props: {
         
     },
+    mounted() {
+        // Llama al metodo para obtener productos sin filtro al montar el componente
+        this.obtenerProductos(this.categoria, this.filtro);
+    },
     methods: {
-        
+        async obtenerProductos(categoria, filtro) {
+            const { error, datos, mensaje } = await ApiService.obtenerProductos(categoria, filtro);
+            if (!error) {
+                this.productos = datos; // Asigna la lista de productos
+            } else {
+                console.error(mensaje); // Manejo de eerores basico para mostrar un mensaje en la consola en caso de que la solicitud falle
+            }
+        },
     },
     computed: {
         
