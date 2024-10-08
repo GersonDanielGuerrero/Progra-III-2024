@@ -63,3 +63,25 @@ class ApiService {
   
   // Exportar una instancia de la clase con la URL base
   export default new ApiService("http://127.0.0.1:8000");
+
+
+  class ApiService {
+    async obtenerCategorias() {
+     
+      return [
+        { id: 0, nombre: "Electrónica", url_foto: "electronica.jpg" },
+        { id: 1, nombre: "Ropa", url_foto: "ropa.jpg" },
+      ];
+    }
+  
+    async obtenerAnuncios() {
+     
+      return [
+        { id: 0, url_foto: "anuncio1.jpg", url_redireccion: "http://127.0.0.1:8000" },
+        { id: 1, url_foto: "anuncio2.jpg", url_redireccion: "http://127.0.0.1:8000" },
+      ];
+    }
+  }
+ 
+
+
