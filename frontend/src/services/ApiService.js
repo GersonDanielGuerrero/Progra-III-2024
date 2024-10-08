@@ -62,7 +62,7 @@ class ApiService {
     async obtenerProductos(categoria, filtro = "") {
       try {
         const queryParams = filtro ? `?categoria=${categoria}&filtro=${filtro}` : `?categoria=${categoria}`;
-        const respuesta = await fetch(`${this.baseURL}/menu/productos${queryParams}`, {
+        const respuesta = await fetch(`${this.baseURL}/menu/productos/${queryParams}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

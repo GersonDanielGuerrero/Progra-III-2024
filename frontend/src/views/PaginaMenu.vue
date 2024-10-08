@@ -1,7 +1,6 @@
 <template>
     <div class ="container-fluid ">
         <div class="barra-menu row">
-
         </div>
         <div class="buscador row ">
             <button class="btn-regresar col-1" >
@@ -12,7 +11,7 @@
             <div class="col-4">
             <CajaTexto placeholder="Filtrar" type="text" v-model="filtro"/>
             </div>
-            <BotonComp  class="col-1">Filtro</BotonComp>
+            <BotonComp @metodo_click="obtenerProductos(this.categoria,this.filtro)"  class="col-1">Filtro</BotonComp>
             
         </div>
         <div class ="lista-productos row">
@@ -68,7 +67,7 @@
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 import ProductoComp from '@/components/ProductoComp.vue';
-import useAuthStore from '@/stores/auth'; 
+import {useAuthStore} from '@/stores/auth'; 
 import ApiService from '@/services/ApiService'; 
 
 export default {
@@ -78,9 +77,16 @@ export default {
         BotonComp,
         CajaTexto,
     },
+    setup() {
+    const authStore = useAuthStore(); // Llama a la función para obtener la instancia de la tienda
+    authStore.cargarDatos(); // Asegúrate de que cargarDatos se llame dentro del setup
+    return {
+      authStore
+    };
+  },
     data() {
         return {
-            categoria: 'burgers', 
+            categoria: 'bebidas', 
             productos: [ 
                 {
                     id: 1,
@@ -97,7 +103,6 @@ export default {
                     url_foto: "https://th.bing.com/th/id/OIP.IDr8Ipp1_QAlSbQIiw5YegHaHa?rs=1&pid=ImgDetMain"
                 },
             ],
-            authStore: useAuthStore(), // Inicializa el store de autenticación
             usuario: this.authStore.usuario, // Obtiene el usuario actual del store
             filtro: '', // Inicializa el filtro vacio
         }
@@ -115,7 +120,7 @@ export default {
             if (!error) {
                 this.productos = datos; // Asigna la lista de productos
             } else {
-                console.error(mensaje); // Manejo de eerores basico para mostrar un mensaje en la consola en caso de que la solicitud falle
+                alert(mensaje); // Manejo de eerores basico para mostrar un mensaje en la consola en caso de que la solicitud falle
             }
         },
     },

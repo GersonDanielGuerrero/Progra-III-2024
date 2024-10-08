@@ -19,8 +19,8 @@ class ListaProductosView(APIView):
         
         productos = Producto.objects.all()
         if categoria:
-            productos = Producto.objects.filter(categoria__nombre=categoria)
+            productos = productos.filter(categoria__nombre=categoria)
         if filtro:
-            productos = Producto.objects.filter(nombre__icontains=filtro)
+            productos = productos.filter(nombre__icontains=filtro)
         serializer = ProductoListaSerializer(productos, many=True)
         return Response(serializer.data)
