@@ -33,7 +33,11 @@ class Combo_Producto(models.Model):
         verbose_name_plural = 'Combos_Productos'
     
 class Descuento(models.Model):
-    tipo = enum.Enum('porcentaje', 'fijo')
+    TIPO_CHOICES = [
+        ('porcentaje', 'Porcentaje'),
+        ('fijo', 'Fijo'),
+    ]
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='porcentaje')
     valor = models.DecimalField(max_digits=5, decimal_places=2)
     inicio = models.DateTimeField()
     fin = models.DateTimeField()
