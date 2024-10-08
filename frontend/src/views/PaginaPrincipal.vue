@@ -2,6 +2,13 @@
     <div>
       <BarraMenu/>
     </div>
+    <div>
+        
+    </div>
+
+    
+
+
 </template>
  
 <style scoped>
@@ -18,6 +25,7 @@ export default {
     name: 'PaginaPrincipal',
     components: {
         BarraMenu
+        
     },
     data() {
         return {
