@@ -83,5 +83,29 @@ class ApiService {
     }
   }
  
+  const categorias = [
+    { id: 1, nombre: '' },
+    { id: 2, nombre: '' },
+    { id: 3, nombre: '' },
+    { id: 4, nombre: '' }
+];
+export async function obtenerCategorias() {
+    try {
+       
+        return categorias;
+    } catch (error) {
+        console.error('Error al obtener las categorías:', error);
+        throw error;
+    }
+}
+
+
+obtenerCategorias()
+    .then(data => {
+        console.log("Categorías disponibles:", data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
 
 
