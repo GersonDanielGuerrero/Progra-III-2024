@@ -1,82 +1,84 @@
 <template>
-    <div>
-        <nav class="barra-menu">
-    <div class="logo">
-      <span class="good">GOOD</span>
-      <span class="burger">BURGER</span>
+   <header class="header">
+    <div class="img">
+      <img src="imagenes/image.png" alt="image" />
     </div>
-    <ul class="menu">
-      <li><a href="#">Inicio</a></li>
-      <li><a href="#">Nosotros</a></li>
-      <li><a href="#">Redes</a></li>
-      <li><a href="#">Atención al Cliente</a></li>
-    </ul>
-    <div class="acciones">
-      <a href="#" class="iniciar-sesion">Iniciar Sesión</a>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Redes</a></li>
+        <li><a href="#">Atención al Cliente</a></li>
+      </ul>
+    </nav>
+    <div class="user-actions">
+      <button class="search-btn">🔍</button>
+      <button class="cart-btn">🛒</button>
+      <button class="login-btn">Iniciar Sesión</button>
     </div>
-  </nav>
-    </div>
+  </header>
 </template>
+
 <style scoped>
-.barra-menu {
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #ffffff;
+}
+
+/* Header */
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000; 
   padding: 10px 20px;
+  background-color: #000;
+  border-bottom: 2px solid #fdfdfd46;
 }
 
-.logo {
-  color: #ffad00; 
-  font-size: 24px;
+.img img {
+  width: 120px; /* Ajusta el tamaño de la imagen */
+  margin-right: 1px;
+  height: auto;
+  border-radius: 10px;
 }
 
-.good {
-  font-weight: bold;
-}
-
-.burger {
-  font-weight: normal;
-}
-
-.menu {
+nav ul {
   list-style: none;
   display: flex;
   gap: 20px;
 }
 
-.menu li a {
-  color: #fff; 
+nav ul li a {
   text-decoration: none;
-  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
 }
 
-.menu li a:hover {
-  color: #ffad00;
+.user-actions {
+  display: flex;
+  gap: 10px;
 }
 
-.acciones {
-  margin-left: auto;
+.login-btn {
+  background-color: #f6a901;
+  color: #000;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-.iniciar-sesion {
-  color: #ffad00; 
-  text-decoration: none;
-  background-color: #fff;
-  padding: 10px 15px;
-  border-radius: 5px;
-}
-
-.iniciar-sesion:hover {
-  background-color: #ffad00; 
-  color: #000; 
+.cart-btn,
+.search-btn {
+  background-color: #000000;
+  color: #000;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 </style>
 
-
-<script>
-export default {
-    name: 'BarraMenu',
-}
-</script>
