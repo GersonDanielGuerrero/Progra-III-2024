@@ -207,25 +207,14 @@ export default {
           this.datos_validos = true;
           // Aquí podrías redirigir al usuario a otra página
           this.$router.push('/');
-        } else {
-          // Si la respuesta no es válida, se muestran los errores
-          this.datos_validos = false;
-          const errorData = await response.json();
-
-          if (errorData.error === 'Correo incorrecto') {
-            this.email_error = true;
-            this.mensaje_error = 'El correo no es válido.';
-          } else if (errorData.error === 'Contraseña incorrecta') {
-            this.password_error = true;
-            this.mensaje_error = 'La contraseña es incorrecta.';
-          } else {
-            this.mensaje_error = 'El correo o la contraseña no son válidos.';
-          }
+        } else if (response.status === 401) {
+          alert('Correo o contraseña incorrectos');
         }
       } catch (error) {
         // Manejo de error de red u otro tipo de fallo
         this.mensaje_error = 'Hubo un problema al conectar con el servidor.';
         this.datos_validos = false;
+        alert(this.mensaje_error);
       }
     },
     registrarse() {
