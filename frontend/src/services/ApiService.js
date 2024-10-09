@@ -13,7 +13,7 @@ class ApiService {
     }
 
     // Método para insertar productos, categorías o anuncios
-    async insertarEntidad(entidad, datosEntidad, imagen = null) {
+    async insertarEntidad(entidad, datosEntidad) {
         const token = this.obtenerToken();
         try {
             const formData = new FormData();
@@ -21,11 +21,6 @@ class ApiService {
             // Añadir los datos de la entidad al FormData
             for (const clave in datosEntidad) {
                 formData.append(clave, datosEntidad[clave]);
-            }
-
-            // Si hay una imagen, añadirla al FormData
-            if (imagen) {
-                formData.append('imagen', imagen); // 'imagen' es el nombre del campo que espera el backend
             }
 
             const respuesta = await fetch(`${this.baseURL}/${entidad}/`, {
@@ -53,7 +48,7 @@ class ApiService {
     }
 
     // Método para actualizar productos, categorías o anuncios
-    async actualizarEntidad(entidad, idEntidad, datosEntidad, imagen = null) {
+    async actualizarEntidad(entidad, idEntidad, datosEntidad) {
         const token = this.obtenerToken();
         try {
             const formData = new FormData();
@@ -61,11 +56,6 @@ class ApiService {
             // Añadir los datos de la entidad al FormData
             for (const clave in datosEntidad) {
                 formData.append(clave, datosEntidad[clave]);
-            }
-
-            // Si hay una imagen, añadirla al FormData
-            if (imagen) {
-                formData.append('imagen', imagen); // 'imagen' es el nombre del campo que espera el backend
             }
 
             const respuesta = await fetch(`${this.baseURL}/${entidad}/${idEntidad}/`, {
@@ -158,7 +148,10 @@ class ApiService {
 
             if (respuesta.ok) {
                 // Guardar el token y redirigir
-                localStorage.setItem('token', datos.token);
+                const authStore = useAuthStore();
+                const usuario = datos.usuario;
+                authStore.setToken(datos.token);
+                authStore.setUsuario(usuario);
                 window.location.href = '/pagina-principal'; // Redirigir a la página principal
                 return { error: false, datos: datos };
             }
