@@ -1,22 +1,27 @@
 <template>
-    <div class="input-group">
+    <div class="input-group w-100" :class="{invalido : invalido}">
     <input 
         v-bind="$attrs"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     />
     <img class="icono" :src="icono" v-if="icono">
-    </div>
+</div>
+<p class="msg-error" v-if="msg_error">{{msg_error}}</p>
 </template>
 
 <style scoped>
 *{
     font-family: "Arial Black", Gadget, sans-serif;
 }
+
+.msg-error {
+    color: red;
+    margin: 10px;
+    margin-right: auto;
+}
 .input-group {
 position: relative;
-margin-bottom: 15px;
-width: 100%;
 }
 
 .input-group input {
@@ -42,6 +47,10 @@ top: 50%;
 transform: translateY(-50%);
 color: #ffad00;
 }
+.invalido {
+    border: 3px solid red;
+    border-radius: 10px;
+}
 
 </style>
 
@@ -61,6 +70,14 @@ export default {
         },
         icono: {
             type: String,
+            Required: false
+        },
+        msg_error: {
+            type: String,
+            Required: false
+        },
+        invalido: {
+            type: Boolean,
             Required: false
         }
     },

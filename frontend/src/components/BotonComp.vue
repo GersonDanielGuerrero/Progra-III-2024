@@ -15,14 +15,13 @@
         font-family: "Arial Black", Gadget, sans-serif;
     }
     .btn-componente {
-        margin: auto;
+        margin: auto 0;
         background-color: #ffad00;
         color: #000;
         border: none;
         padding: 10px;
         cursor: pointer;
-        width: 200px;
-        margin-top: 20px;
+        width: 100%;
         border-radius: 5px;
         display:grid;
         grid-template-columns: 1fr auto;
