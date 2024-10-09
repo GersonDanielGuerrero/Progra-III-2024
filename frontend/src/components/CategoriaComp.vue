@@ -1,7 +1,7 @@
 <template>
     <div class="category">
-      <img :src="categoria.imagen" :alt="categoria.nombre" class="category-image" />
       <h3>{{ categoria.nombre }}</h3>
+      <img :src="categoria.imagen" :alt="categoria.nombre" class="category-image" />
     </div>
 </template>
 
@@ -24,30 +24,23 @@ export default {
 </script>
 
 <style scoped>
-
-.category {
-  position: relative;
-  border-radius: 10px;
-  text-align: center;
+*{
+  font-family: 'Arial Black';
   color: white;
-  
+  font-size: 20px;
 }
-
-.category h3 {
-  position: absolute;
-  top: 55px;
-  left: 50%;
-  transform: translate(-50%, -299%);
-}
-
-.category-image {
-  width: 50px; 
-  height: 50px;
-  object-fit: cover;   
-  border-radius: 500px;
-  margin-bottom: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 149px;
-  height: auto;
-}
+  .category{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff4;
+  }
+  .category-image{
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+  }
 </style>

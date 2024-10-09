@@ -1,80 +1,40 @@
 <template>
-    <div class = "container">
+    <div class = "container-fluid">
         <div class = "row">
             <BarraMenu />
         </div>
         <div class = "row">
-
         </div>
         <div class = "row lista-categorias">
-            <div class = "col-2" v-for="categoria in categorias" :key="categoria.id"
+            <div class = "col-3" v-for="categoria in categorias" :key="categoria.id"
             @click="abrirMenu(categoria.nombre)"
             >
-                <CategoriaComp :categoria="categoria"/>
+                <CategoriaComp class="categoria" :categoria="categoria"/>
             </div>
         </div>
+    </div>
+    <div class = "footer">
+      <p>
+        Esto de aquí sería el footer, pero no se nos proporcionó la informacion necesaria
+      </p>
     </div>
 </template>
  
 <style scoped>
-/* Estilos de menú */
-.menu {
-  padding: 20px;
-  text-align: center;
+.lista-categorias .categoria{
+  margin:10px;
 }
-
-.menu-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  position: relative;
+.container-fluid{
+  height: 100vh;
 }
-
-.menu-title h2 {
-  font-size: 23px;
-  color: #fff;
-  margin: 0 20px;
+.footer{
+  height: 20vh;
+  background-color: #fff2;
+  padding: 100px;
 }
-
-.menu-title .line {
-  height: 2px;
-  background-color: #ffae00;
-  flex: 1;
+.footer p{
+  color: white;
 }
-
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-}
-
-.menu-item {
-  background-color: #2f2e2e;
-  padding: 20px;
-  text-align: center;
-  border-radius: 10px;
-}
-
-.menu-item img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  margin-bottom: 10px;
-}
-
-.menu-item p {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-img {
-  max-width: 150px;
-  max-height: 290px;
-  object-fit: cover;
-}
-
 </style>
 
 <!-- C U I D A D I T O -->

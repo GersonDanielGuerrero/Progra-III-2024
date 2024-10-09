@@ -100,6 +100,9 @@
 
 <script>
 export default {
-    
+    name: 'CarruselComp',
+    data (){
+        
+    }
 }
 </script>
