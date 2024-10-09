@@ -182,22 +182,10 @@ export default {
     },
     data(){
     return{
-    correo: '',            // V-model para el correo
-    password: '',        // V-model para la contraseña
-    datos_validos: true,   // Controla si los datos son válidos o no
-    mensaje_error: '',     // Mensaje de error a mostrar
-    email_error: false,    // Controla si el campo de correo es incorrecto
-    password_error: false  // Controla si el campo de contraseña es incorrecto
   }
 },
   methods: {
     async iniciar_sesion() {
-      // Restablecer errores
-      this.datos_validos = true;
-      this.email_error = false;
-      this.password_error = false;
-      this.mensaje_error = '';
-
       try {
         const response = await fetch('http://127.0.0.1:8000//usuarios/login/', {
           method: 'POST',
@@ -236,6 +224,10 @@ export default {
         this.mensaje_error = 'Hubo un problema al conectar con el servidor.';
         this.datos_validos = false;
       }
+    },
+    registrarse() {
+      //Redireccionar a la página de RegistroUsuario
+      this.$router.push('/registro');
     }
   },
     props: {
