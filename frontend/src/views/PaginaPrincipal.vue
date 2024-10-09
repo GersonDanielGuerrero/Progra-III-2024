@@ -1,5 +1,6 @@
 <template>
     <div>
+
       <BarraMenu/>
     </div>
 
@@ -107,6 +108,7 @@ img {
   <script>
   import ApiService from '@/services/ApiService'; 
 import BarraMenu from '@/components/BarraMenu.vue';
+import CategoriaComp from "@/components/CategoriaComp.vue";
   
   export default {
     data() {
@@ -116,7 +118,8 @@ import BarraMenu from '@/components/BarraMenu.vue';
       };
     },
     components: {
-      BarraMenu
+      BarraMenu,
+      CategoriaComp,
     },
     methods: {
       async cargarDatos() {
