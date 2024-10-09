@@ -113,111 +113,109 @@ export default {
         BotonComp
     },
     data() {
-    return {
-      form: {
-        nombre: "",
-        apellido: "",
-        telefono: "",
-        correo: "",
-        contraseña: "",
-        confirmar_contraseña: "",
-      },
-      errores: {},
-      msgError: '',
-    };
-  },
-  methods: {
-    async registrarUsuario() {
-      this.errores = {}; // Limpiar errores previos
-      if (this.validarFormulario()) {
-        try {
-          const response = await ApiService.registrarUsuario(this.form);
+        return {
+            form: {
+                nombre: "",
+                apellido: "",
+                telefono: "",
+                correo: "",
+                contraseña: "",
+                confirmar_contraseña: "",
+            },
+            errores: {},
+            msgError: '',
+        };
+    },
+    methods: {
+        async registrarUsuario() {
+            this.errores = {}; // Limpiar errores previos
+            if (this.validarFormulario()) {
+                try {
+                    const response = await ApiService.registrarUsuario(this.form);
 
-          if (!response.error) {
-            // Usuario registrado con éxito, ahora intentamos iniciar sesión
-            const respuestaLogin = await ApiService.iniciarSesion({
-              correo: this.form.correo,
-              password: this.form.contraseña,
+                    if (!response.error) {
+                        // Usuario registrado con éxito, ahora intentamos iniciar sesión
+                        const respuestaLogin = await ApiService.iniciarSesion({
+                            correo: this.form.correo,
+                            password: this.form.contraseña,
+                        });
+
+                        if (respuestaLogin.error) {
+                            this.msgError = respuestaLogin.mensaje; 
+                        }
+                    } else {
+                        this.msgError = response.mensaje;
+                    }
+                } catch (error) {
+                    this.msgError = error.message; 
+                    console.error('Error en el registro o login:', error);
+                }
+            } else {
+                alert(Object.values(this.errores).join('\n'));
+            }
+        },
+
+        validarFormulario() {
+            let esValido = true;
+            const camposRequeridos = [
+                "nombre",
+                "apellido",
+                "telefono",
+                "correo",
+                "contraseña",
+                "confirmar_contraseña",
+            ];
+
+            camposRequeridos.forEach((campo) => {
+                if (typeof this.form[campo] === 'string' && this.form[campo].trim().length === 0) {
+                    this.errores[campo] = `El campo "${this.capitalizarNombreCampo(campo)}" es obligatorio.`;
+                    esValido = false;
+                }
             });
 
-            if (respuestaLogin.error) {
-              this.msgError = respuestaLogin.mensaje["correo"];
+            // Validaciones específicas
+            if (this.form.nombre.length < 3 || this.form.nombre.length > 50) {
+                this.errores.nombres = "El nombre debe tener entre 3 y 50 caracteres.";
+                esValido = false;
             }
-          } else {
-            this.msgError = response.mensaje.correo;
-          }
-        } catch (error) {
-          this.msgError = error.message; // Guarda el mensaje de error para mostrarlo
-          console.error('Error en el registro o login:', error);
-        }
-      } else {
-        alert(Object.values(this.errores).join('\n'));
-      }
-    },
+            if (this.form.apellido.length < 3 || this.form.apellido.length > 50) {
+                this.errores.apellidos = "El apellido debe tener entre 3 y 50 caracteres.";
+                esValido = false;
+            }
+            if (!this.validarTelefono(this.form.telefono)) {
+                this.errores.telefono = "El teléfono debe tener el formato 0000-0000.";
+                esValido = false;
+            }
+            if (!this.validarCorreo(this.form.correo)) {
+                this.errores.correo = "El correo electrónico no es válido.";
+                esValido = false;
+            }
+            if (!this.validarContraseña(this.form.contraseña)) {
+                this.errores.contraseña = "La contraseña debe tener entre 6 y 50 caracteres, con al menos una mayúscula, una minúscula y un número.";
+                esValido = false;
+            }
+            if (this.form.contraseña !== this.form.confirmar_contraseña) {
+                this.errores.confirmar_contraseña = "Las contraseñas no coinciden.";
+                esValido = false;
+            }
 
-    validarFormulario() {
-      let esValido = true;
-      const camposRequeridos = [
-        "nombre",
-        "apellido",
-        "telefono",
-        "correo",
-        "contraseña",
-        "confirmar_contraseña",
-      ];
-
-      camposRequeridos.forEach((campo) => {
-        if (typeof this.form[campo] === 'string' && this.form[campo].trim().length === 0) {
-          this.errores[campo] = `El campo "${this.capitalizarNombreCampo(campo)}" es obligatorio.`;
-          esValido = false;
-        }
-      });
-
-      // Validaciones específicas
-      if (this.form.nombre.length < 3 || this.form.nombre.length > 50) {
-        this.errores.nombres = "El nombre debe tener entre 3 y 50 caracteres.";
-        esValido = false;
-      }
-      if (this.form.apellido.length < 3 || this.form.apellido.length > 50) {
-        this.errores.apellidos = "El apellido debe tener entre 3 y 50 caracteres.";
-        esValido = false;
-      }
-      if (!this.validarTelefono(this.form.telefono)) {
-        this.errores.telefono = "El teléfono debe tener el formato 0000-0000.";
-        esValido = false;
-      }
-      if (!this.validarCorreo(this.form.correo)) {
-        this.errores.correo = "El correo electrónico no es válido.";
-        esValido = false;
-      }
-      if (!this.validarContraseña(this.form.contraseña)) {
-        this.errores.contraseña = "La contraseña debe tener entre 6 y 50 caracteres, con al menos una mayúscula, una minúscula y un número.";
-        esValido = false;
-      }
-      if (this.form.contraseña !== this.form.confirmar_contraseña) {
-        this.errores.confirmar_contraseña = "Las contraseñas no coinciden.";
-        esValido = false;
-      }
-
-      return esValido;
+            return esValido;
+        },
+        capitalizarNombreCampo(nombreCampo) {
+            return nombreCampo.charAt(0).toUpperCase() + nombreCampo.slice(1);
+        },
+        validarCorreo(correo) {
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(correo);
+        },
+        validarTelefono(telefono) {
+            const re = /^\d{4}-\d{4}$/;
+            return re.test(telefono);
+        },
+        validarContraseña(contraseña) {
+            const re = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{6,50}$/;
+            return re.test(contraseña);
+        },
     },
-    capitalizarNombreCampo(nombreCampo) {
-      return nombreCampo.charAt(0).toUpperCase() + nombreCampo.slice(1);
-    },
-    validarCorreo(correo) {
-      const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      return re.test(correo);
-    },
-    validarTelefono(telefono) {
-      const re = /^\d{4}-\d{4}$/;
-      return re.test(telefono);
-    },
-    validarContraseña(contraseña) {
-      const re = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{6,50}$/;
-      return re.test(contraseña);
-    },
-  },
 };
-
-
 </script>

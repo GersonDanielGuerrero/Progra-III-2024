@@ -81,9 +81,9 @@ export default {
     const authStore = useAuthStore(); // Llama a la función para obtener la instancia de la tienda
     authStore.cargarDatos(); // Asegúrate de que cargarDatos se llame dentro del setup
     return {
-      authStore
+    authStore
     };
-  },
+},
     data() {
         return {
             categoria: 'bebidas', 

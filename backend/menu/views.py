@@ -12,6 +12,19 @@ class CategoriaView(APIView):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        usuario = request.user
+        if usuario.roles.filter(nombre='Administrador').exists():
+            serializer = CategoriaSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+            
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'mensaje': 'No tienes permisos para realizar esta acción'})
 class ListaProductosView(APIView):
     def get(self, request):
         categoria = request.query_params.get('categoria')
