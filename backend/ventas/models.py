@@ -37,6 +37,7 @@ class Carrito_Producto_Extra(models.Model):
         verbose_name_plural = 'Carritos_Productos_Extras'
     
 class Venta(models.Model):
+    
     fecha = models.DateTimeField(auto_now_add=True)
     metodo_pago = enum.Enum('tarjeta', 'efectivo')
     tipo_entrega = enum.Enum('domicilio', 'local')

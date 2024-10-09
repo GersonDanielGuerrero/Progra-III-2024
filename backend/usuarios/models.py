@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 class UserManager(BaseUserManager):
     use_in_migrations = True
     
-    def create_user(self, correo, nombre, apellido, contraseña):
+    def create_user(self, correo, nombre, apellido, telefono, password = None):
         if not correo:
             raise ValueError('El correo es obligatorio')
         if not nombre:
@@ -13,8 +13,11 @@ class UserManager(BaseUserManager):
         if not apellido:
             raise ValueError('El apellido es obligatorio')
         
-        usuario = self.model(correo=self.normalize_email(correo), nombre=nombre, apellido=apellido)
-        usuario.set_password(contraseña)
+        usuario = self.model(correo=self.normalize_email(correo),
+                            nombre=nombre, apellido=apellido, 
+                            telefono=telefono)
+        if password:
+            usuario.set_password(password)
         usuario.save(using=self._db)
         return usuario
         
@@ -24,14 +27,13 @@ class Usuario(AbstractBaseUser):
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     telefono = models.CharField(max_length=9, blank=True, null=True)
-    contraseña = models.CharField(max_length=50)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     
     objects = UserManager()
     
     USERNAME_FIELD = 'correo'
-    PASSWORD_FIELD = 'contraseña'
-    REQUIRED_FIELDS = ['nombre', 'apellido','contraseña']
+    PASSWORD_FIELD = 'password'
+    REQUIRED_FIELDS = ['nombre', 'apellido']
     
     def __str__(self):
         return self.correo
