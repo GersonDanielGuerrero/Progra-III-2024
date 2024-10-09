@@ -64,11 +64,13 @@ form{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 20px;
 }
 
 
 .form-wrapper{
     margin: auto;
+    margin-top: 40px;
     position: absolute;
     left: 50%;
     top: 56%;
@@ -204,6 +206,7 @@ export default {
           localStorage.setItem('token', data.token);
           this.datos_validos = true;
           // Aquí podrías redirigir al usuario a otra página
+          this.$router.push('/');
         } else {
           // Si la respuesta no es válida, se muestran los errores
           this.datos_validos = false;
