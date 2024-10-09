@@ -194,3 +194,4 @@ class ApiService {
 
 // Exportar una instancia de la clase con la URL base
 export default new ApiService("http://127.0.0.1:8000");
+

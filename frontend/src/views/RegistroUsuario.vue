@@ -91,6 +91,11 @@
     background-color: #000;
     padding: 20px;
     border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
 }
 </style>
 
