@@ -11,7 +11,7 @@ class Pregunta_Frecuente(models.Model):
     
 class Anuncio(models.Model):
     url_foto = models.URLField(max_length=256)
-    url_redireccion = models.URLField(max_length=256)
+    url_redireccion = models.ImageField(upload_to='anuncios/')
     
     class Meta:
         db_table = 'anuncios'
