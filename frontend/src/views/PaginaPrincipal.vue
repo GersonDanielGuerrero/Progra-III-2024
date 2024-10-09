@@ -1,44 +1,18 @@
 <template>
-    <div>
-
-      <BarraMenu/>
-    </div>
-
-    <div>
-        <section class="menu">
-        <div class="menu-title">
-            <div class="line"></div>
-             <h2>MENU</h2>
-            <div class="line"></div>
+    <div class = "container">
+        <div class = "row">
+            <BarraMenu />
         </div>
-        <div class="menu-grid">
-            <div class="menu-item">
-                <p>Burgers</p>
-                <img src="img/image1.png" alt="Burgers">
-               
-            </div>
-            <div class="menu-item">
-                <p>Snacks</p>
-                <img src="img/image2.png" alt="Snacks">
-                
-            </div>
-            <div class="menu-item">
-                <p>Bebidas</p>
-                <img src="img/image3.png" alt="Bebidas">
-               
-            </div>
-            <div class="menu-item">
-                <p>Combos</p>
-                <img src="img/image4.png" alt="Combos">
-               
-            </div>
-            <div class="menu-item">
-                <p>Promociones</p>
-                <img src="img/image5.png" alt="Promociones">
-                
+        <div class = "row">
+
+        </div>
+        <div class = "row lista-categorias">
+            <div class = "col-2" v-for="categoria in categorias" :key="categoria.id"
+            @click="abrirMenu(categoria.nombre)"
+            >
+                <CategoriaComp :categoria="categoria"/>
             </div>
         </div>
-    </section>
     </div>
 </template>
  
@@ -113,7 +87,32 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
   export default {
     data() {
       return {
-        categorias: [], 
+        categorias: [{
+            id: 1,
+            nombre: 'burgers',
+            imagen: 'https://th.bing.com/th/id/R.c691ed37c9ce3040c3ebd2892e88870c?rik=QUBcFflN%2b9oqPQ&pid=ImgRaw&r=0'
+        },
+        {
+            id: 2,
+            nombre: 'snacks',
+            imagen: 'img/image2.png'
+        },
+        {
+            id: 3,
+            nombre: 'bebidas',
+            imagen: 'img/image3.png'
+        },
+        {
+            id: 4,
+            nombre: 'combos',
+            imagen: 'img/image4.png'
+        },
+        {
+            id: 5,
+            nombre: 'promociones',
+            imagen: 'img/image5.png'
+        }
+    ], 
         anuncio: []  
       };
     },
@@ -135,7 +134,10 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
         } catch (error) {
           console.error('Error al cargar los datos:', error);
         }
-      }
+      },
+        abrirMenu(categoria) {
+            this.$router.push({ name: 'PaginaMenu', query: { categoria } });
+        }
     },
     mounted() {
       this.cargarDatos();

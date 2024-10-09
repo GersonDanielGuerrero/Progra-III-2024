@@ -86,7 +86,7 @@ export default {
 },
     data() {
         return {
-            categoria: 'bebidas', 
+            categoria:'', 
             productos: [ 
                 {
                     id: 1,
@@ -107,6 +107,14 @@ export default {
             filtro: '', // Inicializa el filtro vacio
         }
     },
+    created() {
+    this.categoria = this.$route.params.categoria || 'burgers'
+},
+watch: {
+    '$route.query'(newQuery){
+        this.categoria = newQuery.categoria || 'burgers'
+    }
+},
     props: {
         
     },
