@@ -103,62 +103,10 @@ img {
 </style>
 
 <!-- C U I D A D I T O -->
-
-<script>
-import BarraMenu from '@/components/BarraMenu.vue';
-
-
-export default {
-    name: 'PaginaPrincipal',
-    components: {
-        BarraMenu
-        
-    },
-    data() {
-        return {
-            
-        }
-    },
-    props: {
-        
-    },
-    methods: {
-        
-    },
-    computed: {
-        
-    },
-
-}
-</script>
-
-<template>
-    <div>
-      <h1>Página Principal</h1>
-      <div v-if="categorias.length">
-        <h2>Categorías:</h2>
-        <ul>
-          <li v-for="categoria in categorias" :key="categoria.id">
-            {{ categoria.nombre }} - <img :src="categoria.url_foto" :alt="categoria.nombre" />
-          </li>
-        </ul>
-      </div>
-  
-      <div v-if="anuncio.length">
-        <h2>Anuncios:</h2>
-        <ul>
-          <li v-for="item in anuncio" :key="item.id">
-            <a :href="item.url_redireccion">
-              <img :src="item.url_foto" :alt="'Anuncio ' + item.id" />
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </template>
-  
+    
   <script>
-  import ApiService from '@/apiservice.js'; 
+  import ApiService from '@/services/ApiService'; 
+import BarraMenu from '@/components/BarraMenu.vue';
   
   export default {
     data() {
@@ -166,6 +114,9 @@ export default {
         categorias: [], 
         anuncio: []  
       };
+    },
+    components: {
+      BarraMenu
     },
     methods: {
       async cargarDatos() {
@@ -188,7 +139,4 @@ export default {
     }
   };
   </script>
-  
-  <style scoped>
-  </style>
   
