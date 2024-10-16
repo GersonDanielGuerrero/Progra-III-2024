@@ -72,8 +72,7 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
             nombre: 'promociones',
             imagen: 'img/image5.png'
         }
-    ], 
-        anuncio: []  
+    ],  
       };
     },
     components: {
@@ -84,19 +83,14 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
       async cargarDatos() {
         try {
 
-          const categoriasData = await ApiService.obtenerCategorias();
-          const anunciosData = await ApiService.obtenerAnuncios();
-  
-
-          this.categorias = categoriasData;
-          this.anuncio = anunciosData;
-  
+          let respuesta = await ApiService.obtenerCategorias();
+          this.categorias = respuesta.datos;
         } catch (error) {
           console.error('Error al cargar los datos:', error);
         }
       },
-        abrirMenu(categoria) {
-            this.$router.push({ name: 'PaginaMenu', query: { categoria } });
+        abrirMenu(categ) {
+          window.location.href = '/menu?categoria=' + categ;
         }
     },
     mounted() {

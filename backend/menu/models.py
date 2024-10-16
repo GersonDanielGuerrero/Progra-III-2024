@@ -4,7 +4,7 @@ import datetime
 # Create your models here.
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
-    url_foto = models.ImageField(upload_to='categorias/')
+    url_foto = models.CharField(max_length=256)
     
     class Meta:
         db_table = 'categorias'
@@ -37,7 +37,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=5, decimal_places=2)
-    url_foto = models.ImageField(upload_to='productos/')
+    url_foto = models.CharField(max_length=256)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='productos')
     descuento = models.ForeignKey(Descuento, on_delete=models.SET_NULL, related_name='productos', null=True, blank=True)
     class Meta:

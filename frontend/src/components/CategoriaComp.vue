@@ -1,7 +1,7 @@
 <template>
     <div class="category">
       <h3>{{ categoria.nombre }}</h3>
-      <img :src="categoria.imagen" :alt="categoria.nombre" class="category-image" />
+      <img :src="categoria.url_foto" :alt="categoria.nombre" class="category-image" />
     </div>
 </template>
 

@@ -13,7 +13,7 @@
     <div class="user-actions">
       <button class="search-btn">🔍</button>
       <button class="cart-btn">🛒</button>
-      <button class="login-btn">Iniciar Sesión</button>
+      <button @click="enviarLogin" class="login-btn">Iniciar Sesión</button>
     </div>
   </header>
 </template>
@@ -81,4 +81,15 @@ nav ul li a {
 }
 
 </style>
+
+<script>
+export default {
+  name: 'BarraMenu',
+  methods: {
+    enviarLogin() {
+      this.$router.push('/login');
+    }
+  }
+}
+</script>
 

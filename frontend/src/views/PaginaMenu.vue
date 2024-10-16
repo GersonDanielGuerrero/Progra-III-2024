@@ -108,7 +108,7 @@ export default {
         }
     },
     created() {
-    this.categoria = this.$route.params.categoria || 'burgers'
+    this.categoria = this.$route.query.categoria || 'burgers'
 },
 watch: {
     '$route.query'(newQuery){
