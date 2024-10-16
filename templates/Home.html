@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4e4caf;
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 50%;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #4f4caf;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #4b45a0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4c57af;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Lista de Usuarios</h2>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre">
+        <button onclick="buscarUsuario()">Buscar</button>
+    </div>
+
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Nombre Completo</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se cargarán dinámicamente los usuarios -->
+        </tbody>
+    </table>
+
+    <script>
+
+        const usuarios = [
+            { usuario: 'jdoe', nombre: 'John Doe', telefono: '123456789' },
+            { usuario: 'marias', nombre: 'Maria Smith', telefono: '987654321' },
+            { usuario: 'lgarcia', nombre: 'Luis Garcia', telefono: '456789123' }
+        ];
+
+        // Función para cargar usuarios en la tabla
+        function cargarUsuarios(usuariosFiltrados) {
+            const tbody = document.getElementById('usersTable').querySelector('tbody');
+            tbody.innerHTML = ''; // Limpiar la tabla antes de cargar
+
+            usuariosFiltrados.forEach(usuario => {
+                const row = `<tr>
+                    <td>${usuario.usuario}</td>
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.telefono}</td>
+                    <td>
+                        <button onclick="editarUsuario('${usuario.usuario}')">Editar</button>
+                        <button onclick="eliminarUsuario('${usuario.usuario}')">Eliminar</button>
+                    </td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        window.onload = function() {
+            cargarUsuarios(usuarios);
+        };
+
+        function buscarUsuario() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const usuariosFiltrados = usuarios.filter(usuario => 
+                usuario.nombre.toLowerCase().includes(searchValue)
+            );
+            cargarUsuarios(usuariosFiltrados);
+        }
+
+        // Función para editar usuario (ejemplo, implementar lógica de edición)
+        function editarUsuario(usuario) {
+            alert(Editar usuario: ${usuario});
+        }
+
+        // Función para eliminar usuario (ejemplo, implementar lógica de eliminación)
+        function eliminarUsuario(usuario) {
+            alert(Eliminar usuario: ${usuario});
+        }
+    </script>
+</body>
+</html>
