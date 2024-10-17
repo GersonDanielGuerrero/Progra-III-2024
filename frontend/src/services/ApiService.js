@@ -192,7 +192,7 @@ class ApiService {
     }
     async obtenerCategorias(){
         try {
-            const respuesta = await fetch(`${this.baseURL}/menu/productos/`, {
+            const respuesta = await fetch(`${this.baseURL}/menu/categorias/`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

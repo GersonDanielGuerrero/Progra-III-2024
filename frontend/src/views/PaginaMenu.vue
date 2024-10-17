@@ -1,6 +1,7 @@
 <template>
     <div class ="container-fluid ">
         <div class="barra-menu row">
+            <BarraMenu/>
         </div>
         <div class="buscador row ">
             <button class="btn-regresar col-1" >
@@ -38,11 +39,7 @@
     padding:0;
     width: 100%;
 }
-.barra-menu{
-    background-color: coral;
-    height: 50px;
-    width: 100%;
-}
+
 .btn-regresar{
     background-color: #ffad00;
     height: 45px; 
@@ -66,9 +63,10 @@
 <script>
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
+import BarraMenu from '@/components/BarraMenu.vue';
 import ProductoComp from '@/components/ProductoComp.vue';
 import {useAuthStore} from '@/stores/auth'; 
-import ApiService from '@/services/ApiService'; 
+import ApiService from '@/services/ApiService';
 
 export default {
     name: 'PaginaMenu',
@@ -76,6 +74,7 @@ export default {
         ProductoComp,
         BotonComp,
         CajaTexto,
+        BarraMenu,
     },
     setup() {
     const authStore = useAuthStore(); // Llama a la función para obtener la instancia de la tienda
@@ -116,7 +115,10 @@ watch: {
     }
 },
     props: {
-        
+        usuario: {
+            type: Object,
+            required: true
+        }
     },
     mounted() {
         // Llama al metodo para obtener productos sin filtro al montar el componente

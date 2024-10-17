@@ -16,3 +16,16 @@ npm install
 `
 npm run serve
 `
+
+### Backend
+
+`
+venv/Scripts/Activate
+`
+
+`
+cd backend
+`
+`
+pip install requirements.txt
+`

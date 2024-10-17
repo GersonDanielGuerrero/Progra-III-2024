@@ -21,7 +21,7 @@
 </template>
  
 <style scoped>
-.lista-categorias .categoria{
+.categoria{
   margin:10px;
 }
 .container-fluid{
