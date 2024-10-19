@@ -114,12 +114,6 @@ watch: {
         this.categoria = newQuery.categoria || 'burgers'
     }
 },
-    props: {
-        usuario: {
-            type: Object,
-            required: true
-        }
-    },
     mounted() {
         // Llama al metodo para obtener productos sin filtro al montar el componente
         this.obtenerProductos(this.categoria, this.filtro);
