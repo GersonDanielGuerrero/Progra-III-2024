@@ -102,7 +102,28 @@
 export default {
     name: 'CarruselComp',
     data (){
-        
+        anuncios: [
+            {
+                id: 1,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Burger_cheesebacon.jpeg",
+                url_redireccion: "/menu?categoria=Burgers"
+            },
+            {
+                id: 2,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Limonada_fresa.jpeg",
+                url_redireccion: "/menu?categoria=Bebidas"
+            },
+            {
+                id: 3,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Combo_estudiante.jpeg",
+                url_redireccion: "/menu?categoria=Combos"
+            },
+            {
+                id: 4,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Nachos.jpeg",
+                url_redireccion: "/menu?categoria=Snacks"
+            }
+        ]
     }
 }
 </script>
