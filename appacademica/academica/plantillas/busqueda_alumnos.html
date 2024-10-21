@@ -1,0 +1,83 @@
+<form id="frmBusquedaAlumno">
+    <div class="card text-bg-dark mb-3">
+        <div class="card-header">
+            <div class="d-flex">
+                Consulta de Alumnos
+                <div class="ms-auto">
+                    <button type="button" data-form="busqueda_alumnos" class="btn-close btn-close-white" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class = "container">
+            <div class="row">
+                <input type="text" class="form-control col-6 " id="txtBusquedaAlumno" name="txtBusquedaAlumno" placeholder="Buscar alumno" @submit.prevent>
+                <select class="form-select col-3" id="selBusquedaAlumno" name="selBusquedaAlumno">
+                    <option value="codigo">Codigo</option>
+                    <option value="nombre">Nombre</option>
+                </select>
+                <button type="button" class="btn btn-outline-success col-3" id="btnBuscarAlumno">Buscar</button>
+            </div>
+        </div>
+            <table class="table table-hover" id="tblAlumnos">
+                <thead>
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>NOMBRE</th>
+                        <th>DIRECCION</th>
+                        <th>TEL</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</form>
+<script>
+    /*
+    Tarea: Realizar la busqueda interactiva de alumnos, por codigo, nombre y email.
+    */
+    document.querySelector('#btnBuscarAlumno').addEventListener('click', ()=>{
+        let campo = document.querySelector('#selBusquedaAlumno').value;
+        let valor = document.querySelector('#txtBusquedaAlumno').value;
+        consultarAlumnos(campo, valor);
+    });
+    function eliminarAlumno(idAlumno){
+        if(confirm("¿Desea eliminar este registro?")){
+            let datos = {
+                accion : "eliminar",
+                idAlumno,
+            };
+            enviarDatosAlumno(datos);
+        }
+    }
+    function consultarAlumnos(campo, valor){
+        fetch('consultar_alumnos/?'+campo+'='+valor)
+        .then(res => res.json())
+        .then(data => {
+            mostrarFilasAlumnos(data);
+        })
+        .catch(err => console.log(err));
+    }
+    function mostrarFilasAlumnos(data = []){
+        let filas = '';
+        data.forEach(alumno => {
+            filas += `
+                <tr onClick='modificarAlumno(${JSON.stringify(alumno)})'>
+                    <td>${alumno.codigo}</td>
+                    <td>${alumno.nombre}</td>
+                    <td>${alumno.direccion}</td>
+                    <td>${alumno.telefono}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger" 
+                            onClick='eliminarAlumno(${alumno.id})'>DEL
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        document.querySelector('#tblAlumnos > tbody').innerHTML = filas;
+    }
+    consultarAlumnos();
+</script>
