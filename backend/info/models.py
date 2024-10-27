@@ -10,7 +10,7 @@ class Pregunta_Frecuente(models.Model):
         verbose_name_plural = 'Preguntas_Frecuentes'
     
 class Anuncio(models.Model):
-    url_foto = models.URLField(max_length=256)
+    imagen = models.URLField(max_length=256)
     url_redireccion = models.ImageField(upload_to='anuncios/')
     
     class Meta:
