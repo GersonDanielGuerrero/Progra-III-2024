@@ -67,6 +67,7 @@
             email : txtEmailDocente.value
         };
         enviarDatosDocente(datos);
+        alertify.success('Docente guardado correctamente');
     });
     function enviarDatosDocente(datos){
         fetch('guardar_docente/',{

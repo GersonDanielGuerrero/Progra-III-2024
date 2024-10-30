@@ -45,14 +45,18 @@
         consultarMaterias(campo, valor);
     });
     function eliminarMateria(idMateria){
-        if(confirm("¿Desea eliminar este registro?")){
+        alertify.confirm('Eliminar Docente', '¿Está seguro de eliminar este docente?', function(){
             let datos = {
                 accion : "eliminar",
                 idMateria,
             };
+            alertify.success('Docente eliminado');
+            }, function(){
+            alertify.error('Cancelado');
             enviarDatosMateria(datos);
         }
-    }
+        );
+        }
     function consultarMaterias(campo, valor){
         fetch('consultar_materias/?'+campo+'='+valor)
         .then(res => res.json())

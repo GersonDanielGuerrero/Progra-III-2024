@@ -75,12 +75,12 @@
         consultarDocentes(campo, valor);
     });
     function eliminarDocente(idDocente){
-        alertify.confirm('Eliminar Alumno', '¿Está seguro de eliminar este alumno?', function(){
+        alertify.confirm('Eliminar Docente', '¿Está seguro de eliminar este docente?', function(){
             let datos = {
                 accion : "eliminar",
                 idDocente,
             };
-            alertify.success('Alumno eliminado');
+            alertify.success('Docente eliminado');
             }, function(){
             alertify.error('Cancelado');
             enviarDatosDocente(datos);

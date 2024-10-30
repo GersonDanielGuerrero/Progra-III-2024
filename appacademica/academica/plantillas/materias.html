@@ -53,6 +53,7 @@
             uv : txtUvMateria.value
         };
         enviarDatosMateria(datos);
+        alertify.success('Materia guardada correctamente');
     });
     function enviarDatosMateria(datos){
         fetch('guardar_materia/',{
