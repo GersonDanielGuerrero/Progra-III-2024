@@ -30,7 +30,7 @@
             <div class="row p-1">
                 <div class="col-3 col-md-2">TELEFONO </div>
                 <div class="col-9 col-md-4">
-                    <input type="text" class="form-control" id="txtTelefonoAlumno" name="txtTelefonoAlumno" required>
+                    <input type="text" class="form-control" id="txtTelefonoAlumno" name="txtTelefonoAlumno" required pattern="\d{4}-\d{4}" title="formato invalido">
                 </div>
             </div>
             <div class="row p-1">
@@ -48,6 +48,7 @@
     </div>
 </form>
 <script>
+
     document.querySelector('#frmAlumno').addEventListener('submit', (e)=>{
         e.preventDefault();
         
@@ -59,7 +60,11 @@
             direccion : txtDireccionAlumno.value,
             telefono : txtTelefonoAlumno.value
         };
+        
         enviarDatosAlumno(datos);
+        
+        alertify.success('Alumno guardado correctamente');
+
     });
     function enviarDatosAlumno(datos){
         fetch('guardar_alumno/',{

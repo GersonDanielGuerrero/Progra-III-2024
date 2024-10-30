@@ -11,7 +11,12 @@
         <div class="card-body">
             <div class = "container">
             <div class="row">
-                <input type="text" class="form-control col-6 " id="txtBusquedaAlumno" name="txtBusquedaAlumno" placeholder="Buscar alumno" @submit.prevent>
+                <input type="text" list="listaAlumnos" id="txtBusquedaAlumno" name="a" placeholder="Buscar alumno">
+                <datalist id="listaAlumnos">
+                    <option value="opcion 1"/>
+                    <option value="opcion 2"/>
+                    <option value="opcion 3"/>
+                </datalist>
                 <select class="form-select col-3" id="selBusquedaAlumno" name="selBusquedaAlumno">
                     <option value="codigo">Codigo</option>
                     <option value="nombre">Nombre</option>
@@ -38,28 +43,61 @@
     /*
     Tarea: Realizar la busqueda interactiva de alumnos, por codigo, nombre y email.
     */
+    let alumnos = [];
     document.querySelector('#btnBuscarAlumno').addEventListener('click', ()=>{
         let campo = document.querySelector('#selBusquedaAlumno').value;
         let valor = document.querySelector('#txtBusquedaAlumno').value;
         consultarAlumnos(campo, valor);
     });
+    document.getElementById('selBusquedaAlumno').addEventListener('change', function(){
+        let campo = this.value;
+        let alumnosFiltrados = alumnos.filter(alumno => alumno[campo].toLowerCase());
+        filtrarAlumnos(alumnosFiltrados);
+
+    });
+    function filtrarAlumnos(alumnosFiltrados){
+        const lista = document.getElementById('listaAlumnos');
+        const selBusquedaAlumno = document.getElementById('selBusquedaAlumno');
+        let campo = selBusquedaAlumno.value;
+        lista.innerHTML = '';
+        alumnosFiltrados.forEach(alumno => {
+            const item = document.createElement('option');
+            item.value = alumno[campo];
+            item.addEventListener('click', function(){
+                //llamar a modificarAlumno al igual que los tr
+
+            });
+            lista.appendChild(item);
+        });
+    }
+            
     function eliminarAlumno(idAlumno){
-        if(confirm("¿Desea eliminar este registro?")){
+        alertify.confirm('Eliminar Alumno', '¿Está seguro de eliminar este alumno?', function(){
             let datos = {
                 accion : "eliminar",
                 idAlumno,
             };
             enviarDatosAlumno(datos);
+            alertify.success('Alumno eliminado');
+            }, function(){
+            alertify.error('Cancelado');
+        });
         }
-    }
     function consultarAlumnos(campo, valor){
-        fetch('consultar_alumnos/?'+campo+'='+valor)
+    return fetch('consultar_alumnos/?'+campo+'='+valor)
         .then(res => res.json())
         .then(data => {
             mostrarFilasAlumnos(data);
+            if (!(campo && valor)){
+            guardarDataAlumnos(data);
+            filtrarAlumnos(data);
+            }
         })
         .catch(err => console.log(err));
-    }
+}
+function guardarDataAlumnos(data) {
+    alumnos = data;
+}
     function mostrarFilasAlumnos(data = []){
         let filas = '';
         data.forEach(alumno => {

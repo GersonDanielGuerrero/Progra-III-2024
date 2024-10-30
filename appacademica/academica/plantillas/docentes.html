@@ -30,13 +30,13 @@
             <div class="row p-1">
                 <div class="col-3 col-md-2">TELEFONO </div>
                 <div class="col-9 col-md-4">
-                    <input type="text" class="form-control" id="txtTelefonoDocente" name="txtTelefonoDocente" required>
+                    <input type="tel" class="form-control" id="txtTelefonoDocente" name="txtTelefonoDocente" required pattern="\d{4}-\d{4}" title="formato invalido">
                 </div>
             </div>
             <div class="row p-1">
                 <div class="col-3 col-md-2">EMAIL </div>
                 <div class="col-9 col-md-4">
-                    <input type="text" class="form-control" id="txtEmailDocente" name="txtEmailDocente" required>
+                    <input type="email" class="form-control" id="txtEmailDocente" name="txtEmailDocente" required pattern="/^[^\s@]+@[^\s@]+\.[^\s@]+$/" title="formato invalido"
                 </div>
             </div>
             <div class="row p-1">

@@ -11,7 +11,9 @@
         <div class="card-body">
             <div class="container">
                 <div class="row">
-                    <input type="text" class="form-control col-6 " id="txtBusquedaDocente" name="txtBusquedaDocente" placeholder="Buscar docente" @submit.prevent>
+                    <input type="text" list="listaDocentes" id="txtBusquedaDocente" name="a">
+                <datalist id="listaDocentes">
+                </datalist>
                     <select class="form-select col-3" id="selBusquedaDocente" name="selBusquedaDocente">
                         <option value="codigo">Codigo</option>
                         <option value="nombre">Nombre</option>
@@ -40,28 +42,67 @@
     /*
     Tarea: Realizar la busqueda interactiva de docentes, por codigo, nombre y email.
     */
+    let docentes = [];
+    document.querySelector('#btnBuscarDocente').addEventListener('click', ()=>{
+        let campo = document.querySelector('#selBusquedaDocente').value;
+        let valor = document.querySelector('#txtBusquedaDocente').value;
+        consultarDocentes(campo, valor);
+    });
+    document.getElementById('selBusquedaDocente').addEventListener('change', function(){
+        let campo = this.value;
+        let docentesFiltrados = Docentes.filter(docente => docente[campo].toLowerCase());
+        filtrarDocentes(docentesFiltrados);
+
+    });
+    function filtrarDocentes(DocentesFiltrados){
+        const lista = document.getElementById('listaDocente');
+        const selBusquedaDocente = document.getElementById('selBusquedaDocente');
+        let campo = selBusquedaDocente.value;
+        lista.innerHTML = '';
+        DocentesFiltrados.forEach(Docente => {
+            const item = document.createElement('option');
+            item.value = Docente[campo];
+            item.addEventListener('click', function(){
+                //llamar a modificarDocente al igual que los tr
+
+            });
+            lista.appendChild(item);
+        });
+    }
     document.querySelector('#btnBuscarDocente').addEventListener('click', ()=>{
         let campo = document.querySelector('#selBusquedaDocente').value;
         let valor = document.querySelector('#txtBusquedaDocente').value;
         consultarDocentes(campo, valor);
     });
     function eliminarDocente(idDocente){
-        if(confirm("¿Desea eliminar este registro?")){
+        alertify.confirm('Eliminar Alumno', '¿Está seguro de eliminar este alumno?', function(){
             let datos = {
                 accion : "eliminar",
                 idDocente,
             };
+            alertify.success('Alumno eliminado');
+            }, function(){
+            alertify.error('Cancelado');
             enviarDatosDocente(datos);
+            }
+        );
+            
         }
-    }
     function consultarDocentes(campo, valor){
         fetch('consultar_docentes/?'+campo+'='+valor)
         .then(res => res.json())
         .then(data => {
             mostrarFilasDocentes(data);
+            if (!(campo && valor)){
+            guardarDataDocentes(data);
+            filtrarDocentes(data);
+            }
         })
         .catch(err => console.log(err));
     }
+    function guardarDataAlumnos(data) {
+    alumnos = data;
+}
     function mostrarFilasDocentes(data = []){
         let filas = '';
         data.forEach(docente => {
