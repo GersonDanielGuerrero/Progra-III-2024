@@ -1,101 +1,104 @@
 <template>
-    <div id="carrusel" class="carrusel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-        <button 
-            type="button"
-            :data-bs-target="'#carousel'"
-            :data-bs-slide-to="0"
-            :class="active"
-            aria-current="true"
-            aria-label="Slide 1">
-        </button>
-        <button
-            type="button"
-            :data-bs-target="'#carousel'"
-            :data-bs-slide-to="1"
-            aria-label="Slide 2">
-        </button>
-        <button
-            type="button"
-            :data-bs-target="'#carousel'"
-            :data-bs-slide-to="2"
-            aria-label="Slide 3">
-        </button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
+<div class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-item" v-for="(item, index) in anuncios" :key="index">
                 <a :href="item.url_redireccion">
-                    <img src="" class="d-block w-100" alt="Promocion 1">
+                    <img :src="item.url_foto" :alt="'Promo ' + (index + 1)">
                 </a>
             </div>
-        <div class="carousel-inner">
-                <a :href="item.url_redireccion">
-                    <img src="" class="d-block w-100" alt="Promocion 2">
-                </a>
         </div>
-        <div class="carousel-inner">
-                <a :href="item.url_redireccion">
-                    <img src="" class="d-block w-100" alt="Promocion 3">
-                </a>
-        </div>
-        <button 
-            class="carousel-control-prev" 
-            type="button"
-            data-bs-target="#carrusel"
-            data-bs-slide="prev">
-        <span
-            class="carousel-control-prev-icon"
-            aria-hidden="true">
-        </span>
-        <span
-            class="visually-hidden">Anterior
-        </span>
-        </button>
 
-        <button 
-            class="carousel-control-next" 
-            type="button"
-            data-bs-target="#carrusel"
-            data-bs-slide="next">
-        <span
-            class="carousel-control-next-icon"
-            aria-hidden="true">
-        </span>
-        <span
-            class="visually-hidden">Siguiente
-        </span>
-        </button>
-
+        <div class="controls">
+            <button id="prevBtn" @click="prevSlide">❮</button>
+            <button id="nextBtn" @click="nextSlide">❯</button>
         </div>
-        
+
+        <div class="indicators">
+            <span v-for="(item, index) in anuncios" :key="index" :class="['dot', { active: currentIndex === index }]" @click="showSlide(index)"></span>
+        </div>
     </div>
 </template>
 
 <style>
-.carousel-item img {
-    height: 400px;
-    object-fit: cover;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    background-color: rgba(255, 173, 0, 0.8);
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.carousel-container {
+    position: relative;
+    width: 70%;
+    max-width: 900px;
+    max-height: 400px;
+    overflow: hidden;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    width: 100%;
+    flex: 1 0 100%;
+}
+
+.carousel img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.controls {
+    position: absolute;
+    top: 44%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 20px;
+}
+
+.controls button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
 }
 
-.carousel-indicators button {
-    background-color: #FFAD00;
-    width: 12px;
+.indicators {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
     height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
 }
 
-.carousel-indicators .active {
-    background-color: white;
+.dot.active {
+    background-color: #ffad00;
 }
-
 </style>
 
 <script>
@@ -126,4 +129,52 @@ export default {
         ]
     }
 }
+
+/*
+let currentIndex = 0;
+const slides = document.querySelectorAll('.carousel-item');
+const dots = document.querySelectorAll('.dot');
+
+function showSlide(index) {
+    currentIndex = index;
+    const totalSlides = slides.length;
+    const offset = -100 * index;
+    document.querySelector('.carousel').style.transform = `translateX(${offset}%)`;
+
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[index].classList.add('active');
+}
+
+function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+}
+
+function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+}
+
+document.getElementById('nextBtn').addEventListener('click', nextSlide);
+document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => showSlide(index));
+});
+
+let slideInterval = setInterval(nextSlide, 5000); 
+
+document.querySelector('.carousel-container').addEventListener('mouseover', () => {
+    clearInterval(slideInterval); 
+});
+
+document.querySelector('.carousel-container').addEventListener('mouseout', () => {
+    slideInterval = setInterval(nextSlide, 5000); 
+});
+
+window.onload = () => {
+    showSlide(0);
+};
+*/
+
 </script>
