@@ -1,4 +1,4 @@
-<<template>
+<template>
   <header class="header">
     <div class="img">
       <img src="imagenes/image.png" alt="image" />
@@ -108,7 +108,6 @@ nav ul li.active a {
   cursor: pointer;
   font-weight: bold;
 }
-
 </style>
 
 <script>
@@ -128,6 +127,7 @@ export default {
       this.opcionSeleccionada = opcion;
     },
     editarLogo() {
+    
       console.log('Edit logo clicked');
     },
   },
