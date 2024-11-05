@@ -291,9 +291,15 @@
   </style>
 
 <script>
+import BarraMenu from '@/components/BarraMenu.vue';
+
 
 export default {
     name: 'PaginaCarrito',
+    components: {
+        BarraMenu,
+
+    },
     data() {
     return {
     };
