@@ -1,4 +1,5 @@
 <template>
+     <BarraMenu />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <div class="container">
       <div class="cart">
@@ -120,8 +121,8 @@
     background-color: #333;
     padding: 20px;
     border-radius: 5px;
-    width: 60%;
-    min-width: 400px;
+    width: 70%;
+    min-width: 500px;
   }
  
   .cart h2,
@@ -298,7 +299,7 @@ export default {
     name: 'PaginaCarrito',
     components: {
         BarraMenu,
-
+       
     },
     data() {
     return {
