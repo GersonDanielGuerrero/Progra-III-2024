@@ -1,6 +1,10 @@
 <template>
     <div class="container">
 
+        <div class = "row">
+            <BarraMenu/>
+        </div>
+
         <h1 class="header-title">{{producto.categoria}}</h1>
 
         <div class="product-view">
@@ -62,7 +66,6 @@
     font-size: 1.8em;
     color: #fff;
     margin-bottom: 20px;
-    margin-top: 75px;
     font-weight: bold;
 }
 
@@ -207,6 +210,7 @@
 </style>
 
 <script>
+import BarraMenu from '@/components/BarraMenu.vue';
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 export default{
@@ -215,6 +219,7 @@ export default{
     components: {
         BotonComp,
         CajaTexto,
+        BarraMenu,
     },
     data(){
         return{
