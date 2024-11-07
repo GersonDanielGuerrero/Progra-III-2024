@@ -1,28 +1,26 @@
 <template>
     <div class="container">
-        <header>
-            <h1 class="header-title">BURGERS</h1>
-        </header>
-        <main class="product-view">
+
+        <h1 class="header-title">{{producto.categoria}}</h1>
+
+        <div class="product-view">
             <div class="product-image">
-                <p class="discount-text">*Producto en descuento, restricciones aplican.</p>
-                <img src="/frontend/public/imagenes/logo_color.png" alt="Imagen de la Burger Clasica" class="product-img">
+                <p class="discount-text" v-if="producto.precio_anterior">*Producto en descuento, restricciones aplican.</p>
+                <img :src="producto.imagen" alt="Imagen de la Burger Clasica" class="product-img">
                 <p class="price">
-                    <span class="previous-price">$4.75</span>
-                    <span class="current-price">$4.00</span>
+                    <span class="previous-price" v-if="producto.precio_anterior" >${{producto.precio_anterior}}</span>
+                    <span class="current-price">${{producto.precio}}</span>
                 </p>
-                <p class="description">Prueba nuestra deliciosa Burger Clasica con 100g de carne de res o pollo con queso amarillo, tomate, lechuga, cebolla, incluye papas fritas y salsa de la casa.</p>
+                <p class="description">{{producto.descripcion}}</p>
             </div>
             <div class="product-info">
-                <h2 class="product-name">Burger Clasica</h2>
+                <h2 class="product-name">{{ producto.nombre }}</h2>
                 <div class="placeholder-div"></div>
                 
                 <CajaTexto
                     placeholder="Escribe aquí (opcional)" 
                     type="text" 
-                    v-model="form.detalle" 
-                    :invalido="errores.detalle" 
-                    :msg_error="errores.detalle"
+                    v-model="detalles" 
                 />
 
                 <div class="order-section">
@@ -39,7 +37,7 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </template>
 
@@ -49,11 +47,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
     font-family: Arial, sans-serif;
-    background-color: #000;
     color: #fff;
 }
 
@@ -224,9 +218,27 @@ export default{
     },
     data(){
         return{
+            producto: {
+                // DATOS DE PRUEBA
+                id: 1,
+                nombre: 'Burger Clasica',
+                precio: 4.75,
+                precio_anterior: 5.25,
+                categoria: 'burgers',
+                descripcion: 'Prueba nuestra deliciosa Burger Clasica con 100g de carne de res o pollo con queso amarillo, tomate, lechuga, cebolla, incluye papas fritas y salsa de la casa.',
+                imagen: 'https://th.bing.com/th/id/R.c691ed37c9ce3040c3ebd2892e88870c?rik=QUBcFflN%2b9oqPQ&pid=ImgRaw&r=0',
+            },
+            detalles: '',
+            cantidad: 1,
+
         };
     },
     methods:{
+    },
+    computed:{
+        total(){
+            return this.producto.precio * this.cantidad;
+        }
     }
 }
 </script>
