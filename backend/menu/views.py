@@ -42,3 +42,4 @@ class DetalleProductoView(APIView):
         producto = Producto.objects.get(id=id)
         serializer = ProductoDetalleSerializer(producto)
         return Response(serializer.data)
+
