@@ -68,41 +68,44 @@
 
 .product-view {
     display: flex;
+    justify-content: center; 
     gap: 30px;
 }
 
 .product-img {
-    width: 90%;
-    height: auto;
-    background-color: #ffad00;
+    width: 500px; 
+    height: 500px; 
     object-fit: cover;
-    border-radius: 8px; 
+    border-radius: 8px;
+    background-color: transparent;
 }
 
 .discount-text {
-    position: absolute;
-    top: -20px;
     font-size: 0.9em;
     color: #ffad00;
     text-align: center;
-    width: 100%;
-    margin-right: 60px;
+    margin-bottom: 10px;
     font-weight: bold;
+    width: 100%;
 }
 
 .placeholder-div {
-    width: 100%;
-    padding-top: 50%;
+    width: 750px; 
+    height: 400px;
     background-color: #333;
     border: 1px solid #ffad00;
-    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffad00;
+    font-size: 1.2em;
 }
 
 .price {
     display: flex;
     justify-content: space-between;
-    width: 90%;
-    margin: 10px auto;
+    width: 400px; 
+    margin-top: 10px;
     font-size: 1.2em;
     color: #fff;
     font-weight: bold;
@@ -117,15 +120,14 @@
 .current-price {
     color: #fff;
     font-size: 1.3em;
-    margin-left: 10px;
+    margin-left: 375px;
 }
 
 .description {
     font-size: 0.9em;
     color: #fff;
-    text-align: center;
-    padding: 0 10px;
-    max-width: 90%;
+    padding-top: 10px;
+    max-width: 500px;
     font-weight: bold;
     text-align: left;
 }
@@ -142,8 +144,7 @@
     font-weight: bold;
     color: #ffad00;
     text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
+    margin-top: 10px;
 }
 
 .order-section {
@@ -152,7 +153,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     font-weight: bold;
 }
 
@@ -177,6 +178,7 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 10px;
+    margin-top: 15px;
 }
 
 .quantity-controls {
@@ -184,7 +186,6 @@
     align-items: center;
     gap: 10px;
     justify-content: center;
-    margin-right: 65px;
     font-weight: bold;
 }
 
@@ -202,7 +203,6 @@
     font-size: 1.2em;
     color: #fff;
 }
-
 
 </style>
 
