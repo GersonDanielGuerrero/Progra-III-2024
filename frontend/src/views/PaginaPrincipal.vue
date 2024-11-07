@@ -4,6 +4,8 @@
             <BarraMenu />
         </div>
         <div class = "row">
+            <CarruselComp />
+            <h1>Hola</h1>
         </div>
         <div class = "row lista-categorias">
             <div class = "col-3" v-for="categoria in categorias" :key="categoria.id"
@@ -43,6 +45,7 @@
   import ApiService from '@/services/ApiService'; 
 import BarraMenu from '@/components/BarraMenu.vue';
 import CategoriaComp from "@/components/CategoriaComp.vue";
+import CarruselComp from '@/components/CarruselComp.vue';
   
   export default {
     data() {
@@ -78,6 +81,7 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
     components: {
       BarraMenu,
       CategoriaComp,
+      CarruselComp,
     },
     methods: {
       async cargarDatos() {

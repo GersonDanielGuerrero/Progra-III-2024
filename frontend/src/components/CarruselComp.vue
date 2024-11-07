@@ -1,9 +1,9 @@
 <template>
-<div class="carousel-container">
+<div class="carousel-container" @mouseover="limpiarIntervalo(slideInterval)" @mouseout="slideInterval = setearIntervalo(nextSlide, 5000)">
         <div class="carousel">
-            <div class="carousel-item" v-for="(item, index) in anuncios" :key="index">
-                <a :href="item.url_redireccion">
-                    <img :src="item.url_foto" :alt="'Promo ' + (index + 1)">
+            <div class="carousel-item" v-for="(anuncio) in anuncios" :key="anuncio.id">
+                <a :href="anuncio.url_redireccion">
+                    <img :src="anuncio.url_foto" :alt="'Promo' ">
                 </a>
             </div>
         </div>
@@ -14,7 +14,7 @@
         </div>
 
         <div class="indicators">
-            <span v-for="(item, index) in anuncios" :key="index" :class="['dot', { active: currentIndex === index }]" @click="showSlide(index)"></span>
+            <span v-for="(anuncio) in anuncios" :key="anuncio.id" :class="['dot', { active: currentIndex === anuncio.id }]" @click="showSlide(anuncio.id)"></span>
         </div>
     </div>
 </template>
@@ -26,14 +26,6 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
 
 .carousel-container {
     position: relative;
@@ -103,8 +95,10 @@ body {
 
 <script>
 export default {
+    
     name: 'CarruselComp',
     data (){
+        return{
         anuncios: [
             {
                 id: 1,
@@ -126,9 +120,37 @@ export default {
                 url_foto: "https://proyectodb.blob.core.windows.net/imgs/Nachos.jpeg",
                 url_redireccion: "/menu?categoria=Snacks"
             }
-        ]
-    }
-}
+        ],
+        currentIndex: 0,
+        dots: document.querySelectorAll('.dot'),
+        slides: document.querySelectorAll('.carousel-item'),
+        slideInterval: null,
+        };
+    },
+    methods: {
+        showSlide(index) {
+            this.currentIndex = index;
+        },
+        nextSlide(){
+            this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+            this.showSlide(this.currentIndex);
+        },
+        prevSlide() {
+            this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+            this.showSlide(this.currentIndex);
+        },
+        limpiarIntervalo(intervalo) {
+            clearInterval(intervalo);
+        },
+        setearIntervalo(funcion, tiempo) {
+            return setInterval(funcion, tiempo);
+        }
+    },
+    mounted() {
+        this.slideInterval = setInterval(this.nextSlide, 5000); 
+    },
+};
+
 
 /*
 let currentIndex = 0;
