@@ -56,3 +56,34 @@ class CarritoView(APIView):
         for producto in productos_a_eliminar:
             producto.delete()
         return Response(status=status.HTTP_200_OK, data={'mensaje': 'Productos eliminados correctamente'})
+
+class VentaView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        usuario = request.user
+        carrito = usuario.carrito
+        productos = request.data.get('productos')
+        tipo_entrega = request.data.get('tipo_entrega')
+        id_direccion = request.data.get('id_direccion')
+        metodo_pago = request.data.get('metodo_pago')
+        if not productos:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'mensaje': 'No se enviaron productos'})
+        direccion = Direccion.objects.get(id=id_direccion)
+        venta = Venta()
+        venta.usuario = usuario
+        venta.tipo_entrega = tipo_entrega
+        venta.metodo_pago = metodo_pago
+        venta.direccion = direccion
+        venta.save()
+        
+        for producto in productos:
+            producto_guardado = Producto.objects.get(id=producto['id'])
+            venta_producto = Venta_Producto()
+            venta_producto.venta = venta
+            venta_producto.producto = producto_guardado
+            venta_producto.cantidad = producto['cantidad']
+            venta_producto.precio_compra = producto_guardado.precio
+            venta_producto.save()
+        return Response(status=status.HTTP_201_CREATED, data={'mensaje': 'Venta realizada correctamente'})
+            
+        

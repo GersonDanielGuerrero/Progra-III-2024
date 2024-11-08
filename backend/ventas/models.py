@@ -74,7 +74,7 @@ class Venta_Producto(models.Model):
     cantidad = models.IntegerField()
     precio_compra = models.DecimalField(max_digits=5, decimal_places=2)
     detalles = models.TextField(null=True)
-    ingredientes = models.ManyToManyField(Ingrediente, related_name='ventas_productos')
+    ingredientes = models.ManyToManyField(Ingrediente, related_name='ventas_productos', null=True)
     
     class Meta:
         db_table = 'ventas_productos'
