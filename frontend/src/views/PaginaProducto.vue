@@ -9,7 +9,7 @@
                 <img src="/frontend/public/imagenes/logo_color.png" alt="Imagen de la Burger Clasica" class="product-img">
                 <p class="price">
                     <span class="previous-price">$4.75</span>
-                    <span class="current-price">$4.00</span>
+                    <span class="current-price">${{ total }}</span> <!-- Aquí se muestra el precio total -->
                 </p>
                 <p class="description">Prueba nuestra deliciosa Burger Clasica con 100g de carne de res o pollo con queso amarillo, tomate, lechuga, cebolla, incluye papas fritas y salsa de la casa.</p>
             </div>
@@ -17,6 +17,7 @@
                 <h2 class="product-name">Burger Clasica</h2>
                 <div class="placeholder-div"></div>
                 
+                <!-- Caja de texto para detalles -->
                 <CajaTexto
                     placeholder="Escribe aquí (opcional)" 
                     type="text" 
@@ -27,14 +28,16 @@
 
                 <div class="order-section">
                     <div class="total-container">
-                        <span class="total-label">Total:</span> <span>$4.75</span>
+                        <span class="total-label">Total:</span> <span>${{ total }}</span>
                     </div>
                     <div class="controls-and-button">
                         <div class="quantity-controls">
+                            <!-- Botones para cambiar la cantidad -->
                             <button id="subtract" @click="restarCantidad">-</button>
                             <span id="quantity">{{ cantidad }}</span>
                             <button id="add" @click="sumarCantidad">+</button>
                         </div>
+                        <!-- Botón para añadir al carrito -->
                         <BotonComp @metodo_click="agregarACarrito">Añadir a mi orden 🛒</BotonComp>
                     </div>
                 </div>
@@ -222,11 +225,61 @@ export default{
         BotonComp,
         CajaTexto,
     },
-    data(){
-        return{
-        };
+    data() {
+    return {
+      producto: {
+        id: 0,  
+        nombre: 'Burger Clasica',
+        descripcion: 'Prueba nuestra deliciosa Burger Clasica...',
+        precioAnterior: 4.75,
+        precioActual: 4.00,
+        imagen: '/frontend/public/imagenes/logo_color.png',
+      },
+      cantidad: 1,
+      form: {
+        detalle: '',
+      },
+      errores: {
+        detalle: false,
+      },
+    };
+  },
+  methods: {
+    
+    sumarCantidad() {
+      this.cantidad++;
     },
-    methods:{
+
+    
+    restarCantidad() {
+      if (this.cantidad > 1) {
+        this.cantidad--;
+      }
+    },
+
+    
+    async agregarACarrito() {
+      const datosCarrito = {
+        id: this.producto.id,  
+        cantidad: this.cantidad,
+        ingredientes: [],  
+        detalles: this.form.detalle,  
+      };
+
+      const respuesta = await ApiService.agregarACarrito(datosCarrito);
+      if (!respuesta.error) {
+        console.log('Producto agregado al carrito:', respuesta.datos);
+      } else {
+        console.error('Error al agregar al carrito:', respuesta.mensaje);
+      }
+    },
+  },
+
+  computed: {
+   
+    total() {
+      return (this.producto.precioActual * this.cantidad).toFixed(2);
     }
-}
+  }
+};
 </script>
