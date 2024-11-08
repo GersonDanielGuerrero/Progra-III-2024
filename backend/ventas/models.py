@@ -14,8 +14,8 @@ class Carrito(models.Model):
         ('local', 'Local')
     ]
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='carrito')
-    metodo_pago = models.CharField(max_length=10, choices=METODO_PAGO_CHOICES)
-    tipo_entrega = models.CharField(max_length=10, choices=TIPO_ENTREGA_CHOICES)
+    metodo_pago = models.CharField(max_length=10, choices=METODO_PAGO_CHOICES, null=True)
+    tipo_entrega = models.CharField(max_length=10, choices=TIPO_ENTREGA_CHOICES, null=True)
     direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE, related_name='carritos', null=True)
     class Meta:
         db_table = 'carritos'
@@ -57,8 +57,8 @@ class Venta(models.Model):
     ]
     
     fecha = models.DateTimeField(auto_now_add=True)
-    metodo_pago = models.CharField(max_length=10, choices=METODO_PAGO_CHOICES)
-    tipo_entrega = models.CharField(max_length=10, choices=TIPO_ENTREGA_CHOICES)
+    metodo_pago = models.CharField(max_length=10, choices=METODO_PAGO_CHOICES, null=True)
+    tipo_entrega = models.CharField(max_length=10, choices=TIPO_ENTREGA_CHOICES, null=True)
     costo_envio = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='ventas')
     direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE, related_name='ventas',null=True)
