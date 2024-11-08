@@ -41,4 +41,18 @@ class CarritoView(APIView):
                 carrito.direccion = Direccion.objects.get(id=id_direccion)
             carrito.save()
             return Response(status=status.HTTP_200_OK, data={'mensaje': 'Carrito actualizado correctamente'})
-        
+    
+    def delete(self, request):
+        usuario = request.user
+        carrito = Carrito.objects.filter(usuario=usuario)
+        ids = request.data.get('ids')
+        productos_a_eliminar = []
+        for id in ids:
+            carrito_producto = Carrito_Producto.objects.get(id=id)
+            if carrito_producto:
+                productos_a_eliminar.append(carrito_producto)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data={'mensaje': f'No se encontró el producto con id {id}'})
+        for producto in productos_a_eliminar:
+            producto.delete()
+        return Response(status=status.HTTP_200_OK, data={'mensaje': 'Productos eliminados correctamente'})
