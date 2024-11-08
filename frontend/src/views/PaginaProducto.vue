@@ -1,29 +1,36 @@
 <template>
     <div class="container">
-        <header>
-            <h1 class="header-title">BURGERS</h1>
-        </header>
-        <main class="product-view">
+
+        <div class = "row">
+            <BarraMenu/>
+        </div>
+
+        <h1 class="header-title">{{producto.categoria}}</h1>
+
+        <div class="product-view">
             <div class="product-image">
-                <p class="discount-text">*Producto en descuento, restricciones aplican.</p>
-                <img src="/frontend/public/imagenes/logo_color.png" alt="Imagen de la Burger Clasica" class="product-img">
+                <p class="discount-text" v-if="producto.precio_anterior">*Producto en descuento, restricciones aplican.</p>
+                <img :src="producto.imagen" alt="Imagen de la Burger Clasica" class="product-img">
                 <p class="price">
+<<<<<<< HEAD
                     <span class="previous-price">$4.75</span>
                     <span class="current-price">${{ total }}</span> <!-- Aquí se muestra el precio total -->
+=======
+                    <span class="previous-price" v-if="producto.precio_anterior" >${{producto.precio_anterior}}</span>
+                    <span class="current-price">${{producto.precio}}</span>
+>>>>>>> fd7d3f006fdeab19d759f2267a02ac0ad337c43e
                 </p>
-                <p class="description">Prueba nuestra deliciosa Burger Clasica con 100g de carne de res o pollo con queso amarillo, tomate, lechuga, cebolla, incluye papas fritas y salsa de la casa.</p>
+                <p class="description">{{producto.descripcion}}</p>
             </div>
             <div class="product-info">
-                <h2 class="product-name">Burger Clasica</h2>
+                <h2 class="product-name">{{ producto.nombre }}</h2>
                 <div class="placeholder-div"></div>
                 
                 <!-- Caja de texto para detalles -->
                 <CajaTexto
                     placeholder="Escribe aquí (opcional)" 
                     type="text" 
-                    v-model="form.detalle" 
-                    :invalido="errores.detalle" 
-                    :msg_error="errores.detalle"
+                    v-model="detalles" 
                 />
 
                 <div class="order-section">
@@ -42,7 +49,7 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </template>
 
@@ -52,11 +59,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
     font-family: Arial, sans-serif;
-    background-color: #000;
     color: #fff;
 }
 
@@ -71,47 +74,49 @@ body {
     font-size: 1.8em;
     color: #fff;
     margin-bottom: 20px;
-    margin-top: 75px;
     font-weight: bold;
 }
 
 .product-view {
     display: flex;
+    justify-content: center; 
     gap: 30px;
 }
 
 .product-img {
-    width: 90%;
-    height: auto;
-    background-color: #ffad00;
+    width: 500px; 
+    height: 500px; 
     object-fit: cover;
-    border-radius: 8px; 
+    border-radius: 8px;
+    background-color: transparent;
 }
 
 .discount-text {
-    position: absolute;
-    top: -20px;
     font-size: 0.9em;
     color: #ffad00;
     text-align: center;
-    width: 100%;
-    margin-right: 60px;
+    margin-bottom: 10px;
     font-weight: bold;
+    width: 100%;
 }
 
 .placeholder-div {
-    width: 100%;
-    padding-top: 50%;
+    width: 750px; 
+    height: 400px;
     background-color: #333;
     border: 1px solid #ffad00;
-    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffad00;
+    font-size: 1.2em;
 }
 
 .price {
     display: flex;
     justify-content: space-between;
-    width: 90%;
-    margin: 10px auto;
+    width: 400px; 
+    margin-top: 10px;
     font-size: 1.2em;
     color: #fff;
     font-weight: bold;
@@ -126,15 +131,14 @@ body {
 .current-price {
     color: #fff;
     font-size: 1.3em;
-    margin-left: 10px;
+    margin-left: 375px;
 }
 
 .description {
     font-size: 0.9em;
     color: #fff;
-    text-align: center;
-    padding: 0 10px;
-    max-width: 90%;
+    padding-top: 10px;
+    max-width: 500px;
     font-weight: bold;
     text-align: left;
 }
@@ -151,8 +155,7 @@ body {
     font-weight: bold;
     color: #ffad00;
     text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
+    margin-top: 10px;
 }
 
 .order-section {
@@ -161,7 +164,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     font-weight: bold;
 }
 
@@ -186,6 +189,7 @@ body {
     flex-direction: column;
     align-items: flex-end;
     gap: 10px;
+    margin-top: 15px;
 }
 
 .quantity-controls {
@@ -193,7 +197,6 @@ body {
     align-items: center;
     gap: 10px;
     justify-content: center;
-    margin-right: 65px;
     font-weight: bold;
 }
 
@@ -212,10 +215,10 @@ body {
     color: #fff;
 }
 
-
 </style>
 
 <script>
+import BarraMenu from '@/components/BarraMenu.vue';
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 export default{
@@ -224,7 +227,9 @@ export default{
     components: {
         BotonComp,
         CajaTexto,
+        BarraMenu,
     },
+<<<<<<< HEAD
     data() {
     return {
       producto: {
@@ -279,6 +284,31 @@ export default{
    
     total() {
       return (this.producto.precioActual * this.cantidad).toFixed(2);
+=======
+    data(){
+        return{
+            producto: {
+                // DATOS DE PRUEBA
+                id: 1,
+                nombre: 'Burger Clasica',
+                precio: 4.75,
+                precio_anterior: 5.25,
+                categoria: 'burgers',
+                descripcion: 'Prueba nuestra deliciosa Burger Clasica con 100g de carne de res o pollo con queso amarillo, tomate, lechuga, cebolla, incluye papas fritas y salsa de la casa.',
+                imagen: 'https://th.bing.com/th/id/R.c691ed37c9ce3040c3ebd2892e88870c?rik=QUBcFflN%2b9oqPQ&pid=ImgRaw&r=0',
+            },
+            detalles: '',
+            cantidad: 1,
+
+        };
+    },
+    methods:{
+    },
+    computed:{
+        total(){
+            return this.producto.precio * this.cantidad;
+        }
+>>>>>>> fd7d3f006fdeab19d759f2267a02ac0ad337c43e
     }
   }
 };

@@ -17,7 +17,7 @@ class Carrito_Producto(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='carritos')
     cantidad = models.IntegerField()
     detalles = models.TextField(null=True)
-    ingredientes = models.ManyToManyField(Ingrediente, related_name='carritos_productos')
+    ingredientes = models.ManyToManyField(Ingrediente, related_name='carritos_productos', null=True)
     
     class Meta:
         db_table = 'carritos_productos'

@@ -1,7 +1,7 @@
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import CategoriaSerializer, ProductoListaSerializer
+from .serializers import CategoriaSerializer, ProductoListaSerializer, ProductoDetalleSerializer
 from rest_framework.response import Response
 from .models import Categoria, Producto, Descuento
 from rest_framework import status
@@ -37,3 +37,9 @@ class ListaProductosView(APIView):
             productos = productos.filter(nombre__icontains=filtro)
         serializer = ProductoListaSerializer(productos, many=True)
         return Response(serializer.data)
+class DetalleProductoView(APIView):
+    def get(self, request, id):
+        producto = Producto.objects.get(id=id)
+        serializer = ProductoDetalleSerializer(producto)
+        return Response(serializer.data)
+
