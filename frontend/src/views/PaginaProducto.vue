@@ -229,7 +229,6 @@ export default{
         CajaTexto,
         BarraMenu,
     },
-<<<<<<< HEAD
     data() {
     return {
       producto: {
@@ -284,31 +283,7 @@ export default{
    
     total() {
       return (this.producto.precioActual * this.cantidad).toFixed(2);
-=======
-    data(){
-        return{
-            producto: {
-                // DATOS DE PRUEBA
-                id: 1,
-                nombre: 'Burger Clasica',
-                precio: 4.75,
-                precio_anterior: 5.25,
-                categoria: 'burgers',
-                descripcion: 'Prueba nuestra deliciosa Burger Clasica con 100g de carne de res o pollo con queso amarillo, tomate, lechuga, cebolla, incluye papas fritas y salsa de la casa.',
-                imagen: 'https://th.bing.com/th/id/R.c691ed37c9ce3040c3ebd2892e88870c?rik=QUBcFflN%2b9oqPQ&pid=ImgRaw&r=0',
-            },
-            detalles: '',
-            cantidad: 1,
 
-        };
-    },
-    methods:{
-    },
-    computed:{
-        total(){
-            return this.producto.precio * this.cantidad;
-        }
->>>>>>> fd7d3f006fdeab19d759f2267a02ac0ad337c43e
     }
   }
 };
