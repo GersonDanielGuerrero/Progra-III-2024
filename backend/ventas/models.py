@@ -5,8 +5,18 @@ import enum
 
 # Create your models here.
 class Carrito(models.Model):
+    METODO_PAGO_CHOICES = [
+        ('tarjeta', 'Tarjeta'),
+        ('efectivo', 'Efectivo')
+    ]
+    TIPO_ENTREGA_CHOICES = [
+        ('domicilio', 'Domicilio'),
+        ('local', 'Local')
+    ]
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='carrito')
-    
+    metodo_pago = models.CharField(max_length=10, choices=METODO_PAGO_CHOICES)
+    tipo_entrega = models.CharField(max_length=10, choices=TIPO_ENTREGA_CHOICES)
+    direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE, related_name='carritos', null=True)
     class Meta:
         db_table = 'carritos'
         verbose_name = 'Carrito'
@@ -37,10 +47,18 @@ class Carrito_Producto_Extra(models.Model):
         verbose_name_plural = 'Carritos_Productos_Extras'
     
 class Venta(models.Model):
+    METODO_PAGO_CHOICES = [
+        ('tarjeta', 'Tarjeta'),
+        ('efectivo', 'Efectivo')
+    ]
+    TIPO_ENTREGA_CHOICES = [
+        ('domicilio', 'Domicilio'),
+        ('local', 'Local')
+    ]
     
     fecha = models.DateTimeField(auto_now_add=True)
-    metodo_pago = enum.Enum('tarjeta', 'efectivo')
-    tipo_entrega = enum.Enum('domicilio', 'local')
+    metodo_pago = models.CharField(max_length=10, choices=METODO_PAGO_CHOICES)
+    tipo_entrega = models.CharField(max_length=10, choices=TIPO_ENTREGA_CHOICES)
     costo_envio = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='ventas')
     direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE, related_name='ventas',null=True)
