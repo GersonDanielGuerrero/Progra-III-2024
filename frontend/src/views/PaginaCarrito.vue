@@ -291,21 +291,141 @@
   }
   </style>
 
+
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
-
+import ApiService from "@/services/ApiService"; 
 
 export default {
-    name: 'PaginaCarrito',
+  name: 'PaginaCarrito',
     components: {
-        BarraMenu,
-       
+        BarraMenu
     },
-    data() {
+  data() {
     return {
+      productos: [],
+      direcciones: [],
+      direccionSeleccionada: null,
+      tipoEntrega: "",
+      metodoPago: "",
     };
-},
-    methods: {
+  },
+  computed: {
+    totalCarrito() {
+      return this.productos
+        .filter((producto) => producto.seleccionado)
+        .reduce((acc, producto) => acc + producto.precioTotal, 0);
+    },
+    cantidadProductos() {
+      return this.productos.reduce((acc, producto) => acc + producto.cantidad, 0);
+    },
+  },
+  methods: {
+    async obtenerCarrito() {
+      const respuesta = await ApiService.obtenerCarrito(); 
+      if (!respuesta.error) {
+        this.productos = respuesta.datos.productos;
+      } else {
+        alertify.error(respuesta.mensaje);
+      }
+    },
+    async obtenerDirecciones() {
+      const respuesta = await ApiService.obtenerDirecciones(); 
+      if (!respuesta.error) {
+        this.direcciones = respuesta.datos;
+      } else {
+        alertify.error(respuesta.mensaje);
+      }
+    },
+    async actualizarCarrito() {
+      const productosActualizados = this.productos.map(({ id, cantidad }) => ({ id, cantidad }));
+      const data = {
+        productos: productosActualizados,
+        tipo_entrega: this.tipoEntrega,
+        id_direccion: this.direccionSeleccionada,
+        metodo_pago: this.metodoPago,
+      };
+      const respuesta = await ApiService.actualizarCarrito(data); 
+      if (respuesta.error) {
+        alertify.error(respuesta.mensaje);
+      }
+    },
+    async realizarPedido() {
+      const productosPedido = this.productos.filter((p) => p.seleccionado);
+      if (productosPedido.length === 0 || !this.tipoEntrega || !this.metodoPago || !this.direccionSeleccionada) {
+        alertify.error("Por favor completa todos los campos y selecciona al menos un producto.");
+        return;
+      }
+      const data = {
+        productos: productosPedido.map(({ id, cantidad }) => ({ id, cantidad })),
+        tipo_entrega: this.tipoEntrega,
+        id_direccion: this.direccionSeleccionada,
+        metodo_pago: this.metodoPago,
+      };
+      const respuesta = await ApiService.realizarPedido(data); 
+      if (respuesta.error) {
+        alertify.error(respuesta.mensaje);
+      } else {
+        alertify.success("Pedido realizado con éxito");
+        await this.obtenerCarrito();
+      }
+    },
+    async sumarProducto(id) {
+      const respuesta = await ApiService.sumarProducto(id); 
+      if (!respuesta.error) {
+        await this.obtenerCarrito();
+      } else {
+        alertify.error(respuesta.mensaje);
+      }
+    },
+    async restarProducto(id) {
+      const producto = this.productos.find((p) => p.id === id);
+      if (producto.cantidad === 1) {
+      alertify.confirm(
+          'Eliminar producto',
+          '¿Deseas eliminar este producto del carrito?',
+          async () => {
+            const respuesta = await ApiService.restarProducto(id); 
+            if (!respuesta.error) {
+              await this.obtenerCarrito();
+            } else {
+              alertify.error(respuesta.mensaje);
+            }
+          },
+          function() {} 
+        );
+
+    }else {
+      const respuesta = await ApiService.restarProducto(id); 
+      if (!respuesta.error) {
+        await this.obtenerCarrito();
+      } else {
+        alertify.error(respuesta.mensaje);
+      }
     }
-    }
+  },
+    async borrarProductos() {
+      const productosSeleccionados = this.productos.filter((p) => p.seleccionado);
+      if (productosSeleccionados.length === 0) return;
+      alertify.confirm(
+        'Eliminar productos',
+        '¿Deseas eliminar los productos seleccionados?',
+        async () => {
+          const ids = productosSeleccionados.map((p) => p.id);
+          const respuesta = await ApiService.borrarProductos(ids); 
+          if (!respuesta.error) {
+            await this.obtenerCarrito();
+          } else {
+            alertify.error(respuesta.mensaje);
+          }
+        },
+        function() {} 
+      );
+    },
+  },
+  async mounted() {
+    await this.obtenerCarrito();
+    await this.obtenerDirecciones();
+  },
+};
 </script>
