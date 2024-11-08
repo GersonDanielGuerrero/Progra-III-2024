@@ -295,6 +295,7 @@
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
 import ApiService from "@/services/ApiService"; 
+import alertify from 'alertifyjs';
 
 export default {
   name: 'PaginaCarrito',
