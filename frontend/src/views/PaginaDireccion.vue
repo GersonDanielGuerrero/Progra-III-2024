@@ -23,12 +23,26 @@
       </div>
     </div>
   </template>
+
+<style>
+.map-container {
+  width: 70vw;
+  height: 70vh;
+  margin: 10vh auto;
+}
+.coordinates {
+  margin-top: 10px;
+}
+</style>
+
+
   
   <script>
   import { LMap, LTileLayer, LMarker } from "vue3-leaflet";
   import "leaflet/dist/leaflet.css";
   
   export default {
+    name: "PaginaDireccion",
     components: {
       LMap,
       LTileLayer,
@@ -68,14 +82,4 @@
   };
   </script>
   
-  <style>
-  .map-container {
-    width: 70vw;
-    height: 70vh;
-    margin: 10vh auto;
-  }
-  .coordinates {
-    margin-top: 10px;
-  }
-  </style>
-  
+ 
