@@ -4,6 +4,9 @@
         <div class = "row">
             <BarraMenu/>
         </div>
+        <BotonComp @click="CargarProducto">
+            Recargar
+        </BotonComp>
 
         <h1 class="header-title">{{producto.categoria}}</h1>
 
@@ -12,13 +15,8 @@
                 <p class="discount-text" v-if="producto.precio_anterior">*Producto en descuento, restricciones aplican.</p>
                 <img :src="producto.imagen" alt="Imagen de la Burger Clasica" class="product-img">
                 <p class="price">
-<<<<<<< HEAD
-                    <span class="previous-price">$4.75</span>
-                    <span class="current-price">${{ total }}</span> <!-- Aquí se muestra el precio total -->
-=======
-                    <span class="previous-price" v-if="producto.precio_anterior" >${{producto.precio_anterior}}</span>
-                    <span class="current-price">${{producto.precio}}</span>
->>>>>>> fd7d3f006fdeab19d759f2267a02ac0ad337c43e
+                    <span class="previous-price" v-if="producto.precio_anterior" > ${{producto.precio_anterior}} </span>
+                    <span class="current-price"> ${{producto.precio}} </span>
                 </p>
                 <p class="description">{{producto.descripcion}}</p>
             </div>
@@ -221,6 +219,8 @@
 import BarraMenu from '@/components/BarraMenu.vue';
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
+import ApiService from '@/services/ApiService';
+import Alertify from 'alertifyjs'
 export default{
     name: 'PaginaProducto',
 
@@ -235,9 +235,10 @@ export default{
         id: 0,  
         nombre: 'Burger Clasica',
         descripcion: 'Prueba nuestra deliciosa Burger Clasica...',
+        categoria: 'Burgers',
         precioAnterior: 4.75,
-        precioActual: 4.00,
-        imagen: '/frontend/public/imagenes/logo_color.png',
+        precio: 4.00,
+        imagen: 'https://proyectodb.blob.core.windows.net/imgs/Burger_de_la_casa.jpeg',
       },
       cantidad: 1,
       form: {
@@ -277,14 +278,27 @@ export default{
         console.error('Error al agregar al carrito:', respuesta.mensaje);
       }
     },
+    async CargarProducto(id){
+        ApiService.obtenerProducto(id)
+      .then((respuesta) => {
+        if (!respuesta.error) {
+          this.producto = respuesta.datos;
+          
+        Alertify.success(JSON.stringify(this.producto));
+        } else {
+          console.error('Error al obtener producto:', respuesta.mensaje);
+          Alertify.error('Error al obtener producto');
+        }
+      });
+    },
   },
 
   computed: {
    
     total() {
-      return (this.producto.precioActual * this.cantidad).toFixed(2);
+      return (this.producto.precio * this.cantidad).toFixed(2);
 
     }
-  }
+  },
 };
 </script>

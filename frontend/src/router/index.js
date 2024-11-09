@@ -28,7 +28,7 @@ const routes = [
         component: PaginaMenu,
     },
     {
-        path: "/producto",
+        path: "/producto/:id",
         name: "Producto",
         component: PaginaProducto,
     },
