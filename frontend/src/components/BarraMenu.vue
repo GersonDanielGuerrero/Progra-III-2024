@@ -108,7 +108,6 @@ nav ul li.active a {
   cursor: pointer;
   font-weight: bold;
 }
-
 </style>
 
 <script>
@@ -133,5 +132,4 @@ export default {
     },
   },
 };
-
 </script>
