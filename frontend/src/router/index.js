@@ -28,7 +28,7 @@ const routes = [
         component: PaginaMenu,
     },
     {
-        path: "/direccion/:id",
+        path: "/direccion",
         name: "Direccion",
         component: PaginaDireccion,
     }
