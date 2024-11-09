@@ -296,9 +296,15 @@ export default{
   computed: {
    
     total() {
-      return (this.producto.precio * this.cantidad).toFixed(2);
-
+      return (this.producto.precio * this.cantidad).toFixed(2);    
+        
     }
   },
+  created() {
+  const id = this.$route.params.id;
+  if (id) {
+    this.CargarProducto(id);
+  }
+},
 };
 </script>
