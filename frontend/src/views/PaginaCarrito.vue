@@ -81,7 +81,7 @@
           <p>Total:</p>
           <span>$6.75</span>
         </div>
-        <button class="order-button">PEDIR</button>
+        <button class="order-button" @click="realizarPedido">PEDIR</button>
       </div>
     </div>
   </template>
@@ -296,7 +296,7 @@
 import BarraMenu from '@/components/BarraMenu.vue';
 import ApiService from "@/services/ApiService"; 
 import alertify from 'alertifyjs';
-
+import 'alertifyjs/build/css/alertify.css';
 export default {
   name: 'PaginaCarrito',
     components: {

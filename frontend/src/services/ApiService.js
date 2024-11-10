@@ -9,7 +9,7 @@ class ApiService {
     // Método para obtener el token del authStore
     obtenerToken() {
         const authStore = useAuthStore();
-        return authStore.token;
+        return authStore.getToken();
     }
 
     // Método para insertar productos, categorías o anuncios
@@ -149,9 +149,7 @@ class ApiService {
             if (respuesta.ok) {
                 // Guardar el token y redirigir
                 const authStore = useAuthStore();
-                const usuario = datos.usuario;
-                authStore.setToken(datos.token);
-                authStore.setUsuario(usuario);
+                authStore.setToken(datos.access);
                 window.location.href = '/pagina-principal'; // Redirigir a la página principal
                 return { error: false, datos: datos };
             }
@@ -346,7 +344,7 @@ class ApiService {
     async obtenerDirecciones() {
         const token = this.obtenerToken();
         try {
-            const respuesta = await fetch(`${this.baseURL}/usuarios/direcciones`, {
+            const respuesta = await fetch(`${this.baseURL}/usuarios/direcciones/`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -366,8 +364,12 @@ class ApiService {
     // Método para obtener el carrito del usuario
     async obtenerCarrito() {
         const token = this.obtenerToken();
+        if (!token) {
+            //redirigir a login 
+            window.location.href = '/login';
+        }
         try {
-            const respuesta = await fetch(`${this.baseURL}/ventas/carrito`, {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`

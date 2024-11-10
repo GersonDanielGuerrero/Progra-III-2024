@@ -15,6 +15,10 @@ actions: {
         this.usuario = usuario;
         localStorage.setItem('usuario', JSON.stringify(usuario));
         },
+        getToken(){
+            this.cargarDatos();
+            return this.token;
+        },
     logout(){
         this.token = null;
         this.usuario = null;
@@ -26,10 +30,7 @@ actions: {
             if(token){
                 this.token = token;
             }
-            const usuario = localStorage.getItem('usuario');
-            if(usuario){
-                this.usuario = JSON.parse(usuario);
-            }
+            
         }
     }
 });
