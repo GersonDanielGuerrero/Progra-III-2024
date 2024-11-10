@@ -1,4 +1,6 @@
 import {useAuthStore} from '@/stores/auth';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 class ApiService {
     constructor(baseURL) {
@@ -240,7 +242,7 @@ class ApiService {
     async realizarPedido(productos, tipoEntrega, idDireccion, metodoPago) {
         const token = this.obtenerToken();
         try {
-            const respuesta = await fetch(`${this.baseURL}/ventas/pedidos`, {
+            const respuesta = await fetch(`${this.baseURL}/ventas/pedidos/`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -279,10 +281,11 @@ class ApiService {
                 },
                 body: JSON.stringify({ ids })
             });
-
+            
             if (respuesta.ok) {
                 return { error: false, mensaje: "Productos eliminados correctamente" };
             }
+            alertify.success('Eliminando productos del carrito');
             
             return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al eliminar productos' };
         } catch (error) {
@@ -291,17 +294,17 @@ class ApiService {
     }
 
     // Método para sumar la cantidad de un producto en el carrito
-    async sumarProducto(id) {
+    async sumarProducto(id, cantidad) {
         const token = this.obtenerToken();
         try {
-            const respuesta = await fetch(`${this.baseURL}/ventas/carrito`, {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    productos: [{ id, cantidad: 1 }]
+                    productos: [{ id, cantidad: cantidad + 1 }]
                 })
             });
 
@@ -316,17 +319,17 @@ class ApiService {
     }
 
     // Método para restar la cantidad de un producto en el carrito
-    async restarProducto(id) {
+    async restarProducto(id, cantidad) {
         const token = this.obtenerToken();
         try {
-            const respuesta = await fetch(`${this.baseURL}/ventas/carrito`, {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    productos: [{ id, cantidad: -1 }]
+                    productos: [{ id, cantidad:cantidad -1 }]
                 })
             });
 
@@ -387,24 +390,18 @@ class ApiService {
     }
 
     // Método para actualizar el carrito del usuario
-    async actualizarCarrito(productos, tipoEntrega, idDireccion, metodoPago) {
+    async actualizarCarrito(data) {
         const token = this.obtenerToken();
         try {
-            const respuesta = await fetch(`${this.baseURL}/ventas/carrito`, {
+            alertify.success(JSON.stringify(data));
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    productos: productos.map(producto => ({
-                        id: producto.id,
-                        cantidad: producto.cantidad
-                    })),
-                    tipo_entrega: tipoEntrega,
-                    id_direccion: idDireccion,
-                    metodo_pago: metodoPago
-                })
+                body: JSON.stringify(data)
+                
             });
 
             if (respuesta.ok) {

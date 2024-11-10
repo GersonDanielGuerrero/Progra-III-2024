@@ -28,6 +28,7 @@ class Carrito_Producto(models.Model):
     cantidad = models.IntegerField()
     detalles = models.TextField(null=True)
     ingredientes = models.ManyToManyField(Ingrediente, related_name='carritos_productos')
+    seleccionado = models.BooleanField(default=True)
     
     class Meta:
         db_table = 'carritos_productos'

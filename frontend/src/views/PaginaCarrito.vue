@@ -1,157 +1,125 @@
 <template>
-     <BarraMenu />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <div class="container">
-      <div class="cart">
-        <h2>CARRITO (3)</h2>
-        <div class="select-all">
-          <input type="checkbox" id="select-all">
-          <label for="select-all">SELECCIONAR TODOS</label>
-          <button class="delete">
-           ELIMINAR <i class="fas fa-trash-alt"></i>
+  <BarraMenu />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <div class="container">
+    <div class="cart">
+      <h2>CARRITO ({{ cantidadProductos }})</h2>
+      <div class="select-all">
+        <input type="checkbox" id="select-all" @change="seleccionarTodos">
+        <label for="select-all">SELECCIONAR TODOS</label>
+        <button class="delete" @click="borrarProductos">
+          ELIMINAR <i class="fas fa-trash-alt"></i>
         </button>
-    </div>
-        <div class="cart-item">
-          <div class="item-info">
-            <input type="checkbox" class="item-checkbox" id="item-1">
-            <img src="burger-image.jpg" alt="Burger Guacamole">
-            <div class="item-details">
-              <h3>BURGER GUACAMOLE</h3>
-              <p>Res - Papas G. - 0 Extras</p>
-            </div>
-          </div>
-          <div class="quantity">
-            <button>-</button>
-            <span>1</span>
-            <button>+</button>
-          </div>
-          <span class="price">$6.75</span>
-        </div>
-  
-        <div class="cart-item">
-          <div class="item-info">
-            <input type="checkbox" class="item-checkbox" id="item-2">
-            <img src="placeholder-image.jpg" alt="Producto">
-            <div class="item-details">
-              <h3>PRODUCTO</h3>
-              <p>Especialidad - Acompañante - Extras</p>
-            </div>
-          </div>
-          <div class="quantity">
-            <button>-</button>
-            <span>1</span>
-            <button>+</button>
-          </div>
-          <span class="price">$0.00</span>
-        </div>
-  
-        <div class="cart-item">
-          <div class="item-info">
-            <input type="checkbox" class="item-checkbox" id="item-3">
-            <img src="placeholder-image.jpg" alt="Producto">
-            <div class="item-details">
-              <h3>PRODUCTO</h3>
-              <p>Especialidad - Acompañante - Extras</p>
-            </div>
-          </div>
-          <div class="quantity">
-            <button>-</button>
-            <span>1</span>
-            <button>+</button>
-          </div>
-          <span class="price">$0.00</span>
-        </div>
       </div>
-  
-      <div class="order">
-        <h2>REALIZA TU PEDIDO</h2>
-        <div class="order-option">
-          <p>Escoge el tipo de entrega</p>
-          <button>Domicilio</button>
+      <div v-for="producto in productos" :key="producto.id" class="cart-item">
+        <div class="item-info">
+          <input type="checkbox" class="item-checkbox" v-model="producto.seleccionado">
+          <img :src="producto.imagen" :alt="producto.nombre">
+          <div class="item-details">
+            <h3>{{ producto.nombre }}</h3>
+            <p>{{ producto.detalles }}</p>
+          </div>
         </div>
-        <div class="order-option">
-          <p>Selecciona la dirección</p>
-          <button>Dirección</button>
+        <div class="quantity">
+          <button @click="restarProducto(producto.id)">-</button>
+          <span>{{ producto.cantidad }}</span>
+          <button @click="sumarProducto(producto.id)">+</button>
         </div>
-        <div class="order-option">
-          <p>Escoge el método de pago</p>
-          <button>Seleccionar</button>
-        </div>
-        <div class="total">
-          <p>Total:</p>
-          <span>$6.75</span>
-        </div>
-        <button class="order-button" @click="realizarPedido">PEDIR</button>
+        <span class="price">${{ producto.precio }}</span>
       </div>
     </div>
-  </template>
-  
-  <style scoped>
-  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body, html {
-    background-color: #000;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-  }
-  
-  .container {
-    display: flex;
-    gap: 30px;
-    width: 100%;
-    padding: 40px;
-    box-sizing: border-box;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
- 
-  .cart,
-  .order {
-    background-color: #333;
-    padding: 20px;
-    border-radius: 5px;
-    width: 70%;
-    min-width: 500px;
-  }
- 
-  .cart h2,
-  .order h2 {
-    color: #ffad00; 
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    width: 100%;
-    min-width: 300px;
-  }
-  .cart h2 {
-    text-align: center;
-    font-size: 1.2em;
-    width: 0.1px;
-    min-width: 300px;
-    font-weight: bold;
-  }
-  .select-all {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    justify-content: space-between;
-  }
-  
-  .select-all label {
-    color:  #ffad00; 
-  }
-  .select-all input[type="checkbox"],
+    <div class="order">
+      <h2>REALIZA TU PEDIDO</h2>
+      <div class="order-option">
+        <p>Escoge el tipo de entrega</p>
+        <button @click="cambiarTipoEntrega">Domicilio</button>
+      </div>
+      <div class="order-option">
+        <p>Selecciona la dirección</p>
+        <button @click="seleccionarDireccion">Dirección</button>
+      </div>
+      <div class="order-option">
+        <p>Escoge el método de pago</p>
+        <button @click="seleccionarMetodoPago">Seleccionar</button>
+      </div>
+      <div class="total">
+        <p>Total:</p>
+        <span>${{ totalCarrito}}</span>
+      </div>
+      <BotonComp @click="realizarPedido">PEDIR</BotonComp>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body, html {
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  padding: 40px;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart,
+.order {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 5px;
+  width: 70%;
+  min-width: 500px;
+}
+
+.cart h2,
+.order h2 {
+  color: #ffad00; 
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  width: 100%;
+  min-width: 300px;
+}
+
+.cart h2 {
+  text-align: center;
+  font-size: 1.2em;
+  width: 0.1px;
+  min-width: 300px;
+  font-weight: bold;
+}
+
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: space-between;
+}
+
+.select-all label {
+  color:  #ffad00; 
+}
+
+.select-all input[type="checkbox"],
 .item-checkbox {
   appearance: none;
   width: 18px;
@@ -182,125 +150,117 @@
 }
 
 
-  .cart-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-  }
-  
-  .item-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
 
-  .item-info img {
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-  }
-  
-  .item-details h3 {
-    font-size: 1em;
-    color: #ffad00; 
-    margin-bottom: 5px;
-  }
-  
-  .item-details p {
-    font-size: 0.9em;
-    color:  #ffad00; 
-  } 
-  
-  .quantity {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #ffad00;
-  }
-  
-  .quantity button {
-    background-color: #333;
-    border: none;
-    color:  #ffad00;
-    font-size: 1em;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-  
-  .price {
-    color: #ffad00;
-    font-size: 1em;
-  }
-  
-  .order-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    color: #ffffff;
-  }
-  
-  .order-option p {
-    font-size: 0.9em;
-    color: #ffffff; 
-  }
-  
-  .order-option button {
-    background-color: #ffad00;
-    border: none;
-    padding: 5px 10px;
-    color: #000;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    font-size: 1.2em;
-    color: #ffad00; 
-  }
-  
-  .total p {
-    font-size: 1em;
-    color: #ffffff; 
-  }
-  
-  .total span {
-    color: #ffad00; 
-    font-size: 1em;
-  }
-  
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-  .order-button {
-    background-color: #ffad00;
-    border: none;
-    width: 49%;
-    padding: 10px;
-    color: #000;
-    font-weight: bold;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 20px;
-  }
-  </style>
+.item-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
 
+.item-details h3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  font-size: 1em;
+  color: #ffad00; 
+  margin-bottom: 5px;
+}
+
+.item-details p {
+  font-size: 0.8em;
+  color:  #ffad00; 
+} 
+
+.quantity {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ffad00;
+}
+
+.quantity button {
+  background-color: #333;
+  border: none;
+  color:  #ffad00;
+  font-size: 1em;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.price {
+  color: #ffad00;
+  font-size: 1em;
+}
+
+.order-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.order-option p {
+  font-size: 0.9em;
+  color: #ffffff; 
+}
+
+.order-option button {
+  background-color: #ffad00;
+  border: none;
+  padding: 5px 10px;
+  color: #000;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #ffad00; 
+}
+
+.total p {
+  font-size: 1em;
+  color: #ffffff; 
+}
+
+.total span {
+  color: #ffad00; 
+  font-size: 1em;
+}
+</style>
 
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
+import BotonComp from '@/components/BotonComp.vue';
 import ApiService from "@/services/ApiService"; 
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
 export default {
   name: 'PaginaCarrito',
     components: {
-        BarraMenu
+        BarraMenu,
+        BotonComp,
     },
   data() {
     return {
@@ -309,16 +269,21 @@ export default {
       direccionSeleccionada: null,
       tipoEntrega: "",
       metodoPago: "",
+
+      cambiosRealizados: false,
+      intervalo: null,
     };
   },
   computed: {
     totalCarrito() {
       return this.productos
         .filter((producto) => producto.seleccionado)
-        .reduce((acc, producto) => acc + producto.precioTotal, 0);
+        .reduce((acc, producto) => acc + producto.precio, 0);
     },
     cantidadProductos() {
-      return this.productos.reduce((acc, producto) => acc + producto.cantidad, 0);
+      //Contar solo los productos seleccionados y calcular la cantidad total
+      const productosSeleccionados = this.productos.filter((p) => p.seleccionado);
+      return productosSeleccionados.reduce((acc, producto) => acc + producto.cantidad, 0);
     },
   },
   methods: {
@@ -339,7 +304,10 @@ export default {
       }
     },
     async actualizarCarrito() {
-      const productosActualizados = this.productos.map(({ id, cantidad }) => ({ id, cantidad }));
+      if (this.cambiosRealizados) {
+      this.cambiosRealizados = false;
+        
+      const productosActualizados = this.productos.map(({ id, cantidad, seleccionado }) => ({ id, cantidad, seleccionado }));
       const data = {
         productos: productosActualizados,
         tipo_entrega: this.tipoEntrega,
@@ -350,6 +318,10 @@ export default {
       if (respuesta.error) {
         alertify.error(respuesta.mensaje);
       }
+      else {
+        this.obtenerCarrito();
+      }
+    }
     },
     async realizarPedido() {
       const productosPedido = this.productos.filter((p) => p.seleccionado);
@@ -372,21 +344,17 @@ export default {
       }
     },
     async sumarProducto(id) {
-      const respuesta = await ApiService.sumarProducto(id); 
-      if (!respuesta.error) {
-        await this.obtenerCarrito();
-      } else {
-        alertify.error(respuesta.mensaje);
-      }
+      this.productos.find((p) => p.id === id).cantidad++;
     },
     async restarProducto(id) {
       const producto = this.productos.find((p) => p.id === id);
-      if (producto.cantidad === 1) {
+      const cantidad = producto.cantidad;
+      if (cantidad === 1) {
       alertify.confirm(
           'Eliminar producto',
           '¿Deseas eliminar este producto del carrito?',
           async () => {
-            const respuesta = await ApiService.restarProducto(id); 
+            const respuesta = await ApiService.borrarProductos([id]);
             if (!respuesta.error) {
               await this.obtenerCarrito();
             } else {
@@ -397,12 +365,7 @@ export default {
         );
 
     }else {
-      const respuesta = await ApiService.restarProducto(id); 
-      if (!respuesta.error) {
-        await this.obtenerCarrito();
-      } else {
-        alertify.error(respuesta.mensaje);
-      }
+      producto.cantidad--;
     }
   },
     async borrarProductos() {
@@ -423,10 +386,26 @@ export default {
         function() {} 
       );
     },
+    seleccionarTodos() {
+      this.productos.forEach((producto) => {
+        producto.seleccionado = true;
+      });
+    },
+
   },
   async mounted() {
+    this.intervalo = setInterval(this.actualizarCarrito, 10000);
     await this.obtenerCarrito();
     await this.obtenerDirecciones();
   },
+  beforeUnmount() {
+    clearInterval(this.intervalo);
+    this.actualizarCarrito();
+  },
+  watch: {
+    cantidadProductos() {
+      this.cambiosRealizados = true;
+    },
+  }
 };
 </script>

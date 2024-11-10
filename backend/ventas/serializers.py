@@ -15,17 +15,19 @@ class CarritoSerializer(serializers.ModelSerializer):
             return []
         productos = []
         for carrito_producto in carrito_productos:
-            id = carrito_producto.producto.id
+            id = carrito_producto.id
             nombre = carrito_producto.producto.nombre
             imagen = carrito_producto.producto.url_foto
             precio = carrito_producto.producto.precio
             cantidad = carrito_producto.cantidad
+            seleccionado = carrito_producto.seleccionado
             
             productos.append({
                 'id': id,
                 'nombre': nombre,
                 'imagen': imagen,
                 'precio': precio,
-                'cantidad': cantidad
+                'cantidad': cantidad,
+                'seleccionado': seleccionado
             })
         return productos
