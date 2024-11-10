@@ -28,7 +28,7 @@
                 <CajaTexto
                     placeholder="Escribe aquí (opcional)" 
                     type="text" 
-                    v-model="detalles" 
+                    v-model="form.detalle" 
                 />
 
                 <div class="order-section">
@@ -283,7 +283,6 @@ export default{
       .then((respuesta) => {
         if (!respuesta.error) {
           this.producto = respuesta.datos;
-          
         Alertify.success(JSON.stringify(this.producto));
         } else {
           console.error('Error al obtener producto:', respuesta.mensaje);
