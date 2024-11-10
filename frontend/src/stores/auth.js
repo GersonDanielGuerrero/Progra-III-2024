@@ -16,7 +16,6 @@ actions: {
         },
     logout(){
         this.token = null;
-        this.usuario = null;
         localStorage.removeItem('token');
         },
         cargarDatos(){
