@@ -1,5 +1,6 @@
 <template>
     <div class="map-container">
+      <h2>{{ accion }} Dirección</h2>
       <l-map
         :zoom="zoom"
         :center="centro"
@@ -17,10 +18,36 @@
           @moveend="marcaMovida"
         ></l-marker>
       </l-map>
-      <div class="coordinates">
-        <p>Dirección seleccionada: {{ direccion_marca }}</p>
-        <p>Coordenadas: Latitud {{ posicionMarca?.lat }}, Longitud {{ posicionMarca?.lng }}</p>
-      </div>
+
+      <div class="form-group">
+      <CajaTexto
+      placeholder="Nombre de la direccion"
+      type="text"
+      v-model="direccion_nombre"
+      required
+      />
+
+      <CajaTexto
+      placeholder="Direccion"
+      type="text"
+      v-model="direccion"
+      required
+      />
+
+      <CajaTexto
+      placeholder="Indicaciones adicionales"
+      type="text"
+      v-model="indicaciones"
+      required
+      />
+    </div>
+
+      
+      <div class="button-group">
+      <BotonComp class="boton-ancho" @metodo_click="guardarDireccion">Guardar</BotonComp>
+      <BotonComp class="boton-ancho" @metodo_click="cancelar">Cancelar</BotonComp>
+    </div>
+      
     </div>
   </template>
 
@@ -30,8 +57,35 @@
   height: 70vh;
   margin: 10vh auto;
 }
-.coordinates {
-  margin-top: 10px;
+
+.map-container h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    background-color: #000;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px; 
+  margin-top: 20px;
+  padding-bottom: 40px;
+}
+
+.boton-ancho {
+  width: 150px;
 }
 </style>
 
@@ -40,13 +94,17 @@
   <script>
   import { LMap, LTileLayer, LMarker } from "vue3-leaflet";
   import "leaflet/dist/leaflet.css";
-  
+import CajaTexto from "@/components/CajaTexto.vue";
+import BotonComp from "@/components/BotonComp.vue";
+
   export default {
     name: "PaginaDireccion",
     components: {
       LMap,
       LTileLayer,
       LMarker,
+      CajaTexto,
+      BotonComp,
     },
     data() {
       return {
@@ -81,5 +139,3 @@
     },
   };
   </script>
-  
- 
