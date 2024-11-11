@@ -35,3 +35,10 @@ class DireccionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Direccion
         fields = ['id', 'nombre', 'direccion', 'lat', 'lon','indicaciones']
+        
+    def validarNombre(self, nombre, usuario):
+        #Validar que el nombre no exista en las direcciones del usuario
+        if usuario.direcciones.filter(nombre=nombre).exists():
+            raise serializers.ValidationError('Ya existe una dirección con ese nombre')
+        return nombre
+        
