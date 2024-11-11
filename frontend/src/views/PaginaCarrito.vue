@@ -73,6 +73,7 @@ body, html {
 
 .container {
   display: flex;
+  flex-direction: column;
   gap: 30px;
   width: 100%;
   padding: 40px;
@@ -88,6 +89,14 @@ body, html {
   border-radius: 5px;
   width: 70%;
   min-width: 500px;
+}
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+  .cart, .order {
+    flex:1;
+  }
 }
 
 .cart h2,
