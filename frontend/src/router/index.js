@@ -28,7 +28,7 @@ const routes = [
         component: PaginaMenu,
     },
     {
-        path: "cuenta",
+        path: "/cuenta",
         name: "Cuenta",
         component: PaginaCuenta,
     }
