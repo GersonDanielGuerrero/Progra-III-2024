@@ -31,3 +31,7 @@ class RegistroSerializer(serializers.ModelSerializer):
         usuario.save()
         return usuario
 
+class DireccionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Direccion
+        fields = ['id', 'nombre', 'direccion', 'lat', 'lon','indicaciones']
