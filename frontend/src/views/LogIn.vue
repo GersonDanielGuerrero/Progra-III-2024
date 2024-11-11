@@ -8,14 +8,14 @@
         <form @submit.prevent="handleSubmit">
           <CajaTexto
             class="caja-texto"
-            v-model="correo"
+            v-model="usuario.correo"
             placeholder="Correo Electrónico"
             type="email"
             required
           />
           <CajaTexto
             class="caja-texto"
-            v-model="password"
+            v-model="usuario.password"
             placeholder="Contraseña"
             type="password"
             required
@@ -176,6 +176,7 @@ img{
 <script>
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
+import ApiService from '@/services/ApiService';
 export default {
     name: 'LogIn',
     components: {
@@ -184,37 +185,29 @@ export default {
     },
     data(){
     return{
+        usuario:{
+        correo: '',
+        password: ''
+      }
   }
 },
   methods: {
     async iniciar_sesion() {
       try {
-        const response = await fetch('http://127.0.0.1:8000//usuarios/login/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            correo: this.correo,
-            password: this.password
-          })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          // Si se recibe el JWT, se guarda (esto es un ejemplo básico)
-          localStorage.setItem('token', data.token);
+        const response = await ApiService.iniciarSesion(this.usuario);
+        alert(JSON.stringify(response));
+        if (!response.error) {
           this.datos_validos = true;
           // Aquí podrías redirigir al usuario a otra página
           this.$router.push('/');
-        } else if (response.status === 401) {
+        } else {
           alert('Correo o contraseña incorrectos');
         }
       } catch (error) {
         // Manejo de error de red u otro tipo de fallo
-        this.mensaje_error = 'Hubo un problema al conectar con el servidor.';
+        this.mensaje_error = 'Hubo un problema al conectar con el servidor';
         this.datos_validos = false;
-        alert(this.mensaje_error);
+        alert(this.mensaje_error+': ' + error);
       }
     },
     registrarse() {
