@@ -12,9 +12,10 @@ class CarritoProductoView(APIView):
     def post(self, request):
         usuario = request.user
         carrito = usuario.carrito
-        producto = Producto.objects.get(id=request.data.get('producto'))
         detalles = request.data.get('detalles')
         cantidad = request.data.get('cantidad')
+        id = request.data.get('id')
+        producto = Producto.objects.filter(id=id).first()
 
         if not producto:
             return Response(status=status.HTTP_404_NOT_FOUND, data={'mensaje': 'Producto no encontrado'})

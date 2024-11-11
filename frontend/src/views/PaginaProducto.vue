@@ -4,9 +4,6 @@
         <div class = "row">
             <BarraMenu/>
         </div>
-        <BotonComp @click="CargarProducto">
-            Recargar
-        </BotonComp>
 
         <h1 class="header-title">{{producto.categoria}}</h1>
 
