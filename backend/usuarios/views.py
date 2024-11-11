@@ -32,9 +32,14 @@ class DireccionView(APIView):
         '''
         usuario = request.user
         serializer = DireccionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        print(request.data)
+        #Validar y si hay un error imprimirlo
+        if not serializer.is_valid():
+            print(serializer.errors)
+            return Response(serializer.errors, status=400)
         serializer.validarNombre(request.data['nombre'], usuario)
         serializer.save( usuario = usuario)
+        return Response({'Direccion guardada'}, status=201)
     
     def put(self, request, id):
         usuario = request.user

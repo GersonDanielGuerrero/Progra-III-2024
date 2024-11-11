@@ -243,17 +243,21 @@ class ApiService {
         let metodo = '';
 
         if (accion === 'añadir') {
-            url = `${this.baseURL}/api/usuarios/direcciones`;
+            url = `${this.baseURL}/usuarios/direcciones/`;
             metodo = 'POST';
         } else if (accion === 'editar' && id) {
-            url = `${this.baseURL}/api/usuarios/direcciones/${id}`;
+            url = `${this.baseURL}/usuarios/direcciones/${id}`;
             metodo = 'PUT';
         }
 
         try {
+            const token = this.obtenerToken();
             const response = await fetch(url, {
                 method: metodo,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json' 
+                    },
                 body: JSON.stringify(direccion),
             });
 
@@ -272,12 +276,16 @@ class ApiService {
 
     // Método para cargar datos de una dirección (GET)
     async cargarDatos(id) {
-        const url = `${this.baseURL}/api/usuarios/direcciones/${id}`;
+        const url = `${this.baseURL}/usuarios/direcciones/${id}`;
 
         try {
+            const token = this.obtenerToken();
             const response = await fetch(url, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json' 
+                },
             });
 
             if (!response.ok) {

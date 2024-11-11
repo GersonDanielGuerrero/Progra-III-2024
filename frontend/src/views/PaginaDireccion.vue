@@ -23,7 +23,7 @@
       <CajaTexto
       placeholder="Nombre de la direccion"
       type="text"
-      v-model="direccion_nombre"
+      v-model="nombre"
       required
       />
 
@@ -99,6 +99,7 @@ import BotonComp from "@/components/BotonComp.vue";
 import ApiService from "@/services/ApiService"; 
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
+import { useRoute } from 'vue-router'
 
 export default {
   name: "PaginaDireccion",
@@ -120,9 +121,7 @@ export default {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       nombre: "",
       direccion: "",
-      indicaciones: "",
-      accion: this.$route.state.accion, // Acción tomada (añadir/editar)
-      id: this.$route.state.id || null, // ID de la dirección si se está editando
+      indicaciones: "", // ID de la dirección si se está editando
     };
   },
   methods: {
@@ -190,9 +189,7 @@ export default {
       try {
         await ApiService.guardarDireccion(direccionData, this.accion, this.id);
         alertify.success("Dirección guardada con éxito.");
-        this.$router.push({ name: "paginaCuenta" }); // Redirige a la página de cuenta
       } catch (error) {
-        console.error("Error al guardar la dirección:", error);
         alertify.error("Error al guardar la dirección.");
       }
     },
@@ -206,5 +203,12 @@ export default {
   mounted() {
     this.cargarDatos();
   },
+  setup() {
+    const route = useRoute()
+    const id = route.params.id
+    const accion = route.params.accion
+
+    return { id, accion }
+  }
 };
 </script>

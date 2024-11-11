@@ -39,6 +39,7 @@ class DireccionSerializer(serializers.ModelSerializer):
     def validarNombre(self, nombre, usuario):
         #Validar que el nombre no exista en las direcciones del usuario
         if usuario.direcciones.filter(nombre=nombre).exists():
+            print('Ya existe una dirección con ese nombre')
             raise serializers.ValidationError('Ya existe una dirección con ese nombre')
         return nombre
         
