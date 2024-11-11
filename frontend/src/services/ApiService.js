@@ -9,7 +9,7 @@ class ApiService {
     // Método para obtener el token del authStore
     obtenerToken() {
         const authStore = useAuthStore();
-        return authStore.token;
+        return authStore.getToken();
     }
 
     // Método para insertar productos, categorías o anuncios
@@ -180,9 +180,7 @@ class ApiService {
             if (respuesta.ok) {
                 // Guardar el token y redirigir
                 const authStore = useAuthStore();
-                const usuario = datos.usuario;
-                authStore.setToken(datos.token);
-                authStore.setUsuario(usuario);
+                authStore.setToken(datos.access);
                 window.location.href = '/pagina-principal'; // Redirigir a la página principal
                 return { error: false, datos: datos };
             }
