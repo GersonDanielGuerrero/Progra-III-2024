@@ -97,6 +97,8 @@ import "leaflet/dist/leaflet.css";
 import CajaTexto from "@/components/CajaTexto.vue";
 import BotonComp from "@/components/BotonComp.vue";
 import ApiService from "@/services/ApiService"; 
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 export default {
   name: "PaginaDireccion",
