@@ -91,51 +91,110 @@
 
 
   
-  <script>
-  import { LMap, LTileLayer, LMarker } from "vue3-leaflet";
-  import "leaflet/dist/leaflet.css";
+<script>
+import { LMap, LTileLayer, LMarker } from "vue3-leaflet";
+import "leaflet/dist/leaflet.css";
 import CajaTexto from "@/components/CajaTexto.vue";
 import BotonComp from "@/components/BotonComp.vue";
+import ApiService from "@/services/ApiService"; 
 
-  export default {
-    name: "PaginaDireccion",
-    components: {
-      LMap,
-      LTileLayer,
-      LMarker,
-      CajaTexto,
-      BotonComp,
-    },
-    data() {
-      return {
-        zoom: 19,
-        centro: [13.346994, -88.437800], // Coordenadas iniciales, Good Burger
-        posicionMarca: null, // Posición del marcador
-        tileLayerUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        direccion_marca: "",
-      };
-    },
-    methods: {
-      async clickMapa(event) {
-        this.posicionMarca = event.latlng;
-        await this.obtenerDireccionMarcada(event.latlng.lat, event.latlng.lng);
-      },
-      async marcaMovida(event) {
-        this.posicionMarca = event.target.getLatLng();
-        await this.obtenerDireccionMarcada(this.posicionMarca.lat, this.posicionMarca.lng);
-      },
-      async obtenerDireccionMarcada(lat, lng) {
-        // Esto obtiene el nombre de la direccion en base a las coordenadas
+export default {
+  name: "PaginaDireccion",
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker,
+    CajaTexto,
+    BotonComp,
+  },
+  data() {
+    return {
+      zoom: 19,
+      centro: [13.346994, -88.437800], // Coordenadas iniciales, Good Burger
+      posicionMarca: null, // Posición del marcador
+      lat: null, 
+      lon: null, 
+      tileLayerUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      nombre: "",
+      direccion: "",
+      indicaciones: "",
+      accion: this.$route.state.accion, // Acción tomada (añadir/editar)
+      id: this.$route.state.id || null, // ID de la dirección si se está editando
+    };
+  },
+  methods: {
+    // Método que se llama al cargar la página
+    async cargarDatos() {
+      if (this.accion === "editar" && this.id) {
         try {
-          // Usa el servicio de geocodificación inversa de OpenStreetMap para obtener la dirección
-          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
-          const data = await response.json();
-          this.direccion_marca = data.display_name || "Dirección no disponible";
+          const direccionData = await ApiService.cargarDatos(this.id);
+          this.nombre = direccionData.nombre;
+          this.direccion = direccionData.direccion;
+          this.indicaciones = direccionData.indicaciones || "";
+          this.lat = direccionData.lat;
+          this.lon = direccionData.lon;
+          this.posicionMarca = [this.lat, this.lon]; // Actualiza la posición del marcador
+          this.centro = this.posicionMarca; // Centra el mapa en la dirección cargada
         } catch (error) {
-          console.error("Error al obtener la dirección:", error);
+          console.error("Error al cargar los datos de la dirección:", error);
         }
-      },
+      }
     },
-  };
-  </script>
+
+    // Método que se llama al hacer clic en el mapa
+    async clickMapa(event) {
+      this.posicionMarca = event.latlng;
+      this.lat = event.latlng.lat;
+      this.lon = event.latlng.lng;
+      await this.obtenerDireccionMarcada(this.lat, this.lon);
+    },
+
+    // Método que se llama cuando el marcador es movido
+    async marcaMovida(event) {
+      this.posicionMarca = event.target.getLatLng();
+      this.lat = this.posicionMarca.lat;
+      this.lon = this.posicionMarca.lng;
+      await this.obtenerDireccionMarcada(this.lat, this.lon);
+    },
+
+    // Método para obtener la dirección basada en las coordenadas
+    async obtenerDireccionMarcada(lat, lng) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+        const data = await response.json();
+        this.direccion = data.display_name || "Dirección no disponible";
+      } catch (error) {
+        console.error("Error al obtener la dirección:", error);
+      }
+    },
+
+    // Método para guardar la dirección
+    async guardarDireccion() {
+      const direccionData = {
+        nombre: this.nombre,
+        direccion: this.direccion,
+        lat: this.lat, // Usamos las variables lat y lon
+        lon: this.lon,
+        indicaciones: this.indicaciones,
+      };
+
+      try {
+        await ApiService.guardarDireccion(direccionData, this.accion, this.id);
+        this.$router.push({ name: "paginaCuenta" }); // Redirige a la página de cuenta
+      } catch (error) {
+        console.error("Error al guardar la dirección:", error);
+      }
+    },
+
+    // Método para cancelar (redirige a la página de cuenta sin hacer cambios)
+    cancelar() {
+      this.$router.push({ name: "paginaCuenta" });
+    },
+  },
+  // Llamamos a cargarDatos cuando se carga la vista
+  mounted() {
+    this.cargarDatos();
+  },
+};
+</script>
