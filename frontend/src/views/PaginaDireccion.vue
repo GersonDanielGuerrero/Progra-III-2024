@@ -137,7 +137,7 @@ export default {
           this.posicionMarca = [this.lat, this.lon]; // Actualiza la posición del marcador
           this.centro = this.posicionMarca; // Centra el mapa en la dirección cargada
         } catch (error) {
-          console.error("Error al cargar los datos de la dirección:", error);
+          alertify.error("Error al cargar los datos de la dirección.");
         }
       }
     },
@@ -165,16 +165,22 @@ export default {
         const data = await response.json();
         this.direccion = data.display_name || "Dirección no disponible";
       } catch (error) {
-        console.error("Error al obtener la dirección:", error);
+        alertify.error("Error al obtener la dirección.");
       }
     },
 
     // Método para guardar la dirección
     async guardarDireccion() {
+      // Validación de los campos
+      if (!this.nombre || !this.direccion || !this.lat || !this.lon) {
+        alertify.error("Todos los campos son obligatorios.");
+        return;
+      }
+
       const direccionData = {
         nombre: this.nombre,
         direccion: this.direccion,
-        lat: this.lat, // Usamos las variables lat y lon
+        lat: this.lat, 
         lon: this.lon,
         indicaciones: this.indicaciones,
       };
@@ -184,6 +190,7 @@ export default {
         this.$router.push({ name: "paginaCuenta" }); // Redirige a la página de cuenta
       } catch (error) {
         console.error("Error al guardar la dirección:", error);
+        alertify.error("Error al guardar la dirección.");
       }
     },
 
