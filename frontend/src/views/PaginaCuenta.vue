@@ -79,7 +79,7 @@ h2 {
 export default {
     name: 'PaginaCuenta',
     components: {
-    
+
     },
     data() {
         return {
