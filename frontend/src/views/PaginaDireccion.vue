@@ -187,6 +187,7 @@ export default {
 
       try {
         await ApiService.guardarDireccion(direccionData, this.accion, this.id);
+        alertify.success("Dirección guardada con éxito.");
         this.$router.push({ name: "paginaCuenta" }); // Redirige a la página de cuenta
       } catch (error) {
         console.error("Error al guardar la dirección:", error);
