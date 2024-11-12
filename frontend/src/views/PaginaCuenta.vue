@@ -289,13 +289,7 @@ export default {
       console.log('Datos personales guardados:', this.formDatosPersonales);
       // Aquí puedes enviar esta información a un servidor o almacenarla
     },
-    // Agregar una nueva dirección
-    agregarDireccion() {
-      this.direcciones.push({
-        nombre: 'Nueva Dirección',
-        direccion: 'Dirección pendiente',
-      });
-    },
+    
     // Editar una dirección
     editarDireccion(index) {
       const direccion = this.direcciones[index];
