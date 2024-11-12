@@ -231,40 +231,40 @@ export default {
   },
   data() {
   return {
-    
-    formDatosPersonales: {
-      nombre: '',
-      apellido: '',
-      email: '',
-      telefono: '',
-    },
-   
-    direcciones: [
-      {
-        nombre: 'Casa',
-        direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
-      },
-      {
-        nombre: 'Mi casa',
-        direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
-      },
-      {
-        nombre: 'Trabajo',
-        direccion: 'Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután',
-      },
-    ],
-    
-    isDatosPersonalesVisible: false,
-    isDireccionesVisible: false,
-    isMasOpcionesVisible: false,
-    
-    usuario: {
-      nombres: '',
-      apellidos: '',
-      correo: '',
-      telefono: '',
-    },
-    roles: [],
+
+      
+      isDatosPersonalesVisible: false,
+      isDireccionesVisible: false,
+      isMasOpcionesVisible: false,
+      
+      usuario: {
+          nombres: 'Juan Edgardo',
+          apellidos: 'Pérez García',
+          correo: 'juanpe@gmail.com',
+          telefono: '3563-4232',
+        },
+
+        direcciones: [
+          {
+            id:'1',
+            nombre: 'Casa',
+            direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
+            predeterminada:true,
+          },
+          {
+            id:'2',
+            nombre: 'Mi casa',
+            direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
+            predeterminada:false,
+          },
+          {
+            id:'3',
+            nombre: 'Trabajo',
+            direccion: 'Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután',
+            predeterminada:false,
+          },
+        ],
+        roles: [],
     mensaje: '',
     error: false,
   };
