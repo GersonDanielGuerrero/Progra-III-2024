@@ -1,67 +1,54 @@
 <template>
     <BarraMenu />
     <div class="perfil-container">
+      <!-- Datos Personales -->
       <section class="datos-personales">
-        <h2>Datos personales</h2>
-        <div class="campos">
-          <CajaTexto placeholder="Nombre*" />
-          <CajaTexto placeholder="Apellido*" />
-          <CajaTexto placeholder="Correo electrónico*" />
-          <CajaTexto placeholder="Número de Celular*" />
+        <h2 @click="toggleDatosPersonales">Datos personales</h2>
+        <div v-show="isDatosPersonalesVisible" class="campos">
+          <CajaTexto v-model="formDatosPersonales.nombre" placeholder="Nombre*" />
+          <CajaTexto v-model="formDatosPersonales.apellido" placeholder="Apellido*" />
+          <CajaTexto v-model="formDatosPersonales.email" placeholder="Correo electrónico*" />
+          <CajaTexto v-model="formDatosPersonales.telefono" placeholder="Número de Celular*" />
         </div>
-        <div class="boton-guardar">
-          <BotonComp class="guardar">Guardar</BotonComp>
+        <div v-show="isDatosPersonalesVisible" class="boton-guardar">
+          <BotonComp class="guardar" @click="guardarDatosPersonales">Guardar</BotonComp>
         </div>
       </section>
   
+      <!-- Direcciones -->
       <section class="direcciones">
-        <h2>Direcciones</h2>
-        <div class="boton-agregar">
-          <BotonComp>Agregar dirección</BotonComp>
+        <h2 @click="toggleDirecciones">Direcciones</h2>
+        <div v-show="isDireccionesVisible" class="boton-agregar">
+          <BotonComp @click="agregarDireccion">Agregar dirección</BotonComp>
         </div>
-        <div class="lista-direcciones">
-          <div class="direccion">
-            <span>Mi casa</span>
-            <p>Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután</p>
+        <div v-show="isDireccionesVisible" class="lista-direcciones">
+          <div v-for="(direccion, index) in direcciones" :key="index" class="direccion">
+            <span>{{ direccion.nombre }}</span>
+            <p>{{ direccion.direccion }}</p>
             <div class="acciones">
-              <BotonComp> Editar </BotonComp>
-              <BotonComp> Eliminar </BotonComp>
-              <BotonComp> Predeterminada </BotonComp>
-            </div>
-          </div>
-          <div class="direccion">
-            <span>Trabajo</span>
-            <p>Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután</p>
-            <div class="acciones">
-                <BotonComp> Editar </BotonComp>
-                <BotonComp> Eliminar </BotonComp>
-                <BotonComp> Predeterminada </BotonComp>
-            </div>
-          </div>
-          <div class="direccion">
-            <span>Casa 2</span>
-            <p>Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután</p>
-            <div class="acciones">
-                <BotonComp> Editar </BotonComp>
-                <BotonComp> Eliminar </BotonComp>
-                <BotonComp> Predeterminada </BotonComp>
+              <BotonComp @click="editarDireccion(index)">Editar</BotonComp>
+              <BotonComp @click="eliminarDireccion(index)">Eliminar</BotonComp>
+              <BotonComp @click="marcarPredeterminada(index)">Predeterminada</BotonComp>
             </div>
           </div>
         </div>
       </section>
+  
+      <!-- Más opciones -->
       <section class="mas-opciones">
-        <h2>Más opciones</h2>
-        <div class="opciones-botones">
-            <div class="opcion">
+        <h2 @click="toggleMasOpciones">Más opciones</h2>
+        <div v-show="isMasOpcionesVisible" class="opciones-botones">
+          <div class="opcion">
             <span>Cambio Contraseña</span>
-          <BotonComp class="boton-cambiar">Cambiar</BotonComp>
-          <span>Eliminar Cuenta</span>
-          <BotonComp class="boton-eliminar">Eliminar</BotonComp>
-        </div>
+            <BotonComp class="boton-cambiar" @click="cambiarContraseña">Cambiar</BotonComp>
+            <span>Eliminar Cuenta</span>
+            <BotonComp class="boton-eliminar" @click="eliminarCuenta">Eliminar</BotonComp>
+          </div>
         </div>
       </section>
     </div>
   </template>
+  
   
   <style scoped>
 
@@ -85,7 +72,7 @@
   .campos {
     display: grid;
     grid-template-columns: 2fr 2fr;
-    gap: 40px;
+    gap: 20px;
     margin-bottom: 20px;
   }
   
@@ -248,20 +235,97 @@
 import BarraMenu from '@/components/BarraMenu.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 import BotonComp from '@/components/BotonComp.vue';
+
 export default {
-    name: 'PaginaCuenta',
-    components: {
-     BarraMenu,
-     CajaTexto,
-     BotonComp,
+  name: 'PaginaCuenta',
+  components: {
+    BarraMenu,
+    CajaTexto,
+    BotonComp,
+  },
+  data() {
+    return {
+      // Datos personales
+      formDatosPersonales: {
+        nombre: '',
+        apellido: '',
+        email: '',
+        telefono: '',
+      },
+      // Direcciones
+      direcciones: [
+        {
+          nombre: 'Casa2',
+          direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
+        },
+        {
+          nombre: 'Mi casa',
+          direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
+        },
+        {
+          nombre: 'Trabajo',
+          direccion: 'Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután',
+        },
+      ],
+      // Opciones adicionales
+      isDatosPersonalesVisible: false,
+      isDireccionesVisible: false,
+      isMasOpcionesVisible: false,
+    };
+  },
+  methods: {
+    // Toggle secciones desplegables
+    toggleDatosPersonales() {
+      this.isDatosPersonalesVisible = !this.isDatosPersonalesVisible;
     },
-    data() {
-        return {
-            
+    toggleDirecciones() {
+      this.isDireccionesVisible = !this.isDireccionesVisible;
+    },
+    toggleMasOpciones() {
+      this.isMasOpcionesVisible = !this.isMasOpcionesVisible;
+    },
+    // Guardar datos personales
+    guardarDatosPersonales() {
+      console.log('Datos personales guardados:', this.formDatosPersonales);
+      // Aquí puedes enviar esta información a un servidor o almacenarla
+    },
+    // Agregar una nueva dirección
+    agregarDireccion() {
+      this.direcciones.push({
+        nombre: 'Nueva Dirección',
+        direccion: 'Dirección pendiente',
+      });
+    },
+    // Editar una dirección
+    editarDireccion(index) {
+      const direccion = this.direcciones[index];
+      console.log('Editando dirección:', direccion);
+      // Aquí puedes implementar la edición de la dirección
+    },
+    // Eliminar una dirección
+    eliminarDireccion(index) {
+      this.direcciones.splice(index, 1);
+      console.log('Dirección eliminada');
+    },
+    // Marcar dirección como predeterminada
+    marcarPredeterminada(index) {
+      this.direcciones.forEach((dir, idx) => {
+        if (idx === index) {
+          dir.predeterminada = true;
+        } else {
+          dir.predeterminada = false;
         }
+      });
+      console.log('Dirección predeterminada:', this.direcciones[index]);
     },
-    methods: {
-        
-    }
-}
+    // Cambio de contraseña
+    cambiarContraseña() {
+      console.log('Cambio de contraseña solicitado');
+    },
+    // Eliminar cuenta
+    eliminarCuenta() {
+      console.log('Cuenta eliminada');
+    },
+  },
+};
 </script>
