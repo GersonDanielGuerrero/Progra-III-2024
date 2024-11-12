@@ -1,7 +1,6 @@
 <template>
     <BarraMenu />
     <div class="perfil-container">
-      <!-- Datos Personales -->
       <section class="datos-personales">
         <h2 @click="toggleDatosPersonales">Datos personales</h2>
         <div v-show="isDatosPersonalesVisible" class="campos">
@@ -14,8 +13,6 @@
           <BotonComp class="guardar" @click="guardarDatosPersonales">Guardar</BotonComp>
         </div>
       </section>
-  
-      <!-- Direcciones -->
       <section class="direcciones">
         <h2 @click="toggleDirecciones">Direcciones</h2>
         <div v-show="isDireccionesVisible" class="boton-agregar">
@@ -33,8 +30,6 @@
           </div>
         </div>
       </section>
-  
-      <!-- Más opciones -->
       <section class="mas-opciones">
         <h2 @click="toggleMasOpciones">Más opciones</h2>
         <div v-show="isMasOpcionesVisible" class="opciones-botones">
@@ -48,10 +43,8 @@
       </section>
     </div>
   </template>
-  
-  
-  <style scoped>
 
+  <style scoped>
   .perfil-container {
     background-color: #000;
     color: #fff;
