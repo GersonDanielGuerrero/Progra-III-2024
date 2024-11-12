@@ -230,47 +230,130 @@ export default {
     BotonComp,
   },
   data() {
-    return {
-      // Datos personales
-      formDatosPersonales: {
-        nombre: '',
-        apellido: '',
-        email: '',
-        telefono: '',
+  return {
+    
+    formDatosPersonales: {
+      nombre: '',
+      apellido: '',
+      email: '',
+      telefono: '',
+    },
+   
+    direcciones: [
+      {
+        nombre: 'Casa',
+        direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
       },
-      // Direcciones
-      direcciones: [
-        {
-          nombre: 'Casa',
-          direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
-        },
+      {
+        nombre: 'Mi casa',
+        direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
+      },
+      {
+        nombre: 'Trabajo',
+        direccion: 'Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután',
+      },
+    ],
+    
+    isDatosPersonalesVisible: false,
+    isDireccionesVisible: false,
+    isMasOpcionesVisible: false,
+    
+    usuario: {
+      nombres: '',
+      apellidos: '',
+      correo: '',
+      telefono: '',
+    },
+    roles: [],
+    mensaje: '',
+    error: false,
+  };
+},
 
-        {
-          nombre: 'Mi casa',
-          direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
-        },
-        {
-          nombre: 'Trabajo',
-          direccion: 'Colonia el Cocal (Excirculo Estudiantil Usulután), Primer pasaje, Usulután',
-        },
-      ],
-      // Opciones adicionales
-      isDatosPersonalesVisible: false,
-      isDireccionesVisible: false,
-      isMasOpcionesVisible: false,
+async created() {
+  
+  if (!respuesta.error) {
+    
+    this.usuario = respuesta.datos.usuario;
+    this.direcciones = respuesta.datos.direcciones;
+    this.roles = respuesta.datos.roles;
+    this.mensaje = 'Datos cargados correctamente';
+    this.error = false;
+  } else {
+    
+    this.mensaje = respuesta.mensaje;
+    this.error = true;
+  }
+},
+ 
+ async agregarDireccion() {
+    const nuevaDireccion = {
+      nombre: 'Nueva dirección',
+      direccion: 'Dirección de ejemplo',
+      predeterminada: false,
     };
+    const respuesta = await ApiService.agregarDireccion(nuevaDireccion);
+    if (!respuesta.error) {
+      this.direcciones.push(respuesta.datos);  
+      this.mensaje = 'Dirección agregada exitosamente';
+      this.error = false;
+    } else {
+      this.mensaje = respuesta.mensaje;
+      this.error = true;
+    }
   },
-  methods: {
-    // Toggle secciones desplegables
-    toggleDatosPersonales() {
-      this.isDatosPersonalesVisible = !this.isDatosPersonalesVisible;
-    },
-    toggleDirecciones() {
-      this.isDireccionesVisible = !this.isDireccionesVisible;
-    },
-    toggleMasOpciones() {
-      this.isMasOpcionesVisible = !this.isMasOpcionesVisible;
-    },
+
+ 
+  async editarDireccion(index) {
+    const direccion = this.direcciones[index];
+    const respuesta = await ApiService.editarDireccion(direccion);
+    if (!respuesta.error) {
+      this.mensaje = 'Dirección actualizada exitosamente';
+      this.error = false;
+    } else {
+      this.mensaje = respuesta.mensaje;
+      this.error = true;
+    }
   },
-};
-</script>
+
+  async eliminarDireccion(index) {
+    const direccion = this.direcciones[index];
+    const respuesta = await ApiService.eliminarDireccion(direccion.id);
+    if (!respuesta.error) {
+      this.direcciones.splice(index, 1);  
+      this.mensaje = 'Dirección eliminada exitosamente';
+      this.error = false;
+    } else {
+      this.mensaje = respuesta.mensaje;
+      this.error = true;
+    }
+  },
+
+    async marcarPredeterminada(index) {
+    const direccion = this.direcciones[index];
+    const respuesta = await ApiService.marcarDireccionPredeterminada(direccion.id);
+    if (!respuesta.error) {
+      this.direcciones.forEach((dir) => { dir.predeterminada = false; }); 
+      direccion.predeterminada = true;  
+      this.mensaje = 'Dirección marcada como predeterminada';
+      this.error = false;
+    } else {
+      this.mensaje = respuesta.mensaje;
+      this.error = true;
+    }
+  },
+  async cambiarContraseña() {
+    const nuevaContraseña = prompt("Ingrese la nueva contraseña:");
+    if (nuevaContraseña) {
+      const respuesta = await ApiService.cambiarContraseña(nuevaContraseña);
+      if (!respuesta.error) {
+        this.mensaje = 'Contraseña cambiada exitosamente';
+        this.error = false;
+      } else {
+        this.mensaje = respuesta.mensaje;
+        this.error = true;
+      }
+    }
+  },
+}
+

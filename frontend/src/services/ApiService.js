@@ -11,6 +11,165 @@ class ApiService {
         const authStore = useAuthStore();
         return authStore.token;
     }
+      // Método para obtener los datos de la cuenta
+    async obtenerCuenta() {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (respuesta.ok) {
+                const datos = await respuesta.json();
+                return { error: false, datos: datos };
+            }
+
+            const datos = await respuesta.json();
+            this.msgError = datos.mensaje || 'Error al obtener la cuenta';
+            return { error: true, mensaje: this.msgError };
+
+        } catch (error) {
+            console.error("Error al obtener la cuenta:", error);
+            this.msgError = error.message;
+            return { error: true, mensaje: error.message };
+        }
+    }
+    // Método para actualizar los datos de la cuenta
+    async actualizarCuenta(datosCuenta) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datosCuenta),
+            });
+
+            if (respuesta.ok) {
+                const datos = await respuesta.json();
+                return { error: false, datos: datos };
+            }
+
+            const datos = await respuesta.json();
+            this.msgError = datos.mensaje || 'Error al actualizar la cuenta';
+            return { error: true, mensaje: this.msgError };
+
+        } catch (error) {
+            console.error("Error al actualizar la cuenta:", error);
+            this.msgError = error.message;
+            return { error: true, mensaje: error.message };
+        }
+    }
+// Método para eliminar la cuenta
+async eliminarCuenta() {
+    const token = this.obtenerToken();
+    try {
+        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (respuesta.ok) {
+            return { error: false, mensaje: "Cuenta eliminada correctamente" };
+        }
+
+        const datos = await respuesta.json();
+        this.msgError = datos.mensaje || 'Error al eliminar la cuenta';
+        return { error: true, mensaje: this.msgError };
+
+    } catch (error) {
+        console.error("Error al eliminar la cuenta:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
+    }
+}
+    async obtenerCuenta() {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (respuesta.ok) {
+                const datos = await respuesta.json();
+                return { error: false, datos: datos };
+            }
+    
+            const datos = await respuesta.json();
+            this.msgError = datos.mensaje || 'Error al obtener la cuenta';
+            return { error: true, mensaje: this.msgError };
+    
+        } catch (error) {
+            console.error("Error al obtener la cuenta:", error);
+            this.msgError = error.message;
+            return { error: true, mensaje: error.message };
+        }
+    }
+      // Método para agregar una dirección
+async agregarDireccion(direccion) {
+    try {
+      const response = await axios.post('api/usuarios/direcciones', direccion);
+      return response.data;
+    } catch (error) {
+      return { error: true, mensaje: error.response.data.message || "Error al agregar dirección." };
+    }
+  }
+  
+  // Método para editar una dirección
+  async editarDireccion(id, direccion) {
+    try {
+      const response = await axios.put(`api/usuarios/direcciones/${id}`, direccion);
+      return response.data;
+    } catch (error) {
+      return { error: true, mensaje: error.response.data.message || "Error al editar dirección." };
+    }
+  }
+  
+  // Método para eliminar una dirección
+  async eliminarDireccion(id) {
+    try {
+      const response = await axios.delete(`api/usuarios/direcciones/${id}`);
+      return response.data;
+    } catch (error) {
+      return { error: true, mensaje: error.response.data.message || "Error al eliminar dirección." };
+    }
+  }
+  
+  // Método para marcar una dirección como predeterminada
+  async marcarPredeterminada(id) {
+    try {
+      const response = await axios.put(`api/usuarios/direcciones/${id}/predeterminada`);
+      return response.data;
+    } catch (error) {
+      return { error: true, mensaje: error.response.data.message || "Error al marcar como predeterminada." };
+    }
+  }
+  
+  // Método para cambiar la contraseña
+  async cambiarContraseña(contraseñaActual, nuevaContraseña) {
+    try {
+      const response = await axios.put('api/usuarios/cambiarContraseña', {
+        contraseñaActual,
+        nuevaContraseña,
+      });
+      return response.data;
+    } catch (error) {
+      return { error: true, mensaje: error.response.data.message || "Error al cambiar contraseña." };
+    }
+  }
 
     // Método para insertar productos, categorías o anuncios
     async insertarEntidad(entidad, datosEntidad) {
