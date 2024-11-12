@@ -35,6 +35,7 @@
             <div class="acciones">
                 <BotonComp> Editar </BotonComp>
                 <BotonComp> Eliminar </BotonComp>
+                <BotonComp> Predeterminada </BotonComp>
             </div>
           </div>
           <div class="direccion">
@@ -43,6 +44,7 @@
             <div class="acciones">
                 <BotonComp> Editar </BotonComp>
                 <BotonComp> Eliminar </BotonComp>
+                <BotonComp> Predeterminada </BotonComp>
             </div>
           </div>
         </div>
@@ -58,76 +60,112 @@
   </template>
   
   <style scoped>
+
   .perfil-container {
     background-color: #000;
     color: #fff;
-    padding: 20px;
+    padding: 10px;
     font-family: Arial, sans-serif;
-    max-width: 900px;
+    max-width: 2000px;
     margin: auto;
-    border-radius: 10px;
+    border-radius: 0;
   }
   
   h2 {
     color: #fff;
-    text-align: center;
-    font-size: 1.8em;
+    text-align: left;
+    font-size: 1.4em;
     margin-bottom: 10px;
   }
   
   .campos {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: 2fr 2fr;
+    gap: 40px;
     margin-bottom: 20px;
   }
   
   .boton-guardar {
     text-align: center;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+
   }
   
   .guardar {
     background-color: #ffad00;
     color: #000;
-    padding: 10px 20px;
+    padding: 0 16px;
+    font-size: 0.9em;
     border-radius: 5px;
+    display: inline-block;
+    margin: 0 auto;
+    text-align: center;
     cursor: pointer;
   }
   
+  .direcciones {
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  
   .boton-agregar {
-    text-align: center;
-    margin-bottom: 20px;
+  background-color: #ffad00;
+  color: #000;
+  padding: 0 16px; 
+  font-size: 0.9em; 
+  border-radius: 5px;
+  width: auto; 
+  display: inline-block; 
+  margin: 0 auto; 
+  text-align: center;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  }
+  
+  .boton-agregar:hover {
+    background-color: #fff;
+    color: #000;
+    transition: 0.3s;
   }
   
   .lista-direcciones {
     display: flex;
-    gap: 10px;
+    gap: 30px;
     margin-bottom: 20px;
-    justify-content: center;
+    text-align: left;
+
   }
-  
+
   .direccion {
-    border: 20px solid #000; 
+    border: 1px solid #000; 
     background-color: #000000;
-    padding: 10px;
+    padding: 15px;
     width: 100%;
     border-radius: 5px;
-    text-align: left;
-  }
+    text-align: left; }
   
   .direccion span {
     font-weight: bold;
     color: #ffad00;
+    margin-bottom: 5px;
   }
   
   .direccion p {
-    margin: 5px 5px ;
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 0;
     color: #fff;
   }
   
+  
   .acciones {
     display: flex;
+    justify-content: flex-start;
     gap: 10px;
     margin-top: 10px;
     justify-content: flex-start;
@@ -142,27 +180,28 @@
   }
   
   .filled {
-    color: #ffad00; /* Estrella llena */
+    color: #ffad00; 
   }
   
   .far {
-    color: #ccc; /* Estrella vacía */
+    color: #ccc; 
   }
   
   .mas-opciones {
-    text-align: center;
+    text-align: left;
+    margin-top: 30px;
   }
   
   .opciones-botones {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
   }
   
   .boton-cambiar,
   .boton-eliminar-cuenta {
-    background-color: #ffad00;
-    color: #000;
+    background-color: #000000;
+    color: #ffffff;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
