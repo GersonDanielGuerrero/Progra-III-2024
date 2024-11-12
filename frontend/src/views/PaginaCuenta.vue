@@ -205,7 +205,7 @@
     margin-bottom: 3px;
   }
 
-  
+
   .boton-cambiar,
   .boton-eliminar {
     background-color: #000000;
@@ -277,42 +277,6 @@ export default {
     },
     toggleMasOpciones() {
       this.isMasOpcionesVisible = !this.isMasOpcionesVisible;
-    },
-    // Guardar datos personales
-    guardarDatosPersonales() {
-      console.log('Datos personales guardados:', this.formDatosPersonales);
-      // Aquí puedes enviar esta información a un servidor o almacenarla
-    },
-
-    // Editar una dirección
-    editarDireccion(index) {
-      const direccion = this.direcciones[index];
-      console.log('Editando dirección:', direccion);
-      // Aquí puedes implementar la edición de la dirección
-    },
-    // Eliminar una dirección
-    eliminarDireccion(index) {
-      this.direcciones.splice(index, 1);
-      console.log('Dirección eliminada');
-    },
-    // Marcar dirección como predeterminada
-    marcarPredeterminada(index) {
-      this.direcciones.forEach((dir, idx) => {
-        if (idx === index) {
-          dir.predeterminada = true;
-        } else {
-          dir.predeterminada = false;
-        }
-      });
-      console.log('Dirección predeterminada:', this.direcciones[index]);
-    },
-    // Cambio de contraseña
-    cambiarContraseña() {
-      console.log('Cambio de contraseña solicitado');
-    },
-    // Eliminar cuenta
-    eliminarCuenta() {
-      console.log('Cuenta eliminada');
     },
   },
 };
