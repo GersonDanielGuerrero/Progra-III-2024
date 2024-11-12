@@ -80,9 +80,7 @@
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
-
   }
-  
   .guardar {
     background-color: #ffad00;
     color: #000;
@@ -98,7 +96,6 @@
     padding: 10px 15px;
     border-radius: 5px;
   }
-  
   .guardar:hover {
     background-color: #fff;
     color: #000;
@@ -108,7 +105,6 @@
     text-align: left;
     margin-bottom: 10px;
   }
-  
   .boton-agregar {
   background-color: #ffad00;
   color: #000;
@@ -124,7 +120,6 @@
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-
   }
   
   .boton-agregar:hover {
@@ -132,13 +127,11 @@
     color: #000;
     transition: 0.3s;
   }
-  
   .lista-direcciones {
     display: flex;
     gap: 30px;
     margin-bottom: 20px;
     text-align: left;
-
   }
 
   .direccion {
@@ -189,7 +182,7 @@
   
   .mas-opciones {
     text-align: left;
-    margin-top: 30px;
+    margin-top: 10px;
   }
   
 
@@ -211,7 +204,7 @@
     color: #fcfcfc;
     margin-bottom: 3px;
   }
-  
+
   
   .boton-cambiar,
   .boton-eliminar {
@@ -255,9 +248,10 @@ export default {
       // Direcciones
       direcciones: [
         {
-          nombre: 'Casa2',
+          nombre: 'Casa',
           direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
         },
+
         {
           nombre: 'Mi casa',
           direccion: 'Cancha El Amate (Excirculo Estudiantil Usulután), Primer pasaje, casa 17, Usulután',
@@ -289,7 +283,7 @@ export default {
       console.log('Datos personales guardados:', this.formDatosPersonales);
       // Aquí puedes enviar esta información a un servidor o almacenarla
     },
-    
+
     // Editar una dirección
     editarDireccion(index) {
       const direccion = this.direcciones[index];
