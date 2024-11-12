@@ -4,10 +4,10 @@
       <section class="datos-personales">
         <h2>Datos personales</h2>
         <div class="campos">
-          <CajaTexto placeholder="Nombre" />
-          <CajaTexto placeholder="Apellido" />
-          <CajaTexto placeholder="Correo electrónico" />
-          <CajaTexto placeholder="Número de Celular" />
+          <CajaTexto placeholder="Nombre*" />
+          <CajaTexto placeholder="Apellido*" />
+          <CajaTexto placeholder="Correo electrónico*" />
+          <CajaTexto placeholder="Número de Celular*" />
         </div>
         <div class="boton-guardar">
           <BotonComp class="guardar">Guardar</BotonComp>
@@ -52,8 +52,12 @@
       <section class="mas-opciones">
         <h2>Más opciones</h2>
         <div class="opciones-botones">
-          <BotonComp class="boton-cambiar">Cambiar contraseña</BotonComp>
-          <BotonComp class="boton-eliminar-cuenta">Eliminar cuenta</BotonComp>
+            <div class="opcion">
+            <span>Cambio Contraseña</span>
+          <BotonComp class="boton-cambiar">Cambiar</BotonComp>
+          <span>Eliminar Cuenta</span>
+          <BotonComp class="boton-eliminar">Eliminar</BotonComp>
+        </div>
         </div>
       </section>
     </div>
@@ -70,7 +74,7 @@
     margin: auto;
     border-radius: 0;
   }
-  
+
   h2 {
     color: #fff;
     text-align: left;
@@ -95,15 +99,24 @@
   .guardar {
     background-color: #ffad00;
     color: #000;
-    padding: 0 16px;
+    padding: 18px 16px;
     font-size: 0.9em;
     border-radius: 5px;
     display: inline-block;
     margin: 0 auto;
     text-align: center;
     cursor: pointer;
+    background-color:#010101;
+    color: #fcfcfc;
+    padding: 10px 15px;
+    border-radius: 5px;
   }
   
+  .guardar:hover {
+    background-color: #fff;
+    color: #000;
+    transition: 0.3s;
+  }
   .direcciones {
     text-align: left;
     margin-bottom: 10px;
@@ -192,14 +205,29 @@
     margin-top: 30px;
   }
   
+
   .opciones-botones {
     display: flex;
     justify-content: center;
     gap: 30px;
   }
+
+  .opcion  {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+      
+  }
+  
+  .opcion span {
+    font-weight: bold;
+    color: #fcfcfc;
+    margin-bottom: 3px;
+  }
+  
   
   .boton-cambiar,
-  .boton-eliminar-cuenta {
+  .boton-eliminar {
     background-color: #000000;
     color: #ffffff;
     padding: 10px 15px;
@@ -208,7 +236,7 @@
   }
   
   .boton-cambiar:hover,
-  .boton-eliminar-cuenta:hover {
+  .boton-eliminar:hover {
     background-color: #fff;
     color: #000;
     transition: 0.3s;
