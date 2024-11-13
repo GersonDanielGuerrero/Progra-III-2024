@@ -31,3 +31,35 @@ class RegistroSerializer(serializers.ModelSerializer):
         usuario.save()
         return usuario
 
+class DireccionesListaSerializer(serializers.ModelSerializer):
+    predeterminada = serializers.BooleanField(default=False)
+    class Meta:
+        model = Direccion
+        fields = ['id', 'nombre', 'direccion', 'predeterminada']
+
+class UsuarioCuentaSerializer(serializers.ModelSerializer):
+    direcciones = DireccionesListaSerializer(many=True)
+    class Meta:
+        model = Usuario
+        nombres = serializers.CharField(source='nombre')
+        apellidos = serializers.CharField(source='apellido')
+        fields = ['id', 'correo', 'nombres', 'apellidos', 'telefono']
+
+class RolListaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rol
+        fields = ['id', 'nombre']
+class CuentaSerializer(serializers.ModelSerializer):
+    class Meta:
+        usuario = UsuarioCuentaSerializer()
+        direcciones = DireccionesListaSerializer(many=True)
+        roles = RolListaSerializer(many=True)
+        fields = ['usuario', 'direcciones', 'roles']
+    
+class UsuarioUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        nombres = serializers.CharField(source='nombre')
+        apellidos = serializers.CharField(source='apellido')
+        fields = ['correo', 'nombres', 'apellidos', 'telefono']
+        
