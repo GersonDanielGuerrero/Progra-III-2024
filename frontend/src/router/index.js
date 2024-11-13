@@ -5,6 +5,7 @@ import Principal from "../views/PaginaPrincipal.vue";
 import RegistroUsuario from "../views/RegistroUsuario.vue";
 import PaginaMenu from "../views/PaginaMenu.vue";
 import PaginaCarrito from "@/views/PaginaCarrito.vue";
+import PaginaPrueba from "@/views/PaginaPrueba.vue";
 
 const routes = [
     {
@@ -31,11 +32,17 @@ const routes = [
         path: "/carrito",
         name: "Carrito",
         component: PaginaCarrito,
-    }
+    },
+    {
+        path: "/pruebas",
+        name: "Pruebas",
+        component: PaginaPrueba,
+    },
+
 ];
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(process.env.BASE_URL), 
     routes,
 });
 
