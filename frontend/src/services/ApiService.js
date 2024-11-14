@@ -11,165 +11,128 @@ class ApiService {
         const authStore = useAuthStore();
         return authStore.token;
     }
-      // Método para obtener los datos de la cuenta
-    async obtenerCuenta() {
-        const token = this.obtenerToken();
-        try {
-            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (respuesta.ok) {
-                const datos = await respuesta.json();
-                return { error: false, datos: datos };
-            }
-
-            const datos = await respuesta.json();
-            this.msgError = datos.mensaje || 'Error al obtener la cuenta';
-            return { error: true, mensaje: this.msgError };
-
-        } catch (error) {
-            console.error("Error al obtener la cuenta:", error);
-            this.msgError = error.message;
-            return { error: true, mensaje: error.message };
-        }
-    }
-    // Método para actualizar los datos de la cuenta
-    async actualizarCuenta(datosCuenta) {
-        const token = this.obtenerToken();
-        try {
-            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(datosCuenta),
-            });
-
-            if (respuesta.ok) {
-                const datos = await respuesta.json();
-                return { error: false, datos: datos };
-            }
-
-            const datos = await respuesta.json();
-            this.msgError = datos.mensaje || 'Error al actualizar la cuenta';
-            return { error: true, mensaje: this.msgError };
-
-        } catch (error) {
-            console.error("Error al actualizar la cuenta:", error);
-            this.msgError = error.message;
-            return { error: true, mensaje: error.message };
-        }
-    }
-// Método para eliminar la cuenta
-async eliminarCuenta() {
-    const token = this.obtenerToken();
+      // Método para cargar los datos del usuario, direcciones y roles
+async cargarDatos() {
+    const token = this.obtenerToken(); 
     try {
+        
         const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
-            method: "DELETE",
+            method: "GET",
             headers: {
-                "Authorization": `Bearer ${token}`,
+                "Authorization": `Bearer ${token}`, 
                 "Content-Type": "application/json",
             },
         });
 
         if (respuesta.ok) {
-            return { error: false, mensaje: "Cuenta eliminada correctamente" };
+            const datos = await respuesta.json();
+
+            const usuario = {
+                nombres: datos.usuario.nombres,
+                apellidos: datos.usuario.apellidos,
+                correo: datos.usuario.correo,
+                telefono: datos.usuario.telefono,
+            };
+
+            const direcciones = datos.direcciones.map(direccion => ({
+                id: direccion.id,
+                nombre: direccion.nombre,
+                direccion: direccion.direccion,
+                predeterminada: direccion.predeterminada,
+            }));
+
+            const roles = datos.roles.map(rol => ({
+                id: rol.id,
+                nombre: rol.nombre,
+            }));
+
+            return {
+                error: false,
+                usuario: usuario,
+                direcciones: direcciones,
+                roles: roles
+            };
         }
 
         const datos = await respuesta.json();
-        this.msgError = datos.mensaje || 'Error al eliminar la cuenta';
+        this.msgError = datos.mensaje || 'Error al obtener la cuenta';
         return { error: true, mensaje: this.msgError };
 
     } catch (error) {
-        console.error("Error al eliminar la cuenta:", error);
+        console.error("Error al obtener la cuenta:", error);
         this.msgError = error.message;
         return { error: true, mensaje: error.message };
     }
 }
-    async obtenerCuenta() {
-        const token = this.obtenerToken();
-        try {
-            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });
-    
-            if (respuesta.ok) {
-                const datos = await respuesta.json();
-                return { error: false, datos: datos };
-            }
-    
+
+   // Método para actualizar los datos de la cuenta
+async actualizarCuenta(datosCuenta) {
+    const token = this.obtenerToken();  // Obtener el token
+    try {
+        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,  // Incluir el token en los encabezados
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datosCuenta),
+        });
+
+        if (respuesta.ok) {
             const datos = await respuesta.json();
-            this.msgError = datos.mensaje || 'Error al obtener la cuenta';
-            return { error: true, mensaje: this.msgError };
-    
-        } catch (error) {
-            console.error("Error al obtener la cuenta:", error);
-            this.msgError = error.message;
-            return { error: true, mensaje: error.message };
+            return { error: false, datos: datos };
         }
-    }
-      // Método para agregar una dirección
-async agregarDireccion(direccion) {
-    try {
-      const response = await axios.post('api/usuarios/direcciones', direccion);
-      return response.data;
+
+        const datos = await respuesta.json();
+        this.msgError = datos.mensaje || 'Error al actualizar la cuenta';
+        return { error: true, mensaje: this.msgError };
+
     } catch (error) {
-      return { error: true, mensaje: error.response.data.message || "Error al agregar dirección." };
+        console.error("Error al actualizar la cuenta:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
     }
-  }
-  
-  // Método para editar una dirección
-  async editarDireccion(id, direccion) {
+}
+      
+ // Método para marcar una dirección como predeterminada y actualizar la variable direcciones
+async marcarPredeterminada(id) {
+    const token = this.obtenerToken(); 
     try {
-      const response = await axios.put(`api/usuarios/direcciones/${id}`, direccion);
-      return response.data;
+        
+        const response = await fetch(`${this.baseURL}/usuarios/direcciones/predeterminada`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }), 
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            
+            const direcciones = data.direcciones.map((direccion) => ({
+                id: direccion.id,
+                nombre: direccion.nombre,
+                direccion: direccion.direccion,
+                predeterminada: direccion.predeterminada,
+            }));
+            
+            return {
+                error: false,
+                mensaje: "Dirección marcada como predeterminada",
+                direcciones: direcciones 
+            };
+        }
+
+        return { error: true, mensaje: data.mensaje || "Error al marcar como predeterminada." };
+
     } catch (error) {
-      return { error: true, mensaje: error.response.data.message || "Error al editar dirección." };
+        console.error("Error al marcar como predeterminada:", error);
+        return { error: true, mensaje: error.message || "Error al marcar como predeterminada." };
     }
-  }
-  
-  // Método para eliminar una dirección
-  async eliminarDireccion(id) {
-    try {
-      const response = await axios.delete(`api/usuarios/direcciones/${id}`);
-      return response.data;
-    } catch (error) {
-      return { error: true, mensaje: error.response.data.message || "Error al eliminar dirección." };
-    }
-  }
-  
-  // Método para marcar una dirección como predeterminada
-  async marcarPredeterminada(id) {
-    try {
-      const response = await axios.put(`api/usuarios/direcciones/${id}/predeterminada`);
-      return response.data;
-    } catch (error) {
-      return { error: true, mensaje: error.response.data.message || "Error al marcar como predeterminada." };
-    }
-  }
-  
-  // Método para cambiar la contraseña
-  async cambiarContraseña(contraseñaActual, nuevaContraseña) {
-    try {
-      const response = await axios.put('api/usuarios/cambiarContraseña', {
-        contraseñaActual,
-        nuevaContraseña,
-      });
-      return response.data;
-    } catch (error) {
-      return { error: true, mensaje: error.response.data.message || "Error al cambiar contraseña." };
-    }
-  }
+}
 
     // Método para insertar productos, categorías o anuncios
     async insertarEntidad(entidad, datosEntidad) {
@@ -323,6 +286,7 @@ async agregarDireccion(direccion) {
             return { error: true, mensaje: error.message };
         }
     }
+    
 
     async obtenerProductos(categoria, filtro = "") {
         try {
@@ -382,6 +346,7 @@ async agregarDireccion(direccion) {
                 },
             });
 
+            
             const datos = await respuesta.json();
 
             if (respuesta.ok) {

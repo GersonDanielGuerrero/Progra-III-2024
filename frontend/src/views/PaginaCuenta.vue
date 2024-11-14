@@ -216,11 +216,13 @@
   }
   </style>
 
-
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 import BotonComp from '@/components/BotonComp.vue';
+import ApiService from "@/services/ApiService"; 
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 export default {
   name: 'PaginaCuenta',
@@ -231,8 +233,8 @@ export default {
   },
   data() {
   return {
-
-      
+    isLoading: true,
+         
       isDatosPersonalesVisible: false,
       isDireccionesVisible: false,
       isMasOpcionesVisible: false,
@@ -243,7 +245,6 @@ export default {
           correo: 'juanpe@gmail.com',
           telefono: '3563-4232',
         },
-
         direcciones: [
           {
             id:'1',
@@ -270,90 +271,74 @@ export default {
   };
 },
 
-async created() {
-  
-  if (!respuesta.error) {
-    
-    this.usuario = respuesta.datos.usuario;
-    this.direcciones = respuesta.datos.direcciones;
-    this.roles = respuesta.datos.roles;
-    this.mensaje = 'Datos cargados correctamente';
-    this.error = false;
-  } else {
-    
-    this.mensaje = respuesta.mensaje;
-    this.error = true;
+ methods: {
+   // Método para redirigir a la página para añadir una nueva dirección
+   agregarDireccion() {
+    this.$router.push({
+      path: "/direccion",
+      state: { accion: "añadir" }
+    });
+  },
+
+  // Método para redirigir a la página para editar una dirección existente
+  editarDireccion(id) {
+    this.$router.push({
+      path: "/direccion",
+      state: { accion: "editar", id }
+    });
   }
 },
- 
- async agregarDireccion() {
-    const nuevaDireccion = {
-      nombre: 'Nueva dirección',
-      direccion: 'Dirección de ejemplo',
-      predeterminada: false,
-    };
-    const respuesta = await ApiService.agregarDireccion(nuevaDireccion);
-    if (!respuesta.error) {
-      this.direcciones.push(respuesta.datos);  
-      this.mensaje = 'Dirección agregada exitosamente';
-      this.error = false;
-    } else {
-      this.mensaje = respuesta.mensaje;
-      this.error = true;
-    }
-  },
-
- 
-  async editarDireccion(index) {
-    const direccion = this.direcciones[index];
-    const respuesta = await ApiService.editarDireccion(direccion);
-    if (!respuesta.error) {
-      this.mensaje = 'Dirección actualizada exitosamente';
-      this.error = false;
-    } else {
-      this.mensaje = respuesta.mensaje;
-      this.error = true;
-    }
-  },
-
-  async eliminarDireccion(index) {
-    const direccion = this.direcciones[index];
-    const respuesta = await ApiService.eliminarDireccion(direccion.id);
-    if (!respuesta.error) {
-      this.direcciones.splice(index, 1);  
-      this.mensaje = 'Dirección eliminada exitosamente';
-      this.error = false;
-    } else {
-      this.mensaje = respuesta.mensaje;
-      this.error = true;
-    }
-  },
-
-    async marcarPredeterminada(index) {
-    const direccion = this.direcciones[index];
-    const respuesta = await ApiService.marcarDireccionPredeterminada(direccion.id);
-    if (!respuesta.error) {
-      this.direcciones.forEach((dir) => { dir.predeterminada = false; }); 
-      direccion.predeterminada = true;  
-      this.mensaje = 'Dirección marcada como predeterminada';
-      this.error = false;
-    } else {
-      this.mensaje = respuesta.mensaje;
-      this.error = true;
-    }
-  },
-  async cambiarContraseña() {
-    const nuevaContraseña = prompt("Ingrese la nueva contraseña:");
-    if (nuevaContraseña) {
-      const respuesta = await ApiService.cambiarContraseña(nuevaContraseña);
-      if (!respuesta.error) {
-        this.mensaje = 'Contraseña cambiada exitosamente';
-        this.error = false;
-      } else {
-        this.mensaje = respuesta.mensaje;
-        this.error = true;
+  async guardarDatosUsuario() {
+      try {
+        const respuesta = await ApiService.guardarDatosUsuario(this.usuario);
+        if (!respuesta.error) {
+          alertify.success('Datos guardados correctamente');
+        } else {
+          alertify.error('Error al guardar los datos');
+        }
+      } catch (error) {
+        console.error("Error al guardar los datos del usuario:", error);
+        alertify.error('Ocurrió un error al guardar los datos');
       }
-    }
-  },
-}
+    },
+    async marcarDireccionPredeterminada(id) {
+      try {
+        const respuesta = await ApiService.marcarPredeterminada(id);
+        if (!respuesta.error) {
+          this.direcciones = this.direcciones.map(direccion => ({
+            ...direccion,
+            predeterminada: direccion.id === id,
+          }));
+          alertify.success('Dirección marcada como predeterminada');
+        } else {
+          alertify.error('Error al marcar la dirección como predeterminada');
+        }
+      } catch (error) {
+        console.error("Error al marcar la dirección predeterminada:", error);
+        alertify.error('Ocurrió un error al marcar la dirección predeterminada');
+      }
+    },
 
+async mounted() { 
+    try {
+      const respuesta = await ApiService.cargarDatos();
+      
+      if (!respuesta.error) {
+        
+        this.usuario = respuesta.datos.usuario;
+        this.direcciones = respuesta.datos.direcciones;
+        this.roles = respuesta.datos.roles;
+        
+       
+        alertify.success('Datos cargados correctamente');
+      } else {
+       
+      }
+    } catch (error) {
+     
+      console.error("Error en la carga de datos:", error);
+      alertify.error('Ocurrió un error al cargar los datos');
+    }
+  }
+};
+</script> 
