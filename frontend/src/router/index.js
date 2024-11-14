@@ -4,6 +4,7 @@ import Login from "../views/LogIn.vue";
 import Principal from "../views/PaginaPrincipal.vue";
 import RegistroUsuario from "../views/RegistroUsuario.vue";
 import PaginaMenu from "../views/PaginaMenu.vue";
+import ListaPedidos from "@/views/ListaPedidos.vue";
 
 const routes = [
     {
@@ -26,6 +27,11 @@ const routes = [
         name: "Menu",
         component: PaginaMenu,
     },
+    {
+        path: "/pedidos",
+        name: "Pedidos",
+        component: ListaPedidos,
+    }
 ];
 
 const router = createRouter({
