@@ -4,6 +4,7 @@ import Login from "../views/LogIn.vue";
 import Principal from "../views/PaginaPrincipal.vue";
 import RegistroUsuario from "../views/RegistroUsuario.vue";
 import PaginaMenu from "../views/PaginaMenu.vue";
+import PreguntasFrecuentes from "@/views/PreguntasFrecuentes.vue";
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         path: "/menu",
         name: "Menu",
         component: PaginaMenu,
+    },
+    {
+        path: "/preguntas",
+        name: "Preguntas",
+        component: PreguntasFrecuentes,
     },
 ];
 
