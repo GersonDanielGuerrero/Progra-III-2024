@@ -15,13 +15,16 @@
         />
     </div>
     <div class="pedido-lista">
-        <div v-for="pedido in pedidosFiltrados" :key="pedido.id" class="pedido">
-        <p class="fecha">{{ pedido.fecha }}</p>
-        <p class="cliente">{{ pedido.cliente }}</p>
-        <p class="tipo">{{ pedido.tipo }}</p>
-        <p class="direccion">{{ pedido.direccion }}</p>
-        <p class="cantidad">{{ pedido.cantidad }} <span class="precio">{{ pedido.precio }}</span></p>
-        </div>
+    <div v-for="pedido in pedidosFiltrados" :key="pedido.id" class="pedido">
+    <p class="fecha">{{ pedido.fecha }}</p>
+    <p class="cliente">{{ pedido.nombre_cliente }}</p>
+    <p class="tipo">{{ pedido.tipo }}</p>
+    <p class="direccion">{{ pedido.direccion }}</p>
+    <p class="cantidad">
+        {{ pedido.cantidad_productos }} {{ pedido.cantidad_productos === 1 ? 'producto' : 'productos' }}
+        <span class="precio">$ {{ pedido.total }}</span>
+    </p>
+    </div>
     </div>
     </main>
     </div>
@@ -44,6 +47,7 @@ h1 {
 text-align: center;
 margin: 20px 0;
 color: #ffad00;
+font-weight: bold;
 }
 
 .controls {
@@ -63,17 +67,18 @@ background-color: #ffad00;
 color: #000;
 border: none;
 border-radius: 5px;
+font-weight: bold;
 }
 
 .pedido-lista {
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+grid-template-columns: repeat(2,1fr);
 gap: 20px;
 padding: 20px;
 }
 
 .pedido {
-background-color: #444;
+background-color: #222;
 padding: 20px;
 border-radius: 5px;
 }
@@ -81,12 +86,16 @@ border-radius: 5px;
 .fecha {
 color: #ffad00;
 font-weight: bold;
+text-align: left;
+font-weight: bold;
 }
 
 .cliente,
 .direccion,
-.cantidad
+.cantidad,
 .tipo {
+font-weight: bold;
+text-align: left;
 margin: 5px 0;
 color: #fff
 }
