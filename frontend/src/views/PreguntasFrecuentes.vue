@@ -13,7 +13,7 @@
         <span>{{ question }}</span>
         <span class="actions">
           <span class="icon">▼</span>
-          <span class="edit">✏</span>
+          <button @click="editarLogo" class="edit-logo-btn">✏️</button>
         </span>
       </div>
     </div>
@@ -57,8 +57,8 @@ customer-service {
 .questions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  margin: 20px 180px;
+  gap: 40px;
+  margin: 10px 180px;
 }
 
 .question-item {
@@ -99,6 +99,13 @@ customer-service {
   cursor: pointer;
 
 }
+.edit-logo-btn {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
 
 </style>
 
@@ -128,6 +135,7 @@ export default {
     addQuestion() {
       alert("Nueva pregunta agregada");
         }
-    },
+
+    }
 }
 </script>
