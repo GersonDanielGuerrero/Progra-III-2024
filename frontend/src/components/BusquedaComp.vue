@@ -1,6 +1,6 @@
 <template>
     <div>
-    <CajaTexto type="text" v-model="busqueda" placeholder="Buscar..." @input ="buscar"/>
+    <CajaTexto type="text" v-model="busqueda" placeholder="Buscar..." />
     </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
   methods: {
     buscar() {
       // Normaliza el término de búsqueda a minúsculas
-      const termino = this.busqueda.toLowerCase();
+      const termino = this.busqueda.toLowerCase().trim();
 
       // Se filtran los elementos que coincidan con el término de búsqueda en al menos un campo
       const resultados = this.items.filter(item => {
@@ -54,6 +54,12 @@ export default {
 
       // Se dan los resultados filtrados al componente padre
       this.$emit("resultados-busqueda", resultados);
+    },
+  },
+  watch: {
+    // Se ejecuta la búsqueda cada vez que cambia el término de búsqueda
+    busqueda() {
+      this.buscar();
     },
   },
 };
