@@ -121,21 +121,26 @@ export default {
     },
     data() {
         return{
-            questions: [
-        "¿A qué hora abre el local?",
-        "¿Hasta dónde llegan los envíos?",
-        "Pregunta de ejemplo",
-        "Pregunta de ejemplo",
-        "Pregunta de ejemplo",
-        "Pregunta de ejemplo"
+            preguntas: [
+              {
+                id: 1,
+                pregunta: 'Pregunta de ejemplo 1',
+                respuesta: 'Respuesta de ejemplo 1'
+              },
+              {
+                id: 2,
+                pregunta: 'Pregunta de ejemplo 2',
+                respuesta: 'Respuesta de ejemplo 2'
+              },
+              {
+                id: 3,
+                pregunta: 'Pregunta de ejemplo 3',
+                respuesta: 'Respuesta de ejemplo 3'
+              }
       ]
     };
   },
   methods: {
-    addQuestion() {
-      alert("Nueva pregunta agregada");
-        }
-
     }
 }
 </script>
