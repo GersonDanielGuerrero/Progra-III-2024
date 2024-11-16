@@ -4,18 +4,18 @@
     <div class="header">
       <h2>Atención al Cliente</h2>
       <p>Bienvenidos. Atención al cliente. <span class="highlight">¿Qué le podemos ayudar?</span></p>
-      <div class="preguntas">
+      <div class="pregunta">
       <p>Recomendaciones con preguntas y hacen seguido los clientes.</p>
       </div>
     </div>
-    <div class="questions">
-      <div class="question-item" v-for="(question, index) in questions" :key="index">
-        <span>{{ question }}</span>
-        <span class="actions">
-          <span class="icon">▼</span>
-          <button @click="editarLogo" class="edit-logo-btn">✏️</button>
-        </span>
-      </div>
+    <div class="preguntas">
+      <div class="preguntas-item" v-for="pregunta in preguntas" :key="pregunta.id">
+      <span>{{ pregunta.pregunta }}</span>
+      <span class="actions">
+    <span class="icon">▼</span>
+    <button @click="editarLogo" class="edit-logo-btn">✏️</button>
+  </span>
+</div>
     </div>
     <div class="AÑADIR">
     <Botoncomp> AÑADIR PREGUNTA </Botoncomp>
@@ -45,7 +45,7 @@ customer-service {
   margin-bottom: 20px;
   color: #ffad00;
 }
-.preguntas {
+.pregunta {
   margin-bottom: 20px;
   color: #ffffff;
 }
@@ -54,14 +54,14 @@ customer-service {
   color: #ffad00;
 }
 
-.questions {
+.preguntas {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 40px;
   margin: 10px 180px;
 }
 
-.question-item {
+.preguntas-item {
   background-color: #000;
   border: 2px solid #ffad00;
   color: #fff;
@@ -85,17 +85,17 @@ customer-service {
 .AÑADIR {
     background-color: #ffad00;
   color: #000;
-  padding: 0 16px; 
+  padding: 0 10px; 
   font-size: 0.9em; 
-  border-radius: 5px;
+  border-radius: 50px;
   width: auto; 
   display: inline-block; 
-  margin: 0 auto; 
+  margin: 10px auto; 
   text-align: center;
   background-color: #000000;
   color: #ffffff;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 10px;
   cursor: pointer;
 
 }
@@ -124,18 +124,23 @@ export default {
             preguntas: [
               {
                 id: 1,
-                pregunta: 'Pregunta de ejemplo 1',
+                pregunta: '¿A que hora abre el local?',
                 respuesta: 'Respuesta de ejemplo 1'
               },
               {
                 id: 2,
-                pregunta: 'Pregunta de ejemplo 2',
+                pregunta: '¿Hasta donde llegan los envios?',
                 respuesta: 'Respuesta de ejemplo 2'
               },
               {
                 id: 3,
                 pregunta: 'Pregunta de ejemplo 3',
                 respuesta: 'Respuesta de ejemplo 3'
+              },
+              {
+                id: 4,
+                pregunta: 'Pregunta de ejemplo 4',
+                respuesta: 'Respuesta de ejemplo 4'
               }
       ]
     };
