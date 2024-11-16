@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 # importar modelo producto
 from menu.models import Producto
-from .models import Carrito, Carrito_Producto, Carrito_Producto_Extra, Venta, Venta_Producto
+from .models import Carrito, Carrito_Producto, Venta, Venta_Producto
 from rest_framework import status
 
 class CarritoProductoView(APIView):
