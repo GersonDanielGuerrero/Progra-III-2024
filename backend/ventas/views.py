@@ -2,7 +2,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-# importar modelo producto
 from menu.models import Producto
 from usuarios.models import Usuario, Direccion
 from .models import Carrito, Carrito_Producto, Carrito_Producto_Extra, Venta, Venta_Producto
@@ -87,4 +86,8 @@ class VentaView(APIView):
             venta_producto.save()
         return Response(status=status.HTTP_201_CREATED, data={'mensaje': 'Venta realizada correctamente'})
             
+class ListaPedidosView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        usuario = request.user
         

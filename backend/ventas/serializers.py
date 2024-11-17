@@ -31,3 +31,8 @@ class CarritoSerializer(serializers.ModelSerializer):
                 'seleccionado': seleccionado
             })
         return productos
+    
+class ListaPedidosClientesSerializer(serializers.ModelSerializer):
+    cantidad_productos = serializers.SerializerMethodField()
+    nombre_cliente = serializers.SerializerMethodField()
+    direccion = serializers.SerializerMethodField()
