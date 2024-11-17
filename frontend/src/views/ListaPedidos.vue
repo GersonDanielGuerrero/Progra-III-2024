@@ -110,11 +110,10 @@ font-weight: bold;
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
+import ApiService from "@/services/ApiService"; 
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
-//Importaciones de componentes
-
-
-//Fin de importaciones de componentes
 export default {
     name: 'ListaPedidos',
     components: {
@@ -123,6 +122,8 @@ export default {
     },
     data() {
         return {
+            opcionSelector: 'actuales',
+            filtro: '',
             pedidos:[
                 {
                     id: 1,
@@ -165,5 +166,33 @@ export default {
             ],
         };
     },
-}
+  methods: {
+    // Método para obtener los pedidos (actuales o historial)
+    async obtenerPedidos() {
+      try {
+        const respuesta = await ApiService.obtenerPedidos(this.opcionSelector);
+        if (respuesta.success) {
+          this.pedidos = respuesta.pedidos;
+          this.pedidosFiltrados = this.pedidos; // Inicialmente todos los pedidos
+        } else {
+          alertify.error(respuesta.message || 'Error al obtener los pedidos');
+        }
+      } catch (error) {
+        console.error('Error al obtener pedidos:', error);
+        alertify.error('Error al obtener los pedidos');
+      }
+    },
+    
+  },
+  watch: {
+    // Detectar cambios en el selector y obtener los pedidos correspondientes
+    opcionSelector() {
+      this.obtenerPedidos();
+    },
+  },
+  mounted() {
+    // Obtener los pedidos al cargar la página
+    this.obtenerPedidos();
+  },
+};
 </script>

@@ -236,6 +236,33 @@ class ApiService {
             return { error: true, mensaje: error.message };
         }
     }
+
+    async obtenerPedidos(opcion) {
+        const token = this.obtenerToken();
+        const url = opcion === "actuales"
+          ? `${this.baseUrl}/actuales`
+          : `${this.baseUrl}/historial`;
+        
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+          });
+    
+          if (!response.ok) {
+            throw new Error("Error al obtener los pedidos");
+          }
+    
+          const data = await response.json();
+          return data.pedidos || [];
+        } catch (error) {
+          console.error("Error en obtenerPedidos:", error);
+          throw error;
+        }
+      }
 }
 
 // Exportar una instancia de la clase con la URL base
