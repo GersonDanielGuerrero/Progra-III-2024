@@ -57,8 +57,6 @@ class Combo_Producto(models.Model):
 
 class Tipo_Ingrediente(models.Model):
     nombre = models.CharField(max_length=50)
-    mensaje = models.CharField(max_length=255, null=True)
-    multiple = models.BooleanField(default=True)
     class Meta:
         db_table = 'tipo_ingredientes'
         verbose_name = 'Tipo_Ingrediente'
@@ -78,6 +76,8 @@ class Producto_Tipo_Ingrediente(models.Model):
     tipo_ingrediente = models.ForeignKey(Tipo_Ingrediente, on_delete=models.CASCADE, related_name='productos')
     minimo = models.IntegerField()
     maximo = models.IntegerField(null=True)
+    mensaje = models.CharField(max_length=255, null=True)
+    multiple = models.BooleanField(default=True)
     
     class Meta:
         db_table = 'productos_tipos_ingredientes'
