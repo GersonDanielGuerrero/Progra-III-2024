@@ -23,6 +23,7 @@ actions: {
             if(token){
                 this.token = token;
             }
+            
         }
     }
 });

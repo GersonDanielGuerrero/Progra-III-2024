@@ -4,6 +4,8 @@ import Login from "../views/LogIn.vue";
 import Principal from "../views/PaginaPrincipal.vue";
 import RegistroUsuario from "../views/RegistroUsuario.vue";
 import PaginaMenu from "../views/PaginaMenu.vue";
+import PaginaCarrito from "@/views/PaginaCarrito.vue";
+import PaginaPrueba from "@/views/PaginaPrueba.vue";
 import ListaPedidos from "@/views/ListaPedidos.vue";
 
 const routes = [
@@ -28,6 +30,17 @@ const routes = [
         component: PaginaMenu,
     },
     {
+        path: "/carrito",
+        name: "Carrito",
+        component: PaginaCarrito,
+    },
+    {
+        path: "/pruebas",
+        name: "Pruebas",
+        component: PaginaPrueba,
+    },
+
+    {
         path: "/pedidos",
         name: "Pedidos",
         component: ListaPedidos,
@@ -35,7 +48,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(process.env.BASE_URL), 
     routes,
 });
 

@@ -195,7 +195,6 @@ export default {
     async iniciar_sesion() {
       try {
         const response = await ApiService.iniciarSesion(this.usuario);
-        alert(JSON.stringify(response));
         if (!response.error) {
           this.datos_validos = true;
           // Aquí podrías redirigir al usuario a otra página
