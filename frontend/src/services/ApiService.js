@@ -107,6 +107,31 @@ class ApiService {
             return { error: true, mensaje: error.message };
         }
     }
+// Método para obtener las preguntas frecuentes
+async obtenerPreguntas() {
+    try {
+        const respuesta = await fetch(`${this.baseURL}/api/info/preguntas`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+            return { error: false, datos: datos.preguntas };
+        }
+
+        this.msgError = datos.mensaje || 'Error al obtener las preguntas frecuentes';
+        return { error: true, mensaje: this.msgError };
+
+    } catch (error) {
+        console.error("Error al obtener preguntas frecuentes:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: this.msgError };
+    }
+}
 
     async registrarUsuario(datosUsuario) {
         try {

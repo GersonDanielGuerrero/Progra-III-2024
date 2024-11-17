@@ -143,9 +143,25 @@ export default {
                 respuesta: 'Respuesta de ejemplo 4'
               }
       ]
+
     };
   },
   methods: {
-    }
-}
+    async cargarPreguntas() {
+      try {
+        const respuesta = await ApiService.obtenerPreguntas();
+        if (!respuesta.error) {
+          this.preguntas = respuesta.datos;
+        } else {
+          console.error(respuesta.mensaje);
+        }
+      } catch (error) {
+        console.error("Error al cargar preguntas frecuentes:", error);
+      }
+    },
+  },
+  async mounted() {
+    await this.cargarPreguntas(); 
+  },
+};
 </script>
