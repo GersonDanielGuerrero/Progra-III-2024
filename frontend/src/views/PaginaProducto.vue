@@ -415,7 +415,17 @@ export default{
       .then((respuesta) => {
         if (!respuesta.error) {
           this.producto = respuesta.datos;
-        Alertify.success(JSON.stringify(this.producto));
+          this.collapsesVisibles = {};
+          this.producto.seleccion_ingredientes.forEach((tipoIngrediente) => {
+            tipoIngrediente.ingredientes_seleccionados = [];
+            if (tipoIngrediente.minimo === 1 && tipoIngrediente.maximo === 1) {
+              tipoIngrediente.ingredientes_options = tipoIngrediente.ingredientes.map(ingrediente => ({
+                text: ingrediente.nombre,
+                value: ingrediente.id,
+              }));
+            }
+            this.collapsesVisibles[tipoIngrediente.id_tipo] = false;
+          });
         } else {
           console.error('Error al obtener producto:', respuesta.mensaje);
           Alertify.error('Error al obtener producto');
