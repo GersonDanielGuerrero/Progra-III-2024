@@ -16,7 +16,25 @@
             <div class="product-info col-sm-12 col-md-8 col-lg-8">
               <div class="personalization">
                   <h2 class="product-name">{{ producto.nombre }}</h2>
-                  
+                  <div v-for="tipoIngrediente in producto.seleccion_ingredientes" :key="tipoIngrediente.id_tipo">
+                    <h3>{{ tipoIngrediente.titulo }}</h3>
+                    <b-form-radio-group stacked v-if="tipoIngrediente.maximo === 1" v-model="tipoIngrediente.ingredientes_seleccionados[0]"
+                    :name="'tipoIngrediente-' + tipoIngrediente.id_tipo" :options="tipoIngrediente.ingredientes_options"/>
+
+                    <ul v-else>
+                      <li v-for="ingrediente in tipoIngrediente.ingredientes" :key="ingrediente.id" class="ingrediente">
+                        <span>{{ ingrediente.nombre }}</span>
+                        <div class="quantity-controls">
+                          <button @click="restarIngrediente(ingrediente.id, tipoIngrediente.id_tipo)">-</button>
+                          <span v-if="ingredienteSeleccionado = tipoIngrediente.ingredientes_seleccionados.find(ing => ing.id === ingrediente.id)">
+                            {{ ingredienteSeleccionado.cantidad }}
+                          </span>
+                          <span v-else>0</span>
+                          <button @click="sumarIngrediente(ingrediente.id, tipoIngrediente.id_tipo)">+</button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                   <!-- Caja de texto para detalles -->
                   <CajaTexto 
                       placeholder="Escribe aquí (opcional)" 
@@ -26,11 +44,11 @@
               </div>
                 <div class="order-section">
                   <div class = "quantity">
-                  <p class = "quantity-label">Cantidad:</p>
+                  <p class = "quantity-text">Cantidad:</p>
                   <div class="quantity-controls">
                       <!-- Botones para cambiar la cantidad -->
                       <button id="subtract" @click="restarCantidad">-</button>
-                      <span id="quantity">{{ cantidad }}</span>
+                      <span id="quantity" class="quantity-text">{{ cantidad }}</span>
                       <button id="add" @click="sumarCantidad">+</button>
                   </div>
                   </div>
@@ -56,11 +74,6 @@
     font-family: "Arial Black", Gadget, sans-serif;
     color: #fff;
 }
-.ingrediente-label {
-    color: #fff;
-    font-size: 1.2em;
-    font-weight: bold;
-}
 .product-image, .product-info{
   display: flex;
   flex-direction: column;
@@ -85,7 +98,6 @@
     margin-bottom: 20px;
     font-weight: bold;
 }
-
 
 .product-img {
     width: 100%; 
@@ -215,7 +227,7 @@
     cursor: pointer;
 }
 
-.quantity-controls span {
+.quantity-text {
     font-size: 1.2em;
     color: #fff;
 }
@@ -263,7 +275,11 @@ export default{
                 nombre: 'Carne de pollo'
             }
         ],
-        ingredientes_seleccionados: []
+        ingredientes_seleccionados: [],
+        ingredientes_options: [
+            { text: 'Carne de res', value: { id: 1, nombre: 'Carne de res' } },
+            { text: 'Carne de pollo', value: { id: 2, nombre: 'Carne de pollo' } }
+        ]
     },
     {
         id_tipo: 2,
@@ -303,10 +319,7 @@ export default{
                 precio: 0.25
             }
         ],
-        ingredientes_seleccionados: [{
-            id: 3,
-            cantidad: 0,
-        }]
+        ingredientes_seleccionados: []
     }
     
 ]
