@@ -1,15 +1,11 @@
 <template>
+  <BarraMenu />
     <div class="container">
-
-        <div class = "row">
-            <BarraMenu/>
-        </div>
 
         <h1 class="header-title">{{producto.categoria}}</h1>
 
-        <div class="product-view">
-            <div class="product-image">
-                <p class="discount-text" v-if="producto.precio_anterior">*Producto en descuento, restricciones aplican.</p>
+        <div class="product-view row">
+            <div class="product-image col-sm-12 col-md-4 col-lg-4">
                 <img :src="producto.imagen" alt="Imagen de la Burger Clasica" class="product-img">
                 <p class="price">
                     <span class="previous-price" v-if="producto.precio_anterior" > ${{producto.precio_anterior}} </span>
@@ -17,31 +13,35 @@
                 </p>
                 <p class="description">{{producto.descripcion}}</p>
             </div>
-            <div class="product-info">
-                <h2 class="product-name">{{ producto.nombre }}</h2>
-                <div class="placeholder-div"></div>
-                
-                <!-- Caja de texto para detalles -->
-                <CajaTexto
-                    placeholder="Escribe aquí (opcional)" 
-                    type="text" 
-                    v-model="form.detalle" 
-                />
-
+            <div class="product-info col-sm-12 col-md-8 col-lg-8">
+              <div class="personalization">
+                  <h2 class="product-name">{{ producto.nombre }}</h2>
+                  
+                  <!-- Caja de texto para detalles -->
+                  <CajaTexto 
+                      placeholder="Escribe aquí (opcional)" 
+                      type="text" 
+                      v-model="form.detalle" 
+                  />
+              </div>
                 <div class="order-section">
+                  <div class = "quantity">
+                  <p class = "quantity-label">Cantidad:</p>
+                  <div class="quantity-controls">
+                      <!-- Botones para cambiar la cantidad -->
+                      <button id="subtract" @click="restarCantidad">-</button>
+                      <span id="quantity">{{ cantidad }}</span>
+                      <button id="add" @click="sumarCantidad">+</button>
+                  </div>
+                  </div>
+                  <div class = "total-and-button">
                     <div class="total-container">
-                        <span class="total-label">Total:</span> <span>${{ total }}</span>
+                        <span class="total-label">Total:</span>
+                        <span>${{ total }}</span>
                     </div>
-                    <div class="controls-and-button">
-                        <div class="quantity-controls">
-                            <!-- Botones para cambiar la cantidad -->
-                            <button id="subtract" @click="restarCantidad">-</button>
-                            <span id="quantity">{{ cantidad }}</span>
-                            <button id="add" @click="sumarCantidad">+</button>
-                        </div>
                         <!-- Botón para añadir al carrito -->
-                        <BotonComp @metodo_click="agregarACarrito">Añadir a mi orden 🛒</BotonComp>
-                    </div>
+                        <BotonComp class="btn-carrito" @metodo_click="agregarACarrito">Añadir a mi orden 🛒</BotonComp>
+                  </div>
                 </div>
             </div>
         </div>
@@ -53,12 +53,27 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Arial Black", Gadget, sans-serif;
     color: #fff;
 }
-
+.ingrediente-label {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.product-image, .product-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 20px;
+}
+.product-info{
+  height: 90vh;
+}
 .container {
     max-width: 1200px;
+    height: 70vh;
     margin: 0 auto;
     padding: 20px;
 }
@@ -71,15 +86,9 @@
     font-weight: bold;
 }
 
-.product-view {
-    display: flex;
-    justify-content: center; 
-    gap: 30px;
-}
 
 .product-img {
-    width: 500px; 
-    height: 500px; 
+    width: 100%; 
     object-fit: cover;
     border-radius: 8px;
     background-color: transparent;
@@ -94,26 +103,27 @@
     width: 100%;
 }
 
-.placeholder-div {
-    width: 750px; 
-    height: 400px;
-    background-color: #333;
-    border: 1px solid #ffad00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffad00;
-    font-size: 1.2em;
+
+.personalization {
+  border: 1px solid #ffad00;
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
 }
 
 .price {
+    margin: 0 auto;
+    width: 90%;
     display: flex;
-    justify-content: space-between;
-    width: 400px; 
-    margin-top: 10px;
-    font-size: 1.2em;
-    color: #fff;
+    flex-direction: row;
     font-weight: bold;
+    justify-content: space-between;
 }
 
 .previous-price {
@@ -125,43 +135,44 @@
 .current-price {
     color: #fff;
     font-size: 1.3em;
-    margin-left: 375px;
 }
 
 .description {
     font-size: 0.9em;
     color: #fff;
-    padding-top: 10px;
     max-width: 500px;
     font-weight: bold;
     text-align: left;
-}
-
-.product-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
 }
 
 .product-name {
     font-size: 1.6em;
     font-weight: bold;
     color: #ffad00;
-    text-align: center;
-    margin-top: 10px;
 }
-
 .order-section {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    gap: 20px;
-    margin-top: 10px;
-    font-weight: bold;
+    gap: 10px;
+    width: 100%;
 }
-
+.ingrediente {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+}
+.quantity, .total-and-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10%;
+    width: 100%;
+    justify-content: center;
+}
 .total-container {
     font-size: 1.2em;
     font-weight: bold;
@@ -195,7 +206,7 @@
 }
 
 .quantity-controls button {
-    background-color: #333;
+    background: none;
     border: none;
     padding: 5px 10px;
     color: #ffad00;
@@ -230,11 +241,75 @@ export default{
       producto: {
         id: 0,  
         nombre: 'Burger Clasica',
-        descripcion: 'Prueba nuestra deliciosa Burger Clasica...',
+        descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc nec nisl ultrices tincidunt. Nullam nec nunc nec nisl ultrices tincidunt. Nullam nec nunc nec nisl ultrices tincidunt.',
         categoria: 'Burgers',
-        precioAnterior: 4.75,
+        precio_anterior: 4.75,
         precio: 4.00,
         imagen: 'https://proyectodb.blob.core.windows.net/imgs/Burger_de_la_casa.jpeg',
+        seleccion_ingredientes : [
+    {
+        id_tipo: 1,
+        titulo: 'Selecciona el tipo de carne',
+        minimo: 1,
+        maximo: 1,
+        multiple: false,
+        ingredientes: [
+            {
+                id: 1,
+                nombre: 'Carne de res'
+            },
+            {
+                id: 2,
+                nombre: 'Carne de pollo'
+            }
+        ],
+        ingredientes_seleccionados: []
+    },
+    {
+        id_tipo: 2,
+        titulo: 'Elige ingredientes adicionales (máximo 4)',
+        minimo: 0,
+        maximo: 4,
+        multiple: true,
+        ingredientes: [
+            {
+                id: 3,
+                nombre: 'Queso',
+                precio: 1.15
+            },
+            {
+                id: 4,
+                nombre: 'Tocino',
+                precio: 0.75
+            },
+            {
+                id: 5,
+                nombre: 'Pepinillos',
+                precio: 0.50
+            },
+            {
+                id: 6,
+                nombre: 'Cebolla',
+                precio: 0.25
+            },
+            {
+                id: 7,
+                nombre: 'Lechuga',
+                precio: 0.25
+            },
+            {
+                id: 8,
+                nombre: 'Tomate',
+                precio: 0.25
+            }
+        ],
+        ingredientes_seleccionados: [{
+            id: 3,
+            cantidad: 0,
+        }]
+    }
+    
+]
       },
       cantidad: 1,
       form: {
@@ -257,8 +332,32 @@ export default{
         this.cantidad--;
       }
     },
+    sumarIngrediente(idIngrediente, idTipo) {
+      const tipoIngrediente = this.producto.seleccion_ingredientes.find(tipo => tipo.id_tipo === idTipo);
+      const ingrediente = tipoIngrediente.ingredientes_seleccionados.find(ing => ing.id === idIngrediente);
+      if (ingrediente) {
+        ingrediente.cantidad++;
+      }
+      else {
+        tipoIngrediente.ingredientes_seleccionados.push({
+          id: idIngrediente,
+          cantidad: 1,
+        });
+      }
+    },
+    restarIngrediente(idIngrediente, idTipo) {
+      const tipoIngrediente = this.producto.seleccion_ingredientes.find(tipo => tipo.id_tipo === idTipo);
+      const ingrediente = tipoIngrediente.ingredientes_seleccionados.find(ing => ing.id === idIngrediente);
+      if (ingrediente) {
+        if (ingrediente.cantidad > 1) {
+          ingrediente.cantidad--;
+        }
+        else {
+          tipoIngrediente.ingredientes_seleccionados = tipoIngrediente.ingredientes_seleccionados.filter(ing => ing.id !== idIngrediente);
+        }
+      }
+    },
 
-    
     async agregarACarrito() {
       const datosCarrito = {
         id: this.producto.id,  
