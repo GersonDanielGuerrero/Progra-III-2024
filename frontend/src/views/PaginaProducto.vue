@@ -1,5 +1,5 @@
 <template>
-  <BarraMenu />
+  <BarraMenu class="sticky-top"/>
     <div class="container">
 
         <h1 class="header-title">{{producto.categoria}}</h1>
@@ -16,14 +16,20 @@
             <div class="product-info col-sm-12 col-md-8 col-lg-8">
               <div class="personalization">
                   <h2 class="product-name">{{ producto.nombre }}</h2>
+
                   <div v-for="tipoIngrediente in producto.seleccion_ingredientes" :key="tipoIngrediente.id_tipo">
-                    <h3>{{ tipoIngrediente.titulo }}</h3>
+                      <h3 class="titulo-tipo-ingrediente" style="cursor: pointer;"
+                      @click="collapsesVisibles[tipoIngrediente.id_tipo] = !collapsesVisibles[tipoIngrediente.id_tipo]"> 
+                        {{ tipoIngrediente.titulo }}
+                      </h3>
+
+                    <b-collapse v-model="collapsesVisibles[tipoIngrediente.id_tipo]">
                     <b-form-radio-group stacked v-if="tipoIngrediente.maximo === 1" v-model="tipoIngrediente.ingredientes_seleccionados[0]"
                     :name="'tipoIngrediente-' + tipoIngrediente.id_tipo" :options="tipoIngrediente.ingredientes_options"/>
 
                     <ul v-else>
                       <li v-for="ingrediente in tipoIngrediente.ingredientes" :key="ingrediente.id" class="ingrediente">
-                        <span>{{ ingrediente.nombre }}</span>
+                        <span>{{ ingrediente.nombre }} + ${{ ingrediente.precio }}</span>
                         <div class="quantity-controls">
                           <button @click="restarIngrediente(ingrediente.id, tipoIngrediente.id_tipo)">-</button>
                           <span v-if="ingredienteSeleccionado = tipoIngrediente.ingredientes_seleccionados.find(ing => ing.id === ingrediente.id)">
@@ -34,13 +40,11 @@
                         </div>
                       </li>
                     </ul>
+                  </b-collapse>
                   </div>
-                  <!-- Caja de texto para detalles -->
-                  <CajaTexto 
-                      placeholder="Escribe aquí (opcional)" 
-                      type="text" 
-                      v-model="form.detalle" 
-                  />
+                  <div class="detalle-producto">
+                  <CajaTexto type="text"  v-model="form.detalle" placeholder="Detalles adicionales (opcional)" />
+                  </div>
               </div>
                 <div class="order-section">
                   <div class = "quantity">
@@ -74,6 +78,7 @@
     font-family: "Arial Black", Gadget, sans-serif;
     color: #fff;
 }
+
 .product-image, .product-info{
   display: flex;
   flex-direction: column;
@@ -82,7 +87,7 @@
   gap: 20px;
 }
 .product-info{
-  height: 90vh;
+  height: 80vh;
 }
 .container {
     max-width: 1200px;
@@ -117,9 +122,11 @@
 
 
 .personalization {
-  border: 1px solid #ffad00;
+  background-color: #111;
+  border-radius: 10px;
   height: 100%;
   overflow-y: auto;
+  scrollbar-color: #ffad00 #444 ;
   width: 100%;
 
   display: flex;
@@ -169,6 +176,12 @@
     gap: 10px;
     width: 100%;
 }
+.titulo-tipo-ingrediente {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #ffad00;
+    text-align: center;
+}
 .ingrediente {
     display: flex;
     flex-direction: row;
@@ -176,6 +189,10 @@
     gap: 10px;
     width: 100%;
     justify-content: center;
+}
+.detalle-producto {
+    width: 90%;
+    
 }
 .quantity, .total-and-button {
     display: flex;
@@ -240,6 +257,7 @@ import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 import ApiService from '@/services/ApiService';
 import Alertify from 'alertifyjs'
+import 'alertifyjs/build/css/alertify.css';
 export default{
     name: 'PaginaProducto',
 
@@ -250,10 +268,14 @@ export default{
     },
     data() {
     return {
+      collapsesVisibles: {
+        1: false,
+        2: false,
+      },
       producto: {
         id: 0,  
         nombre: 'Burger Clasica',
-        descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc nec nisl ultrices tincidunt. Nullam nec nunc nec nisl ultrices tincidunt. Nullam nec nunc nec nisl ultrices tincidunt.',
+        descripcion: 'Lorem ipsum dolor',// sit amet, consectetur adipiscing elit. Sed ac nunc nec nisl ultrices tincidunt. Nullam nec nunc nec nisl ultrices tincidunt. Nullam nec nunc nec nisl ultrices tincidunt.',
         categoria: 'Burgers',
         precio_anterior: 4.75,
         precio: 4.00,
@@ -268,17 +290,19 @@ export default{
         ingredientes: [
             {
                 id: 1,
-                nombre: 'Carne de res'
+                nombre: 'Carne de res',
+                precio: 0,
             },
             {
                 id: 2,
-                nombre: 'Carne de pollo'
+                nombre: 'Carne de pollo',
+                precio: 0,
             }
         ],
         ingredientes_seleccionados: [],
         ingredientes_options: [
-            { text: 'Carne de res', value: { id: 1, nombre: 'Carne de res' } },
-            { text: 'Carne de pollo', value: { id: 2, nombre: 'Carne de pollo' } }
+            { text: 'Carne de res', value: 1},
+            { text: 'Carne de pollo', value: 2}
         ]
     },
     {
@@ -403,8 +427,20 @@ export default{
   computed: {
    
     total() {
-      return (this.producto.precio * this.cantidad).toFixed(2);    
-        
+      let precioTotal = this.producto.precio* this.cantidad;
+      this.producto.seleccion_ingredientes.forEach((tipoIngrediente) => {
+        if (tipoIngrediente.minimo === 1 && tipoIngrediente.maximo === 1) {
+          if (tipoIngrediente.ingredientes_seleccionados.length > 0) {
+            precioTotal += tipoIngrediente.ingredientes.find(ingrediente => ingrediente.id === tipoIngrediente.ingredientes_seleccionados[0]).precio;
+          }
+        }
+        else {
+        tipoIngrediente.ingredientes_seleccionados.forEach((ingrediente) => {
+          precioTotal += ingrediente.cantidad * tipoIngrediente.ingredientes.find(ing => ing.id === ingrediente.id).precio;
+        });
+      }
+      });
+      return (precioTotal).toFixed(2);    
     }
   },
   created() {
