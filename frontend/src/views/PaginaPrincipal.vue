@@ -1,5 +1,5 @@
 <template>
-  <BarraMenu class="sticky-top" />
+  <BarraMenu class="sticky-top header" opcionSeleccionada="Inicio" />
     <div class = "container-fluid">
         <div class = "row carrusel">
             <CarruselComp />
@@ -20,6 +20,10 @@
 </template>
  
 <style scoped>
+.header{
+  width: 100vw;
+
+}
 .carrusel{
   margin:10px auto;
   width: 70vw;

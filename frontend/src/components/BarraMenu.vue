@@ -7,38 +7,43 @@
     <nav>
       <ul>
         <li :class="{ active: opcionSeleccionada === 'Inicio' }">
-          <a href="#" @click="seleccionarOpcion('Inicio')">Inicio</a>
+          <a href="#" @click="enviarA('/')">Inicio</a>
         </li>
         <li :class="{ active: opcionSeleccionada === 'Redes' }">
-          <a href="#" @click="seleccionarOpcion('Redes')">Redes</a>
+          <a href="#" @click="enviarA('/redes')">Redes</a>
         </li>
         <li :class="{ active: opcionSeleccionada === 'Atención al Cliente' }">
-          <a href="#" @click="seleccionarOpcion('Atención al Cliente')">Atención al Cliente</a>
+          <a href="#" @click="enviarA('/preguntas')">Atención al Cliente</a>
         </li>
-        <li :class="{ active: opcionSeleccionada === 'Administración' }">
-          <a href="#" @click="seleccionarOpcion('Administración')">Administración</a>
+        <li v-if="roles.includes('Administrador')" :class="{ active: opcionSeleccionada === 'Administración' }">
+          <a href="#" @click="enviarA('/admin')">Administración</a>
+        </li>
+        <li>
+          <button class="search-btn" @click="enviarA('/ubicacion')">
+            <i class="bi bi-geo-alt-fill" :class="{ active: opcionSeleccionada === 'Ubicación' }"></i>
+          </button>
+        </li>
+        <li>
+          <button class="cart-btn" @click="enviarA('/carrito')">
+          <i class="bi bi-cart-fill" :class="{ active: opcionSeleccionada === 'Carrito' }"></i>
+          </button>
         </li>
       </ul>
+      <div class="user-actions">
+        <BotonComp @click="enviarA('/login')" class="login-btn">
+          {{ usuario ? 'Cuenta' : 'Iniciar Sesión' }}
+        </BotonComp>
+      </div>
     </nav>
-    <div class="user-actions">
-      <button class="search-btn">🔍</button>
-      <button class="cart-btn">🛒</button>
-      <button @click="enviarLogin" class="login-btn">
-        {{ usuario ? 'Cuenta' : 'Iniciar Sesión' }}
-      </button>
-    </div>
   </header>
 </template>
 
 <style scoped>
-/* Estilos generales */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000;
-  color: #ffffff;
+i{
+  color: #fffe;
+  height: 100%;
+  width: 100%;
 }
-
 /* Header */
 header {
   display: flex;
@@ -69,10 +74,16 @@ header {
   font-size: 18px;
 }
 
-nav ul {
+nav ul, nav {
   list-style: none;
   display: flex;
   gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+nav {
+  margin-right: 20px;
 }
 
 nav ul li a {
@@ -84,25 +95,17 @@ nav ul li a {
 nav ul li.active a {
   color: #f6a901;
 }
-
+.active {
+  color: #f6a901;
+}
 .user-actions {
   display: flex;
   gap: 10px;
 }
 
-.login-btn {
-  background-color: #f6a901;
-  color: #000;
-  border: none;
-  padding: 8px 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
 .cart-btn,
 .search-btn {
   background-color: #000000;
-  color: #000;
   border: none;
   padding: 8px 10px;
   cursor: pointer;
@@ -111,24 +114,31 @@ nav ul li.active a {
 </style>
 
 <script>
+import BotonComp from './BotonComp.vue';
 export default {
+  components: {
+    BotonComp,
+  },
   name: 'BarraMenu',
   data() {
     return {
-      opcionSeleccionada: 'Inicio',
-      usuario: null, 
+      usuario: null,
+      roles: [],
     };
   },
   methods: {
-    enviarLogin() {
-      this.$router.push('/login');
-    },
-    seleccionarOpcion(opcion) {
-      this.opcionSeleccionada = opcion;
+    enviarA(opcion) {
+      this.$router.push(opcion);
     },
     editarLogo() {
     
       console.log('Edit logo clicked');
+    },
+  },
+  props: {
+    opcionSeleccionada: {
+      type: String,
+      required: true,
     },
   },
 };

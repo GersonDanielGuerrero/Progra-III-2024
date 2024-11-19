@@ -150,7 +150,8 @@ class ApiService {
                 // Guardar el token y redirigir
                 const authStore = useAuthStore();
                 authStore.setToken(datos.access);
-                window.location.href = '/pagina-principal'; // Redirigir a la página principal
+                authStore.setUsuario(datos.usuario);
+                window.location.href = '/'; // Redirigir a la página principal
                 return { error: false, datos: datos };
             }
 
