@@ -3,9 +3,8 @@
         <div class = "row">
             <BarraMenu />
         </div>
-        <div class = "row">
+        <div class = "row carrusel">
             <CarruselComp />
-            <h1>Hola</h1>
         </div>
         <div class = "row lista-categorias">
             <div class = "col-3" v-for="categoria in categorias" :key="categoria.id"
@@ -23,6 +22,11 @@
 </template>
  
 <style scoped>
+.carrusel{
+  width: 100%;
+  height: 400px;
+  margin-bottom: 500px;
+}
 .categoria{
   margin:10px;
 }

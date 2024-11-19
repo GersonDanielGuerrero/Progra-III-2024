@@ -1,104 +1,58 @@
 <template>
-<div class="carousel-container" @mouseover="limpiarIntervalo(slideInterval)" @mouseout="slideInterval = setearIntervalo(nextSlide, 5000)">
-        <div class="carousel">
-            <div class="carousel-item" v-for="(anuncio) in anuncios" :key="anuncio.id">
-                <a :href="anuncio.url_redireccion">
-                    <img :src="anuncio.url_foto" :alt="'Promo' ">
-                </a>
-            </div>
+<div class="carousel">
+        <div class="carousel-slides" >
+        <button class="prev" @click="prevSlide">←</button>
+        <div class="slide">
+            <a :href="anuncios[currentSlide].url_redireccion">
+                <img class="img-anuncio" :src="anuncios[currentSlide].url_foto" alt="Anuncio">
+            </a>
         </div>
-
-        <div class="controls">
-            <button id="prevBtn" @click="prevSlide">❮</button>
-            <button id="nextBtn" @click="nextSlide">❯</button>
-        </div>
-
-        <div class="indicators">
-            <span v-for="(anuncio) in anuncios" :key="anuncio.id" :class="['dot', { active: currentIndex === anuncio.id }]" @click="showSlide(anuncio.id)"></span>
-        </div>
+        <button class="next" @click="nextSlide">→</button>
     </div>
+</div>
 </template>
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-.carousel-container {
-    position: relative;
-    width: 70%;
-    max-width: 900px;
-    max-height: 400px;
-    overflow: hidden;
-    margin: auto;
-    border-radius: 10px;
-}
-
+<style scoped>
 .carousel {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ffad00;
+}
+.carousel-slides {
+    width: 80%;
+    height: 100%;
+  display: flex;
+  transition: fade 0.5s;
+}
+.slide, .img-anuncio,a{
+  min-width: 100%;
+  height: 100%;
+}
+.prev,
+.next {
+    width: 10%;
+    height: 100%;
+  background: #ffad00;
+  color: black;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ffad00;
 }
 
-.carousel-item {
-    width: 100%;
-    flex: 1 0 100%;
-}
 
-.carousel img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.controls {
-    position: absolute;
-    top: 44%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    padding: 0 20px;
-}
-
-.controls button {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 50%;
-}
-
-.indicators {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.dot {
-    height: 12px;
-    width: 12px;
-    margin: 0 5px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.dot.active {
-    background-color: #ffad00;
-}
 </style>
-
 <script>
 export default {
     
     name: 'CarruselComp',
     data (){
         return{
+        currentSlide: 1,
         anuncios: [
             {
                 id: 1,
@@ -121,33 +75,17 @@ export default {
                 url_redireccion: "/menu?categoria=Snacks"
             }
         ],
-        currentIndex: 0,
-        dots: document.querySelectorAll('.dot'),
-        slides: document.querySelectorAll('.carousel-item'),
-        slideInterval: null,
         };
     },
     methods: {
-        showSlide(index) {
-            this.currentIndex = index;
-        },
-        nextSlide(){
-            this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-            this.showSlide(this.currentIndex);
-        },
-        prevSlide() {
-            this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-            this.showSlide(this.currentIndex);
-        },
-        limpiarIntervalo(intervalo) {
-            clearInterval(intervalo);
-        },
-        setearIntervalo(funcion, tiempo) {
-            return setInterval(funcion, tiempo);
-        }
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.anuncios.length;
+    },
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.anuncios.length) % this.anuncios.length;
+    },
     },
     mounted() {
-        this.slideInterval = setInterval(this.nextSlide, 5000); 
     },
 };
 
