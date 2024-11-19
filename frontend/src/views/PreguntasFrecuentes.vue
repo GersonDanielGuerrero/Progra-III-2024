@@ -1,40 +1,49 @@
 <template>
-    <BarraMenu/>
-    <div class="customer-service">
+  <BarraMenu />
+  <div class="customer-service">
     <div class="header">
       <h2>Atención al Cliente</h2>
-      <p>Bienvenidos. Atención al cliente. <span class="highlight">¿Qué le podemos ayudar?</span></p>
+      <p>
+        Bienvenidos. Atención al cliente.
+        <span class="highlight">¿Qué le podemos ayudar?</span>
+      </p>
       <div class="pregunta">
-      <p>Recomendaciones con preguntas y hacen seguido los clientes.</p>
+        <p>Recomendaciones con preguntas y hacen seguido los clientes.</p>
       </div>
     </div>
+
     <div class="preguntas">
       <div class="preguntas-item" v-for="pregunta in preguntas" :key="pregunta.id">
-      <span>{{ pregunta.pregunta }}</span>
-      <span class="actions">
-    <span class="icon">▼</span>
-    <button @click="editarLogo" class="edit-logo-btn">✏️</button>
-  </span>
-  
- </div>
-    </div>
-    <div class="AÑADIR">
-    <Botoncomp> AÑADIR PREGUNTA </Botoncomp>
+ 
+  <div class="pregunta-header">
+    <span class="texto-pregunta">{{ pregunta.pregunta }}</span>
+    <div class="acciones">
+      <span class="icon" @click="toggleRespuesta(pregunta.id)">▼</span>
+      <button @click="editarPregunta(pregunta.id)" class="edit-logo-btn">✏️</button>
     </div>
   </div>
-  </template>
+ 
+  <div class="respuesta" v-if="pregunta.mostrarRespuesta">
+    {{ pregunta.respuesta }}
+  </div>
+</div>
+    </div>
+
+    <div class="AÑADIR">
+      <Botoncomp> AÑADIR PREGUNTA </Botoncomp>
+    </div>
+  </div>
+</template>
   
  
 <style scoped>
-customer-service {
-  text-align: center;
-  width: 400px;
-  margin: auto;
+.preguntas-item {
   background-color: #000;
+  border: 2px solid #ffad00; 
   color: #fff;
   padding: 20px;
-  border-radius: 10px;
-  min-height: 100vh;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .header h2 {
@@ -64,22 +73,58 @@ customer-service {
 
 .preguntas-item {
   background-color: #000;
-  border: 2px solid #ffad00;
+  border: 2px solid #ffad00; 
   color: #fff;
   padding: 10px;
   border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+
+.pregunta-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-between; 
+  align-items: center; 
+}
+
+.texto-pregunta {
+  flex-grow: 1; 
+  margin-right: 10px;
+  text-align: left;
+}
+
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.respuesta {
+  margin-top: 10px; 
+  text-align: left;
+  border: 2px solid #ffad00; 
+  background-color: #000000; 
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .actions {
   display: flex;
   gap: 5px;
+  justify-content: space-between;
 }
 
 .icon, .edit {
   color: #ffad00;
+  cursor: pointer;
+}
+
+.close-btn {
+  background-color: #ffad00;
+  color: #000;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -100,6 +145,7 @@ customer-service {
   cursor: pointer;
 
 }
+
 .edit-logo-btn {
   background-color: transparent;
   color: #fff;
@@ -127,12 +173,12 @@ export default {
               {
                 id: 1,
                 pregunta: '¿A que hora abre el local?',
-                respuesta: 'Respuesta de ejemplo 1'
+                respuesta: 'Abrimos a las 8:00 AM'
               },
               {
                 id: 2,
                 pregunta: '¿Hasta donde llegan los envios?',
-                respuesta: 'Respuesta de ejemplo 2'
+                respuesta: 'Enviamos a todo el país'
               },
               {
                 id: 3,
@@ -153,17 +199,28 @@ export default {
       try {
         const respuesta = await ApiService.obtenerPreguntas();
         if (!respuesta.error) {
-          this.preguntas = respuesta.datos;
-        } else {
+          this.preguntas = respuesta.datos.map(pregunta => ({
+            ...pregunta,
+            mostrarRespuesta: false 
+          })); } else {
           console.error(respuesta.mensaje);
         }
       } catch (error) {
         console.error("Error al cargar preguntas frecuentes:", error);
       }
     },
+    toggleRespuesta(id) {
+      const pregunta = this.preguntas.find(p => p.id === id);
+      if (pregunta) {
+        pregunta.mostrarRespuesta = !pregunta.mostrarRespuesta;
+      }
+    },
+    editarLogo() {
+      console.log('Editar logo');
+    }
   },
   async mounted() {
-    await this.cargarPreguntas(); 
-  },
+    await this.cargarPreguntas();
+}
 };
 </script>
