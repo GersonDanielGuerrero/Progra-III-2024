@@ -236,6 +236,21 @@ class ApiService {
             return { error: true, mensaje: error.message };
         }
     }
+
+    async obtenerElementos(tipo) {
+        try {
+          // Se construye la URL con el tipo
+        const response = await fetch(`/api/${tipo}`);
+        if (!response.ok) throw new Error("Error al obtener datos del servidor");
+        
+          // Se obtiene el JSON con los datos
+        const data = await response.json();
+        return data;
+        } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error;
+        }
+    }
 }
 
 // Exportar una instancia de la clase con la URL base
