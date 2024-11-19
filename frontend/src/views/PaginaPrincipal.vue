@@ -1,8 +1,6 @@
 <template>
+  <BarraMenu class="sticky-top" />
     <div class = "container-fluid">
-        <div class = "row">
-            <BarraMenu />
-        </div>
         <div class = "row carrusel">
             <CarruselComp />
         </div>
@@ -23,9 +21,9 @@
  
 <style scoped>
 .carrusel{
-  width: 100%;
-  height: 400px;
-  margin-bottom: 500px;
+  margin:10px auto;
+  width: 70vw;
+  height: 23vw;
 }
 .categoria{
   margin:10px;
