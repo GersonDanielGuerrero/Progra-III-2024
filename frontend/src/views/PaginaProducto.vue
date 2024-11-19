@@ -396,10 +396,27 @@ export default{
     },
 
     async agregarACarrito() {
+      let ingredientes = {};
+      this.producto.seleccion_ingredientes.forEach((tipoIngrediente) => {
+        if (tipoIngrediente.minimo === 1 && tipoIngrediente.maximo === 1 && tipoIngrediente.ingredientes_seleccionados.length > 0) {
+            ingredientes.push({
+              id: tipoIngrediente.ingredientes_seleccionados[0],
+              cantidad: 1,
+            });
+        }
+        else {
+          tipoIngrediente.ingredientes_seleccionados.forEach((ingrediente) => {
+            ingredientes.push({
+              id: ingrediente.id,
+              cantidad: ingrediente.cantidad,
+            });
+          });
+        }
+      });
       const datosCarrito = {
         id: this.producto.id,  
         cantidad: this.cantidad,
-        ingredientes: [],  
+        ingredientes: ingredientes,  
         detalles: this.form.detalle,  
       };
 
