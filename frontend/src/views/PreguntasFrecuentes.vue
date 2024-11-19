@@ -15,7 +15,8 @@
     <span class="icon">▼</span>
     <button @click="editarLogo" class="edit-logo-btn">✏️</button>
   </span>
-</div>
+  
+ </div>
     </div>
     <div class="AÑADIR">
     <Botoncomp> AÑADIR PREGUNTA </Botoncomp>
