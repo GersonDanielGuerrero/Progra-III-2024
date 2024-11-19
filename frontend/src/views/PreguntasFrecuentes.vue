@@ -113,6 +113,7 @@ customer-service {
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
 import Botoncomp from '@/components/BotonComp.vue';
+import ApiService from '@/services/ApiService';
 export default {
     name: 'PreguntasFrecuentes',
     components: {
