@@ -5,9 +5,18 @@ from .serializers import CategoriaSerializer, ProductoListaSerializer
 from rest_framework.response import Response
 from .models import Categoria, Producto, Descuento
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class CategoriaView(APIView):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            # Permitir acceso público a las solicitudes GET
+            return [AllowAny()]
+        else:
+            # Requerir autenticación para POST, PUT, DELETE
+            return [IsAuthenticated()]
+        
     def get(self, request):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
@@ -23,6 +32,28 @@ class CategoriaView(APIView):
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
             
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'mensaje': 'No tienes permisos para realizar esta acción'})
+    def put(self, request):
+        usuario = request.user
+        if usuario.roles.filter(nombre='Administrador').exists():
+            categoria = Categoria.objects.get(id=request.data['id'])
+            serializer = CategoriaSerializer(categoria, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+            
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'mensaje': 'No tienes permisos para realizar esta acción'})
+    
+    def delete(self, request):
+        usuario = request.user
+        if usuario.roles.filter(nombre='Administrador').exists():
+            categoria = Categoria.objects.get(id=request.data['id'])
+            categoria.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN, data={'mensaje': 'No tienes permisos para realizar esta acción'})
 class ListaProductosView(APIView):

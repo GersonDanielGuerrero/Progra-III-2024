@@ -1,9 +1,8 @@
 <template>
+  <BarraMenu class="sticky-top" />
     <div class = "container-fluid">
-        <div class = "row">
-            <BarraMenu />
-        </div>
-        <div class = "row">
+        <div class = "row carrusel">
+            <CarruselComp />
         </div>
         <div class = "row lista-categorias">
             <div class = "col-3" v-for="categoria in categorias" :key="categoria.id"
@@ -21,6 +20,11 @@
 </template>
  
 <style scoped>
+.carrusel{
+  margin:10px auto;
+  width: 70vw;
+  height: 23vw;
+}
 .categoria{
   margin:10px;
 }
@@ -43,6 +47,7 @@
   import ApiService from '@/services/ApiService'; 
 import BarraMenu from '@/components/BarraMenu.vue';
 import CategoriaComp from "@/components/CategoriaComp.vue";
+import CarruselComp from '@/components/CarruselComp.vue';
   
   export default {
     data() {
@@ -78,6 +83,7 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
     components: {
       BarraMenu,
       CategoriaComp,
+      CarruselComp,
     },
     methods: {
       async cargarDatos() {
