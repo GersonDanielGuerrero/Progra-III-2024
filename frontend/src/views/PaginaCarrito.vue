@@ -191,6 +191,11 @@ select option{
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
+  transition: 0.5s;
+}
+.cart-item:hover {
+  transform: scale(1.02);
+  transition: 0.5s;
 }
 
 .item-info {

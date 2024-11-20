@@ -1,12 +1,10 @@
 <template>
+    <BarraMenu class="sticky-top" opcionSeleccionada="Inicio"/>
     <div class ="container-fluid ">
-        <div class="barra-menu row">
-            <BarraMenu/>
-        </div>
         <div class="buscador row ">
-            <button class="btn-regresar col-1" >
-                Regresar
-            </button>
+            <BotonComp class="btn-regresar col-1" >
+                Atrás
+            </BotonComp>
             <h2 class="col-2 ">MENU DE {{ categoria.toUpperCase() }}</h2>
             <span class="col-4 linea"/>
             <div class="col-4">
@@ -14,7 +12,7 @@
             </div>
         </div>
         <div class ="lista-productos row">
-            <div class = "col-2" v-for="producto in productosFiltrados" :key="producto.id">
+            <div class = "col-2 producto" v-for="producto in productosFiltrados" :key="producto.id">
                 <ProductoComp :producto="producto"/>
             </div>
         </div>
@@ -39,9 +37,9 @@
 }
 
 .btn-regresar{
-    background-color: #ffad00;
     height: 45px; 
     align-content: center;
+    margin : 0;
 }
 .buscador h2 {
     font-size: 18px;
@@ -51,10 +49,21 @@
     align-content: center;
 }
 .buscador{
+    height: 100px;
     padding: 20px 15px;
+    margin-top: 0;
 }
 .lista-productos{
     padding: 20px;
+    margin-top: 0;
+}
+.producto{
+    height: 30vh;
+    transition: 0.5s;
+}
+.producto:hover{
+    transform: scale(1.1);
+    transition: 0.5s;
 }
 </style>
 
@@ -64,6 +73,8 @@ import ProductoComp from '@/components/ProductoComp.vue';
 import {useAuthStore} from '@/stores/auth'; 
 import ApiService from '@/services/ApiService';
 import BusquedaComp from '@/components/BusquedaComp.vue';
+import BotonComp from '@/components/BotonComp.vue';
+
 
 export default {
     name: 'PaginaMenu',
@@ -71,6 +82,7 @@ export default {
         ProductoComp,
         BusquedaComp,
         BarraMenu,
+        BotonComp,
     },
     setup() {
     const authStore = useAuthStore(); // Llama a la función para obtener la instancia de la tienda
