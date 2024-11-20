@@ -2,7 +2,7 @@
   <header class="header">
     <div class="img">
       <img src="imagenes/image.png" alt="image" />
-      <button @click="editarLogo" class="edit-logo-btn">✏️</button>
+      <button v-if="esAdmin" @click="editarLogo" class="edit-logo-btn">✏️</button>
     </div>
     <nav>
       <ul>
@@ -15,7 +15,7 @@
         <li :class="{ active: opcionSeleccionada === 'Atención al Cliente' }">
           <a href="#" @click="enviarA('/preguntas')">Atención al Cliente</a>
         </li>
-        <li v-if="roles.includes('Administrador')" :class="{ active: opcionSeleccionada === 'Administración' }">
+        <li v-if="esAdmin" :class="{ active: opcionSeleccionada === 'Administración' }">
           <a href="#" @click="enviarA('/admin')">Administración</a>
         </li>
         <li>
@@ -30,7 +30,7 @@
         </li>
       </ul>
       <div class="user-actions">
-        <BotonComp @click="enviarA('/login')" class="login-btn">
+        <BotonComp @click="abrirCuenta" class="login-btn">
           {{ usuario ? 'Cuenta' : 'Iniciar Sesión' }}
         </BotonComp>
       </div>
@@ -115,6 +115,7 @@ nav ul li.active a {
 
 <script>
 import BotonComp from './BotonComp.vue';
+import {useAuthStore} from '@/stores/auth';
 export default {
   components: {
     BotonComp,
@@ -127,6 +128,15 @@ export default {
     };
   },
   methods: {
+    abrirCuenta() {
+ /*     if (this.usuario) {
+        this.$router.push('/cuenta');
+      } else {
+        this.$router.push('/login');
+      }
+  */
+      this.$router.push('/login');
+    },
     enviarA(opcion) {
       this.$router.push(opcion);
     },
@@ -139,6 +149,22 @@ export default {
     opcionSeleccionada: {
       type: String,
       required: true,
+    },
+  },
+  mounted() {
+    const authStore = useAuthStore();
+    this.usuario = authStore.getUsuario();
+    if (this.usuario) {
+      this.roles = this.usuario.roles;
+    }
+  },
+  computed: {
+    esAdmin() {
+      const roles = this.roles;
+      if(roles.includes('Administrador')){
+        return true;
+      }
+      return false;
     },
   },
 };
