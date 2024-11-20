@@ -1,4 +1,6 @@
 import {useAuthStore} from '@/stores/auth';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 class ApiService {
     constructor(baseURL) {
@@ -250,6 +252,180 @@ class ApiService {
         } catch (error) {
         console.error("Error en la solicitud:", error);
         throw error;
+        }
+    }
+    // Método para realizar un pedido
+    async realizarPedido(productos, tipoEntrega, idDireccion, metodoPago) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/pedidos/`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productos: productos.map(producto => ({
+                        id: producto.id,
+                        cantidad: producto.cantidad
+                    })),
+                    tipo_entrega: tipoEntrega,
+                    id_direccion: idDireccion,
+                    metodo_pago: metodoPago
+                })
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+            
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al realizar el pedido' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para borrar productos seleccionados en el carrito
+    async borrarProductos(ids) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ids })
+            });
+            
+            if (respuesta.ok) {
+                return { error: false, mensaje: "Productos eliminados correctamente" };
+            }
+            alertify.success('Eliminando productos del carrito');
+            
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al eliminar productos' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para sumar la cantidad de un producto en el carrito
+    async sumarProducto(id, cantidad) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productos: [{ id, cantidad: cantidad + 1 }]
+                })
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al sumar producto' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para restar la cantidad de un producto en el carrito
+    async restarProducto(id, cantidad) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productos: [{ id, cantidad:cantidad -1 }]
+                })
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al restar producto' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para obtener las direcciones del usuario
+    async obtenerDirecciones() {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/usuarios/direcciones/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+            
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al obtener direcciones' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para obtener el carrito del usuario
+    async obtenerCarrito() {
+        const token = this.obtenerToken();
+        if (!token) {
+            //redirigir a login 
+            window.location.href = '/login';
+        }
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al obtener el carrito' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para actualizar el carrito del usuario
+    async actualizarCarrito(data) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+                
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al actualizar el carrito' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
         }
     }
 }

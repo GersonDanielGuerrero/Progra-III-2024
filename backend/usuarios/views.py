@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import RegistroSerializer
+from .serializers import RegistroSerializer, DireccionSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from .models import Direccion
+from rest_framework.permissions import AllowAny, IsAuthenticated
 # Create your views here.
 
 class RegistroView(APIView):
@@ -35,3 +36,11 @@ class LoginView(TokenObtainPairView):
             return None
             
     
+class DireccionesView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        usuario = request.user
+        direcciones = Direccion.objects.filter(usuario=usuario)
+        serializer = DireccionSerializer(direcciones, many=True)
+        return Response(serializer.data)
