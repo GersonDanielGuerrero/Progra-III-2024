@@ -10,13 +10,11 @@
             <h2 class="col-2 ">MENU DE {{ categoria.toUpperCase() }}</h2>
             <span class="col-4 linea"/>
             <div class="col-4">
-            <CajaTexto placeholder="Filtrar" type="text" v-model="filtro"/>
+            <BusquedaComp :items = "productos" :camposFiltrables="['nombre', 'descripcion']" @resultados-busqueda="actualizarResultados"/>
             </div>
-            <BotonComp @metodo_click="obtenerProductos(this.categoria,this.filtro)"  class="col-1">Filtro</BotonComp>
-            
         </div>
         <div class ="lista-productos row">
-            <div class = "col-2" v-for="producto in productos" :key="producto.id">
+            <div class = "col-2" v-for="producto in productosFiltrados" :key="producto.id">
                 <ProductoComp :producto="producto"/>
             </div>
         </div>
@@ -61,19 +59,17 @@
 </style>
 
 <script>
-import BotonComp from '@/components/BotonComp.vue';
-import CajaTexto from '@/components/CajaTexto.vue';
 import BarraMenu from '@/components/BarraMenu.vue';
 import ProductoComp from '@/components/ProductoComp.vue';
 import {useAuthStore} from '@/stores/auth'; 
 import ApiService from '@/services/ApiService';
+import BusquedaComp from '@/components/BusquedaComp.vue';
 
 export default {
     name: 'PaginaMenu',
     components: {
         ProductoComp,
-        BotonComp,
-        CajaTexto,
+        BusquedaComp,
         BarraMenu,
     },
     setup() {
@@ -102,6 +98,7 @@ export default {
                     url_foto: "https://th.bing.com/th/id/OIP.IDr8Ipp1_QAlSbQIiw5YegHaHa?rs=1&pid=ImgDetMain"
                 },
             ],
+            productosFiltrados: [],
             usuario: this.authStore.usuario, // Obtiene el usuario actual del store
             filtro: '', // Inicializa el filtro vacio
         }
@@ -123,9 +120,13 @@ watch: {
             const { error, datos, mensaje } = await ApiService.obtenerProductos(categoria, filtro);
             if (!error) {
                 this.productos = datos; // Asigna la lista de productos
+                this.productosFiltrados = datos; // Asigna la lista de productos filtrados
             } else {
                 alert(mensaje); // Manejo de eerores basico para mostrar un mensaje en la consola en caso de que la solicitud falle
             }
+        },
+        actualizarResultados(resultados) {
+            this.productosFiltrados = resultados; // Actualiza la lista de productos filtrados
         },
     },
     computed: {

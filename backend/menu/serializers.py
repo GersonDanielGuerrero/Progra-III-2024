@@ -13,7 +13,7 @@ class ProductoListaSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Producto
-        fields = ['id', 'nombre', 'precio', 'valor_descuento', 'tipo_descuento', 'url_foto']
+        fields = ['id', 'nombre', 'descripcion','precio', 'valor_descuento', 'tipo_descuento', 'url_foto']
 
 """
 Ejemplo de JSON que se espera en la vista de Ingredientes elegibles para un producto

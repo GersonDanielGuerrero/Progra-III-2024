@@ -1,108 +1,99 @@
 <template>
-    <div id="carrusel" class="carrusel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-        <button 
-            type="button"
-            :data-bs-target="'#carousel'"
-            :data-bs-slide-to="0"
-            :class="active"
-            aria-current="true"
-            aria-label="Slide 1">
-        </button>
-        <button
-            type="button"
-            :data-bs-target="'#carousel'"
-            :data-bs-slide-to="1"
-            aria-label="Slide 2">
-        </button>
-        <button
-            type="button"
-            :data-bs-target="'#carousel'"
-            :data-bs-slide-to="2"
-            aria-label="Slide 3">
-        </button>
+<div class="carousel">
+        <div class="carousel-slides" >
+        <button class="prev" @click="prevSlide">{{ "<" }}</button>
+        <div class="slide">
+            <a :href="anuncios[currentSlide].url_redireccion">
+                <img class="img-anuncio" :src="anuncios[currentSlide].url_foto" alt="Anuncio">
+            </a>
         </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <a :href="item.url_redireccion">
-                    <img src="" class="d-block w-100" alt="Promocion 1">
-                </a>
-            </div>
-        <div class="carousel-inner">
-                <a :href="item.url_redireccion">
-                    <img src="" class="d-block w-100" alt="Promocion 2">
-                </a>
-        </div>
-        <div class="carousel-inner">
-                <a :href="item.url_redireccion">
-                    <img src="" class="d-block w-100" alt="Promocion 3">
-                </a>
-        </div>
-        <button 
-            class="carousel-control-prev" 
-            type="button"
-            data-bs-target="#carrusel"
-            data-bs-slide="prev">
-        <span
-            class="carousel-control-prev-icon"
-            aria-hidden="true">
-        </span>
-        <span
-            class="visually-hidden">Anterior
-        </span>
-        </button>
-
-        <button 
-            class="carousel-control-next" 
-            type="button"
-            data-bs-target="#carrusel"
-            data-bs-slide="next">
-        <span
-            class="carousel-control-next-icon"
-            aria-hidden="true">
-        </span>
-        <span
-            class="visually-hidden">Siguiente
-        </span>
-        </button>
-
-        </div>
-        
+        <button class="next" @click="nextSlide">{{ ">" }}</button>
     </div>
+</div>
 </template>
 
-<style>
-.carousel-item img {
-    height: 400px;
-    object-fit: cover;
+<style scoped>
+.carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-slides {
+    width: 60%;
+    height: 100%;
+  display: flex;
+  transition: fade 0.5s;
+}
+.slide, .img-anuncio,a{
+  min-width: 100%;
+  height: 100%;
+}
+.prev,
+.next {
+    width: 20%;
+    height: 100%;
+  background: none;
+  color: #fff9;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+.prev :hover, .next :hover {
+    background: #fff2;
+    font-size: 2em;
+    color: #fffb;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    background-color: rgba(255, 173, 0, 0.8);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-}
-
-.carousel-indicators button {
-    background-color: #FFAD00;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.carousel-indicators .active {
-    background-color: white;
-}
 
 </style>
-
 <script>
 export default {
+    
     name: 'CarruselComp',
     data (){
-        
+        return{
+        currentSlide: 1,
+        anuncios: [
+            {
+                id: 1,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Burger_cheesebacon.jpeg",
+                url_redireccion: "/menu?categoria=Burgers"
+            },
+            {
+                id: 2,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Limonada_fresa.jpeg",
+                url_redireccion: "/menu?categoria=Bebidas"
+            },
+            {
+                id: 3,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Combo_estudiante.jpeg",
+                url_redireccion: "/menu?categoria=Combos"
+            },
+            {
+                id: 4,
+                url_foto: "https://proyectodb.blob.core.windows.net/imgs/Nachos.jpeg",
+                url_redireccion: "/menu?categoria=Snacks"
+            }
+        ],
+        };
+    },
+    methods: {
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.anuncios.length;
+    },
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.anuncios.length) % this.anuncios.length;
+    },
+    },
+    mounted() {
+        this.intervalo = setInterval(this.nextSlide, 5000);
+    },
+    beforeUnmount() {
+        clearInterval(this.intervalo);
     }
-}
+};
+
 </script>
