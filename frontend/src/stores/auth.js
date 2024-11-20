@@ -26,7 +26,9 @@ actions: {
     },
     logout(){
         this.token = null;
+        this.usuario = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
         },
     cargarDatos(){
         const token = localStorage.getItem('token');

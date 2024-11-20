@@ -7,6 +7,7 @@ import PaginaMenu from "../views/PaginaMenu.vue";
 import PaginaCarrito from "@/views/PaginaCarrito.vue";
 import PaginaPrueba from "@/views/PaginaPrueba.vue";
 import PaginaProducto from "@/views/PaginaProducto.vue";
+import PaginaCuenta from "@/views/PaginaCuenta.vue";
 
 const routes = [
     {
@@ -45,6 +46,11 @@ const routes = [
         name: "Producto",
         component: PaginaProducto,
     },
+    {
+        path: "/cuenta",
+        name: "Cuenta",
+        component: PaginaCuenta,
+    }
 ];
 
 const router = createRouter({

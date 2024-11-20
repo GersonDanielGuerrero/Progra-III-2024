@@ -131,13 +131,11 @@ export default {
   },
   methods: {
     abrirCuenta() {
- /*     if (this.usuario) {
+      if (this.usuario) {
         this.$router.push('/cuenta');
       } else {
         this.$router.push('/login');
       }
-  */
-      this.$router.push('/login');
     },
     enviarA(opcion) {
       this.$router.push(opcion);

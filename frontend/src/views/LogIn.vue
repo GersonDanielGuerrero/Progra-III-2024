@@ -218,8 +218,7 @@ export default {
     props: {
         
     },
-    computed: {
-        
+    computed:{   
     },
 
 }

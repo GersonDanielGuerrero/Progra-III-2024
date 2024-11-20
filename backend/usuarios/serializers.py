@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Usuario, UserManager, Direccion, Rol
+from ventas.models import Carrito
 
 class RegistroSerializer(serializers.ModelSerializer):
     confirmar_contraseña = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -29,9 +30,39 @@ class RegistroSerializer(serializers.ModelSerializer):
         )
         usuario.set_password(contraseña)
         usuario.save()
+        
+        carrito = Carrito(usuario=usuario)
+        carrito.save()
         return usuario
 
 class DireccionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Direccion
         fields = ['id','nombre', 'direccion']
+class DireccionesListaSerializer(serializers.ModelSerializer):
+    predeterminada = serializers.BooleanField(default=False)
+    class Meta:
+        model = Direccion
+        fields = ['id', 'nombre', 'direccion', 'predeterminada']
+
+class RolListaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rol
+        fields = ['id', 'nombre']
+class CuentaSerializer(serializers.ModelSerializer):
+    direcciones = DireccionesListaSerializer(many=True)
+    class Meta:
+        model = Usuario
+        direcciones = DireccionesListaSerializer(many=True)
+        roles = RolListaSerializer(many=True)
+        nombres = serializers.CharField(source='nombre')
+        apellidos = serializers.CharField(source='apellido')
+        fields = ['id', 'correo', 'nombre', 'apellido', 'telefono', 'direcciones', 'roles']
+
+
+    
+class UsuarioUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['correo', 'nombre', 'apellido', 'telefono']
+        

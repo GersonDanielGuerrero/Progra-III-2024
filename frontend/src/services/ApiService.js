@@ -13,6 +13,109 @@ class ApiService {
         const authStore = useAuthStore();
         return authStore.getToken();
     }
+    
+      // Método para cargar los datos del usuario, direcciones y roles
+async cargarDatos() {
+    const token = this.obtenerToken(); 
+    try {
+        
+        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`, 
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (respuesta.ok) {
+            const datos = await respuesta.json();
+
+
+            return {
+                error: false,
+                datos: datos
+            };
+        }
+
+        const datos = await respuesta.json();
+        this.msgError = datos.mensaje || 'Error al obtener la cuenta';
+        return { error: true, mensaje: this.msgError };
+
+    } catch (error) {
+        console.error("Error al obtener la cuenta:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
+    }
+}
+
+   // Método para actualizar los datos de la cuenta
+async actualizarCuenta(datosCuenta) {
+    const token = this.obtenerToken();  // Obtener el token
+    try {
+        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta/`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,  // Incluir el token en los encabezados
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datosCuenta),
+        });
+
+        if (respuesta.ok) {
+            const datos = await respuesta.json();
+            return { error: false, datos: datos };
+        }
+
+        const datos = await respuesta.json();
+        this.msgError = datos.mensaje || 'Error al actualizar la cuenta';
+        return { error: true, mensaje: this.msgError };
+
+    } catch (error) {
+        console.error("Error al actualizar la cuenta:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
+    }
+}
+      
+ // Método para marcar una dirección como predeterminada y actualizar la variable direcciones
+async marcarPredeterminada(id) {
+    const token = this.obtenerToken(); 
+    try {
+        
+        const response = await fetch(`${this.baseURL}/usuarios/direcciones/predeterminada`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }), 
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            
+            const direcciones = data.direcciones.map((direccion) => ({
+                id: direccion.id,
+                nombre: direccion.nombre,
+                direccion: direccion.direccion,
+                predeterminada: direccion.predeterminada,
+            }));
+            
+            return {
+                error: false,
+                mensaje: "Dirección marcada como predeterminada",
+                direcciones: direcciones 
+            };
+        }
+
+        return { error: true, mensaje: data.mensaje || "Error al marcar como predeterminada." };
+
+    } catch (error) {
+        console.error("Error al marcar como predeterminada:", error);
+        return { error: true, mensaje: error.message || "Error al marcar como predeterminada." };
+    }
+}
 
     // Método para insertar productos, categorías o anuncios
     async insertarEntidad(entidad, datosEntidad) {
@@ -197,6 +300,34 @@ class ApiService {
         }
     }
 
+    cerrarSesion() {
+        const authStore = useAuthStore();
+        authStore.logout();
+        window.location.href = '/';
+    }
+    async borrarCuenta() {
+        try {
+            const token = this.obtenerToken();
+            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta/`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+            });
+            if (respuesta.ok) {
+                this.cerrarSesion();
+                return { error: false, mensaje: "Cuenta eliminada correctamente" };
+            }
+            return { error: true, mensaje: "Error al eliminar la cuenta" };
+        }
+        catch (error) {
+            console.error("Error al eliminar la cuenta:", error);
+            return { error: true, mensaje: error.message };
+        }
+                    
+    }
+
     async obtenerProductos(categoria, filtro = "") {
         try {
             const queryParams = filtro ? `?categoria=${categoria}&filtro=${filtro}` : `?categoria=${categoria}`;
@@ -255,6 +386,7 @@ class ApiService {
                 },
             });
 
+            
             const datos = await respuesta.json();
 
             if (respuesta.ok) {

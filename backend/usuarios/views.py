@@ -1,10 +1,11 @@
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import RegistroSerializer, DireccionSerializer
+from .serializers import RegistroSerializer, DireccionSerializer, DireccionSerializer, CuentaSerializer, UsuarioUpdateSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import Direccion
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from .models import Direccion, Usuario
 # Create your views here.
 
 class RegistroView(APIView):
@@ -44,3 +45,21 @@ class DireccionesView(APIView):
         direcciones = Direccion.objects.filter(usuario=usuario)
         serializer = DireccionSerializer(direcciones, many=True)
         return Response(serializer.data)
+
+class CuentaView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        usuario = request.user
+        serializer = CuentaSerializer(usuario)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        usuario = request.user
+        serializer = UsuarioUpdateSerializer(usuario, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    def delete(self, request):
+        usuario = request.user
+        usuario.delete()
+        return Response({'El usuario ha sido eliminado con exito'})

@@ -333,7 +333,7 @@ export default {
       if (!respuesta.error) {
         this.productos = respuesta.datos.productos;
         this.tipoEntrega = respuesta.datos.tipo_entrega;
-        this.direccionSeleccionada = respuesta.datos.id_direccion;
+        this.direccionSeleccionada = respuesta.datos.id_direccion ? respuesta.datos.id_direccion : "";
         this.metodoPago = respuesta.datos.metodo_pago;
       } else {
         alertify.error(respuesta.mensaje);
