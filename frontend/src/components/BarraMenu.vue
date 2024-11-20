@@ -2,43 +2,48 @@
   <header class="header">
     <div class="img">
       <img src="imagenes/image.png" alt="image" />
-      <button @click="editarLogo" class="edit-logo-btn">✏️</button>
+      <button v-if="esAdmin" @click="editarLogo" class="edit-logo-btn">✏️</button>
     </div>
     <nav>
       <ul>
         <li :class="{ active: opcionSeleccionada === 'Inicio' }">
-          <a href="#" @click="seleccionarOpcion('Inicio')">Inicio</a>
+          <a href="#" @click="enviarA('/')">Inicio</a>
         </li>
         <li :class="{ active: opcionSeleccionada === 'Redes' }">
-          <a href="#" @click="seleccionarOpcion('Redes')">Redes</a>
+          <a href="#" @click="enviarA('/redes')">Redes</a>
         </li>
         <li :class="{ active: opcionSeleccionada === 'Atención al Cliente' }">
-          <a href="#" @click="seleccionarOpcion('Atención al Cliente')">Atención al Cliente</a>
+          <a href="#" @click="enviarA('/preguntas')">Atención al Cliente</a>
         </li>
-        <li :class="{ active: opcionSeleccionada === 'Administración' }">
-          <a href="#" @click="seleccionarOpcion('Administración')">Administración</a>
+        <li v-if="esAdmin" :class="{ active: opcionSeleccionada === 'Administración' }">
+          <a href="#" @click="enviarA('/admin')">Administración</a>
+        </li>
+        <li>
+          <button class="search-btn" @click="enviarA('/ubicacion')">
+            <i class="bi bi-geo-alt-fill" :class="{ active: opcionSeleccionada === 'Ubicación' }"></i>
+          </button>
+        </li>
+        <li>
+          <button class="cart-btn" @click="enviarA('/carrito')">
+          <i class="bi bi-cart-fill" :class="{ active: opcionSeleccionada === 'Carrito' }"></i>
+          </button>
         </li>
       </ul>
+      <div class="user-actions">
+        <BotonComp @click="abrirCuenta" class="login-btn">
+          {{ usuario ? 'Cuenta' : 'Iniciar Sesión' }}
+        </BotonComp>
+      </div>
     </nav>
-    <div class="user-actions">
-      <button class="search-btn">🔍</button>
-      <button class="cart-btn">🛒</button>
-      <button @click="enviarLogin" class="login-btn">
-        {{ usuario ? 'Cuenta' : 'Iniciar Sesión' }}
-      </button>
-    </div>
   </header>
 </template>
 
 <style scoped>
-/* Estilos generales */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000;
-  color: #ffffff;
+i{
+  color: #fffe;
+  height: 100%;
+  width: 100%;
 }
-
 /* Header */
 header {
   display: flex;
@@ -48,7 +53,9 @@ header {
   background-color: #000;
   border-bottom: 2px solid #fdfdfd46;
 }
-
+li:hover, .user-actions:hover {
+  transform: translateY(-2px);
+}
 .img {
   display: flex;
   align-items: center;
@@ -69,10 +76,16 @@ header {
   font-size: 18px;
 }
 
-nav ul {
+nav ul, nav {
   list-style: none;
   display: flex;
   gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+nav {
+  margin-right: 20px;
 }
 
 nav ul li a {
@@ -84,25 +97,17 @@ nav ul li a {
 nav ul li.active a {
   color: #f6a901;
 }
-
+.active {
+  color: #f6a901;
+}
 .user-actions {
   display: flex;
   gap: 10px;
 }
 
-.login-btn {
-  background-color: #f6a901;
-  color: #000;
-  border: none;
-  padding: 8px 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
 .cart-btn,
 .search-btn {
   background-color: #000000;
-  color: #000;
   border: none;
   padding: 8px 10px;
   cursor: pointer;
@@ -111,24 +116,55 @@ nav ul li.active a {
 </style>
 
 <script>
+import BotonComp from './BotonComp.vue';
+import {useAuthStore} from '@/stores/auth';
 export default {
+  components: {
+    BotonComp,
+  },
   name: 'BarraMenu',
   data() {
     return {
-      opcionSeleccionada: 'Inicio',
-      usuario: null, 
+      usuario: null,
+      roles: [],
     };
   },
   methods: {
-    enviarLogin() {
-      this.$router.push('/login');
+    abrirCuenta() {
+      if (this.usuario) {
+        this.$router.push('/cuenta');
+      } else {
+        this.$router.push('/login');
+      }
     },
-    seleccionarOpcion(opcion) {
-      this.opcionSeleccionada = opcion;
+    enviarA(opcion) {
+      this.$router.push(opcion);
     },
     editarLogo() {
     
       console.log('Edit logo clicked');
+    },
+  },
+  props: {
+    opcionSeleccionada: {
+      type: String,
+      required: true,
+    },
+  },
+  mounted() {
+    const authStore = useAuthStore();
+    this.usuario = authStore.getUsuario();
+    if (this.usuario) {
+      this.roles = this.usuario.roles;
+    }
+  },
+  computed: {
+    esAdmin() {
+      const roles = this.roles;
+      if(roles.includes('Administrador')){
+        return true;
+      }
+      return false;
     },
   },
 };

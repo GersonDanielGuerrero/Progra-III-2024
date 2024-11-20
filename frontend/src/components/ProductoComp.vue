@@ -1,5 +1,5 @@
 <template>
-    <div class="contenedor">
+    <div class="contenedor" @click="mostrarProducto(producto.id)">
         <img :src="producto.url_foto" :alt="producto.nombre">
         <h3>{{producto.nombre}}</h3>
     </div>
@@ -19,7 +19,9 @@
     background-color: #fff3;
     border-radius: 10px;
     padding: 10px;
+    cursor: pointer;
 }
+
 img{
     width: 100px;
     height: 100px;
@@ -47,7 +49,9 @@ export default {
         }
     },
     methods: {
-        
+        mostrarProducto(id){
+            window.location.href = `/producto/${id}`;
+        }
     },
     computed: {
         
