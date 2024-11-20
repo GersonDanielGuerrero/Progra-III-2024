@@ -49,6 +49,37 @@ class ApiService {
         }
     }
 
+
+    // Método para agregar un producto al carrito
+    async agregarACarrito(datosCarrito) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`, // Enviar token
+                },
+                body: JSON.stringify(datosCarrito),
+            });
+
+            const datos = await respuesta.json();
+
+            if (respuesta.ok) {
+                return { error: false, datos: datos };
+            }
+
+            this.msgError = datos.mensaje || 'Error al agregar al carrito';
+            return { error: true, mensaje: this.msgError };
+
+        } catch (error) {
+            console.error("Error al agregar al carrito:", error);
+            this.msgError = error.message;
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+
     // Método para actualizar productos, categorías o anuncios
     async actualizarEntidad(entidad, idEntidad, datosEntidad) {
         const token = this.obtenerToken();
@@ -425,6 +456,31 @@ class ApiService {
 
             return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al actualizar el carrito' };
         } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    async obtenerProducto(idProducto) {
+        try {
+            const respuesta = await fetch(`${this.baseURL}/menu/producto/${idProducto}/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const datos = await respuesta.json();
+
+            if (respuesta.ok) {
+                return { error: false, datos: datos };
+            }
+
+            this.msgError = datos.mensaje || 'Error al obtener producto';
+            return { error: true, mensaje: this.msgError };
+
+        } catch (error) {
+            console.error("Error al obtener producto:", error);
+            this.msgError = error.message;
             return { error: true, mensaje: error.message };
         }
     }

@@ -53,7 +53,9 @@ header {
   background-color: #000;
   border-bottom: 2px solid #fdfdfd46;
 }
-
+li:hover, .user-actions:hover {
+  transform: translateY(-2px);
+}
 .img {
   display: flex;
   align-items: center;

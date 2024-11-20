@@ -26,11 +26,20 @@
 }
 .carrusel{
   margin:10px auto;
-  width: 70vw;
-  height: 23vw;
+  width: 60vw;
+  height: 20vw;
+}
+.lista-categorias{
+  margin:20px auto;
 }
 .categoria{
   margin:10px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.categoria:hover{
+  transform: scale(1.1);
+  transition: 0.5s;
 }
 .container-fluid{
   height: 100vh;

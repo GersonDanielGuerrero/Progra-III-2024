@@ -15,10 +15,13 @@
         <div class="item-info">
           <input type="checkbox" class="item-checkbox" v-model="producto.seleccionado">
           <img :src="producto.imagen" :alt="producto.nombre">
+          <a :href="'/producto/' + producto.id" style="text-decoration: none">
+            
           <div class="item-details">
             <h3>{{ producto.nombre }}</h3>
             <p>{{ producto.detalles }}</p>
           </div>
+          </a>
         </div>
         <div class="quantity">
           <button @click="restarProducto(producto.id)">-</button>
@@ -188,6 +191,11 @@ select option{
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
+  transition: 0.5s;
+}
+.cart-item:hover {
+  transform: scale(1.02);
+  transition: 0.5s;
 }
 
 .item-info {
