@@ -1,4 +1,6 @@
-import useAuthStore from '@/stores/auth';
+import {useAuthStore} from '@/stores/auth';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 class ApiService {
     constructor(baseURL) {
@@ -9,7 +11,7 @@ class ApiService {
     // Método para obtener el token del authStore
     obtenerToken() {
         const authStore = useAuthStore();
-        return authStore.token;
+        return authStore.getToken();
     }
       // Método para cargar los datos del usuario, direcciones y roles
 async cargarDatos() {
@@ -169,6 +171,37 @@ async marcarPredeterminada(id) {
         }
     }
 
+
+    // Método para agregar un producto al carrito
+    async agregarACarrito(datosCarrito) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`, // Enviar token
+                },
+                body: JSON.stringify(datosCarrito),
+            });
+
+            const datos = await respuesta.json();
+
+            if (respuesta.ok) {
+                return { error: false, datos: datos };
+            }
+
+            this.msgError = datos.mensaje || 'Error al agregar al carrito';
+            return { error: true, mensaje: this.msgError };
+
+        } catch (error) {
+            console.error("Error al agregar al carrito:", error);
+            this.msgError = error.message;
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+
     // Método para actualizar productos, categorías o anuncios
     async actualizarEntidad(entidad, idEntidad, datosEntidad) {
         const token = this.obtenerToken();
@@ -271,10 +304,9 @@ async marcarPredeterminada(id) {
             if (respuesta.ok) {
                 // Guardar el token y redirigir
                 const authStore = useAuthStore();
-                const usuario = datos.usuario;
-                authStore.setToken(datos.token);
-                authStore.setUsuario(usuario);
-                window.location.href = '/pagina-principal'; // Redirigir a la página principal
+                authStore.setToken(datos.access);
+                authStore.setUsuario(datos.usuario);
+                window.location.href = '/'; // Redirigir a la página principal
                 return { error: false, datos: datos };
             }
 
@@ -358,6 +390,220 @@ async marcarPredeterminada(id) {
 
         } catch (error) {
             console.error("Error al obtener productos:", error);
+            this.msgError = error.message;
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    async obtenerElementos(tipo) {
+        try {
+          // Se construye la URL con el tipo
+        const response = await fetch(`/api/${tipo}`);
+        if (!response.ok) throw new Error("Error al obtener datos del servidor");
+        
+          // Se obtiene el JSON con los datos
+        const data = await response.json();
+        return data;
+        } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error;
+        }
+    }
+    // Método para realizar un pedido
+    async realizarPedido(productos, tipoEntrega, idDireccion, metodoPago) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/pedidos/`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productos: productos.map(producto => ({
+                        id: producto.id,
+                        cantidad: producto.cantidad
+                    })),
+                    tipo_entrega: tipoEntrega,
+                    id_direccion: idDireccion,
+                    metodo_pago: metodoPago
+                })
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+            
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al realizar el pedido' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para borrar productos seleccionados en el carrito
+    async borrarProductos(ids) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ids })
+            });
+            
+            if (respuesta.ok) {
+                return { error: false, mensaje: "Productos eliminados correctamente" };
+            }
+            alertify.success('Eliminando productos del carrito');
+            
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al eliminar productos' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para sumar la cantidad de un producto en el carrito
+    async sumarProducto(id, cantidad) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productos: [{ id, cantidad: cantidad + 1 }]
+                })
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al sumar producto' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para restar la cantidad de un producto en el carrito
+    async restarProducto(id, cantidad) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productos: [{ id, cantidad:cantidad -1 }]
+                })
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al restar producto' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para obtener las direcciones del usuario
+    async obtenerDirecciones() {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/usuarios/direcciones/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+            
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al obtener direcciones' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para obtener el carrito del usuario
+    async obtenerCarrito() {
+        const token = this.obtenerToken();
+        if (!token) {
+            //redirigir a login 
+            window.location.href = '/login';
+        }
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al obtener el carrito' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    // Método para actualizar el carrito del usuario
+    async actualizarCarrito(data) {
+        const token = this.obtenerToken();
+        try {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+                
+            });
+
+            if (respuesta.ok) {
+                return { error: false, datos: await respuesta.json() };
+            }
+
+            return { error: true, mensaje: (await respuesta.json()).mensaje || 'Error al actualizar el carrito' };
+        } catch (error) {
+            return { error: true, mensaje: error.message };
+        }
+    }
+
+    async obtenerProducto(idProducto) {
+        try {
+            const respuesta = await fetch(`${this.baseURL}/menu/producto/${idProducto}/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const datos = await respuesta.json();
+
+            if (respuesta.ok) {
+                return { error: false, datos: datos };
+            }
+
+            this.msgError = datos.mensaje || 'Error al obtener producto';
+            return { error: true, mensaje: this.msgError };
+
+        } catch (error) {
+            console.error("Error al obtener producto:", error);
             this.msgError = error.message;
             return { error: true, mensaje: error.message };
         }

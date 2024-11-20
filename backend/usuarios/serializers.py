@@ -31,6 +31,10 @@ class RegistroSerializer(serializers.ModelSerializer):
         usuario.save()
         return usuario
 
+class DireccionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Direccion
+        fields = ['id','nombre', 'direccion']
 class DireccionesListaSerializer(serializers.ModelSerializer):
     predeterminada = serializers.BooleanField(default=False)
     class Meta:

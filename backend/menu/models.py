@@ -54,16 +54,6 @@ class Combo_Producto(models.Model):
         db_table = 'combos_productos'
         verbose_name = 'Combo_Producto'
         verbose_name_plural = 'Combos_Productos'
-    
-        
-class Extras(models.Model):
-    nombre = models.CharField(max_length=50)
-    precio = models.DecimalField(max_digits=5, decimal_places=2)
-    
-    class Meta:
-        db_table = 'extras'
-        verbose_name = 'Extra'
-        verbose_name_plural = 'Extras'
 
 class Tipo_Ingrediente(models.Model):
     nombre = models.CharField(max_length=50)
@@ -80,7 +70,17 @@ class Ingrediente(models.Model):
         db_table = 'ingredientes'
         verbose_name = 'Ingrediente'
         verbose_name_plural = 'Ingredientes'
-        
-        
-        
 
+class Producto_Tipo_Ingrediente(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='tipos_ingrediente')
+    tipo_ingrediente = models.ForeignKey(Tipo_Ingrediente, on_delete=models.CASCADE, related_name='productos')
+    minimo = models.IntegerField()
+    maximo = models.IntegerField(null=True)
+    mensaje = models.CharField(max_length=255, null=True)
+    multiple = models.BooleanField(default=True)
+    
+    class Meta:
+        db_table = 'productos_tipos_ingredientes'
+        verbose_name = 'Producto_Tipo_Ingrediente'
+        verbose_name_plural = 'Productos_Tipos_Ingredientes'
+    
