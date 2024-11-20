@@ -1,5 +1,5 @@
 <template>
-  <BarraMenu />
+  <BarraMenu class ="sticky-top" opcionSeleccionada="Carrito" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <div class="container">
     <div class="cart">
@@ -32,15 +32,26 @@
       <h2>REALIZA TU PEDIDO</h2>
       <div class="order-option">
         <p>Escoge el tipo de entrega</p>
-        <button @click="cambiarTipoEntrega">Domicilio</button>
+        <select v-model="tipoEntrega">
+          <option value="">Selecciona una opción</option>
+          <option value="domicilio">Domicilio</option>
+          <option value="local">Recoger en tienda</option>
+        </select> 
       </div>
       <div class="order-option">
         <p>Selecciona la dirección</p>
-        <button @click="seleccionarDireccion">Dirección</button>
+        <select v-model="direccionSeleccionada">
+          <option value="">Selecciona una opción</option>
+          <option v-for="direccion in direcciones" :key="direccion.id" :value="direccion.id">{{ direccion.nombre }}</option>
+        </select>
       </div>
       <div class="order-option">
         <p>Escoge el método de pago</p>
-        <button @click="seleccionarMetodoPago">Seleccionar</button>
+        <select v-model="metodoPago">
+          <option value="">Selecciona una opción</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
       </div>
       <div class="total">
         <p>Total:</p>
@@ -57,7 +68,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Arial Black", Gadget, sans-serif;
 }
 
 body, html {
@@ -80,6 +91,19 @@ body, html {
   box-sizing: border-box;
   max-width: 1200px;
   margin: 0 auto;
+}
+select{
+  margin: auto 0;
+  background-color: #ffad00;
+  color: #000;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+select option{
+  background: #000;
+  color: #ffad00;
 }
 
 .cart,
@@ -275,7 +299,7 @@ export default {
     return {
       productos: [],
       direcciones: [],
-      direccionSeleccionada: null,
+      direccionSeleccionada: "",
       tipoEntrega: "",
       metodoPago: "",
 
@@ -287,7 +311,7 @@ export default {
     totalCarrito() {
       return this.productos
         .filter((producto) => producto.seleccionado)
-        .reduce((acc, producto) => acc + producto.precio, 0);
+        .reduce((acc, producto) => acc + producto.precio*producto.cantidad, 0);
     },
     cantidadProductos() {
       //Contar solo los productos seleccionados y calcular la cantidad total
@@ -300,6 +324,9 @@ export default {
       const respuesta = await ApiService.obtenerCarrito(); 
       if (!respuesta.error) {
         this.productos = respuesta.datos.productos;
+        this.tipoEntrega = respuesta.datos.tipo_entrega;
+        this.direccionSeleccionada = respuesta.datos.id_direccion;
+        this.metodoPago = respuesta.datos.metodo_pago;
       } else {
         alertify.error(respuesta.mensaje);
       }
@@ -403,7 +430,7 @@ export default {
 
   },
   async mounted() {
-    this.intervalo = setInterval(this.actualizarCarrito, 10000);
+    this.intervalo = setInterval(this.actualizarCarrito, 1000);
     await this.obtenerCarrito();
     await this.obtenerDirecciones();
   },
@@ -413,6 +440,15 @@ export default {
   },
   watch: {
     cantidadProductos() {
+      this.cambiosRealizados = true;
+    },
+    tipoEntrega() {
+      this.cambiosRealizados = true;
+    },
+    direccionSeleccionada() {
+      this.cambiosRealizados = true;
+    },
+    metodoPago() {
       this.cambiosRealizados = true;
     },
   }

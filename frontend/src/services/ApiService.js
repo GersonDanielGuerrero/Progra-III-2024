@@ -409,7 +409,6 @@ class ApiService {
     async actualizarCarrito(data) {
         const token = this.obtenerToken();
         try {
-            alertify.success(JSON.stringify(data));
             const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
                 method: "PUT",
                 headers: {

@@ -22,6 +22,7 @@ class CarritoView(APIView):
         productos = request.data.get('productos')
         tipo_entrega = request.data.get('tipo_entrega')
         metodo_pago = request.data.get('metodo_pago')
+        print('metodo_pago: ', metodo_pago)
         id_direccion = request.data.get('id_direccion')
         
         carrito = usuario.carrito
