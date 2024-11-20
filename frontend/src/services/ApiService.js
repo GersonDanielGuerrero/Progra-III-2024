@@ -152,7 +152,8 @@ class ApiService {
                 // Guardar el token y redirigir
                 const authStore = useAuthStore();
                 authStore.setToken(datos.access);
-                window.location.href = '/pagina-principal'; // Redirigir a la página principal
+                authStore.setUsuario(datos.usuario);
+                window.location.href = '/'; // Redirigir a la página principal
                 return { error: false, datos: datos };
             }
 
@@ -236,6 +237,21 @@ class ApiService {
             console.error("Error al obtener productos:", error);
             this.msgError = error.message;
             return { error: true, mensaje: error.message };
+        }
+    }
+
+    async obtenerElementos(tipo) {
+        try {
+          // Se construye la URL con el tipo
+        const response = await fetch(`/api/${tipo}`);
+        if (!response.ok) throw new Error("Error al obtener datos del servidor");
+        
+          // Se obtiene el JSON con los datos
+        const data = await response.json();
+        return data;
+        } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error;
         }
     }
     // Método para realizar un pedido
