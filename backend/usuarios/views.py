@@ -58,3 +58,8 @@ class CuentaView(APIView):
         serializer = UsuarioUpdateSerializer(usuario, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(serializer.data)
+    def delete(self, request):
+        usuario = request.user
+        usuario.delete()
+        return Response({'El usuario ha sido eliminado con exito'})

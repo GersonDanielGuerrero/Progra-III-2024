@@ -4,13 +4,13 @@
       <section class="datos-personales">
         <h2 @click="toggleDatosPersonales">Datos personales</h2>
         <div v-show="isDatosPersonalesVisible" class="campos">
-          <CajaTexto v-model="formDatosPersonales.nombre" placeholder="Nombre*" />
-          <CajaTexto v-model="formDatosPersonales.apellido" placeholder="Apellido*" />
-          <CajaTexto v-model="formDatosPersonales.email" placeholder="Correo electrónico*" />
-          <CajaTexto v-model="formDatosPersonales.telefono" placeholder="Número de Celular*" />
+          <CajaTexto v-model="usuario.nombre" placeholder="Nombre*" />
+          <CajaTexto v-model="usuario.apellido" placeholder="Apellido*" />
+          <CajaTexto v-model="usuario.correo" placeholder="Correo electrónico*" />
+          <CajaTexto v-model="usuario.telefono" placeholder="Número de Celular*" />
         </div>
         <div v-show="isDatosPersonalesVisible" class="boton-guardar">
-          <BotonComp class="guardar" @click="guardarDatosPersonales">Guardar</BotonComp>
+          <BotonComp class="guardar" @click="guardarDatosUsuario">Guardar</BotonComp>
         </div>
       </section>
       <section class="direcciones">
@@ -19,13 +19,13 @@
           <BotonComp @click="agregarDireccion">Agregar dirección</BotonComp>
         </div>
         <div v-show="isDireccionesVisible" class="lista-direcciones">
-          <div v-for="(direccion, index) in direcciones" :key="index" class="direccion">
+          <div v-for="direccion in usuario.direcciones" :key="direccion.id" class="direccion">
             <span>{{ direccion.nombre }}</span>
             <p>{{ direccion.direccion }}</p>
             <div class="acciones">
-              <BotonComp @click="editarDireccion(index)">Editar</BotonComp>
-              <BotonComp @click="eliminarDireccion(index)">Eliminar</BotonComp>
-              <BotonComp @click="marcarPredeterminada(index)">Predeterminada</BotonComp>
+              <BotonComp @click="editarDireccion(direccion.id)">Editar</BotonComp>
+              <BotonComp @click="eliminarDireccion(direccion.id)">Eliminar</BotonComp>
+              <BotonComp @click="marcarPredeterminada(direccion.id)">Predeterminada</BotonComp>
             </div>
           </div>
         </div>
@@ -38,13 +38,16 @@
             <BotonComp class="boton-cambiar" @click="cambiarContraseña">Cambiar</BotonComp>
             <span>Eliminar Cuenta</span>
             <BotonComp class="boton-eliminar" @click="eliminarCuenta">Eliminar</BotonComp>
+            <span>Cerrar Sesión</span>
+            <BotonComp class="boton-cerrar-sesion" @click="cerrarSesion">Cerrar</BotonComp>
           </div>
         </div>
       </section>
     </div>
   </template>
 
-  <style scoped>
+<style scoped>
+
   .perfil-container {
     background-color: #000;
     color: #fff;
@@ -89,11 +92,6 @@
     padding: 10px 15px;
     border-radius: 5px;
   }
-  .guardar:hover {
-    background-color: #fff;
-    color: #000;
-    transition: 0.3s;
-  }
   .direcciones {
     text-align: left;
     margin-bottom: 10px;
@@ -115,11 +113,6 @@
   cursor: pointer;
   }
   
-  .boton-agregar:hover {
-    background-color: #fff;
-    color: #000;
-    transition: 0.3s;
-  }
   .lista-direcciones {
     display: flex;
     gap: 30px;
@@ -207,14 +200,8 @@
     border-radius: 5px;
     cursor: pointer;
   }
-  
-  .boton-cambiar:hover,
-  .boton-eliminar:hover {
-    background-color: #fff;
-    color: #000;
-    transition: 0.3s;
-  }
-  </style>
+
+</style>
 
 <script>
 import BarraMenu from '@/components/BarraMenu.vue';
@@ -235,9 +222,9 @@ export default {
   return {
     isLoading: true,
          
-      isDatosPersonalesVisible: false,
-      isDireccionesVisible: false,
-      isMasOpcionesVisible: false,
+      isDatosPersonalesVisible: true,
+      isDireccionesVisible: true,
+      isMasOpcionesVisible: true,
       
       usuario: {
           nombres: 'Juan Edgardo',
@@ -275,22 +262,20 @@ export default {
    // Método para redirigir a la página para añadir una nueva dirección
    agregarDireccion() {
     this.$router.push({
-      path: "/direccion",
-      state: { accion: "añadir" }
+      path: "/direccion/añadir",
+      
     });
   },
 
   // Método para redirigir a la página para editar una dirección existente
   editarDireccion(id) {
     this.$router.push({
-      path: "/direccion",
-      state: { accion: "editar", id }
+      path: "/direccion/editar/" + id,
     });
-  }
-},
+  },
   async guardarDatosUsuario() {
       try {
-        const respuesta = await ApiService.guardarDatosUsuario(this.usuario);
+        const respuesta = await ApiService.actualizarCuenta(this.usuario);
         if (!respuesta.error) {
           alertify.success('Datos guardados correctamente');
         } else {
@@ -300,6 +285,23 @@ export default {
         console.error("Error al guardar los datos del usuario:", error);
         alertify.error('Ocurrió un error al guardar los datos');
       }
+    },
+    async eliminarCuenta(){
+      alertify.confirm('Eliminar cuenta', '¿Estás seguro de que deseas eliminar tu cuenta?', async () => {
+        try {
+          const respuesta = await ApiService.borrarCuenta();
+          if (!respuesta.error) {
+            alertify.success('Cuenta eliminada correctamente');
+            this.$router.push({ path: '/' });
+          } else {
+            alertify.error('Error al eliminar la cuenta');
+          }
+        } catch (error) {
+          console.error("Error al eliminar la cuenta:", error);
+          alertify.error('Ocurrió un error al eliminar la cuenta');
+        }
+      }, () => { });
+
     },
     async marcarDireccionPredeterminada(id) {
       try {
@@ -318,6 +320,21 @@ export default {
         alertify.error('Ocurrió un error al marcar la dirección predeterminada');
       }
     },
+    cerrarSesion() {
+      alertify.confirm('Cerrar sesión', '¿Estás seguro de que deseas cerrar sesión?', () => {
+        ApiService.cerrarSesion();
+      }, () => { });
+    },
+    toggleDatosPersonales() {
+      this.isDatosPersonalesVisible = !this.isDatosPersonalesVisible;
+    },
+    toggleDirecciones() {
+      this.isDireccionesVisible = !this.isDireccionesVisible;
+    },
+    toggleMasOpciones() {
+      this.isMasOpcionesVisible = !this.isMasOpcionesVisible;
+    },
+ },
 
 async mounted() { 
     try {
@@ -325,14 +342,12 @@ async mounted() {
       
       if (!respuesta.error) {
         
-        this.usuario = respuesta.datos.usuario;
-        this.direcciones = respuesta.datos.direcciones;
-        this.roles = respuesta.datos.roles;
+        this.usuario = respuesta.datos;
         
        
         alertify.success('Datos cargados correctamente');
       } else {
-       
+       alertify.error('Error al cargar los datos');
       }
     } catch (error) {
      

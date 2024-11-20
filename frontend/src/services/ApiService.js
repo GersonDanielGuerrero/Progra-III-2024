@@ -13,12 +13,13 @@ class ApiService {
         const authStore = useAuthStore();
         return authStore.getToken();
     }
+    
       // Método para cargar los datos del usuario, direcciones y roles
 async cargarDatos() {
     const token = this.obtenerToken(); 
     try {
         
-        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`, 
@@ -29,30 +30,10 @@ async cargarDatos() {
         if (respuesta.ok) {
             const datos = await respuesta.json();
 
-            const usuario = {
-                nombres: datos.usuario.nombres,
-                apellidos: datos.usuario.apellidos,
-                correo: datos.usuario.correo,
-                telefono: datos.usuario.telefono,
-            };
-
-            const direcciones = datos.direcciones.map(direccion => ({
-                id: direccion.id,
-                nombre: direccion.nombre,
-                direccion: direccion.direccion,
-                predeterminada: direccion.predeterminada,
-            }));
-
-            const roles = datos.roles.map(rol => ({
-                id: rol.id,
-                nombre: rol.nombre,
-            }));
 
             return {
                 error: false,
-                usuario: usuario,
-                direcciones: direcciones,
-                roles: roles
+                datos: datos
             };
         }
 
@@ -71,7 +52,7 @@ async cargarDatos() {
 async actualizarCuenta(datosCuenta) {
     const token = this.obtenerToken();  // Obtener el token
     try {
-        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta`, {
+        const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta/`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,  // Incluir el token en los encabezados
@@ -318,7 +299,34 @@ async marcarPredeterminada(id) {
             return { error: true, mensaje: error.message };
         }
     }
-    
+
+    cerrarSesion() {
+        const authStore = useAuthStore();
+        authStore.logout();
+        window.location.href = '/';
+    }
+    async borrarCuenta() {
+        try {
+            const token = this.obtenerToken();
+            const respuesta = await fetch(`${this.baseURL}/usuarios/cuenta/`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+            });
+            if (respuesta.ok) {
+                this.cerrarSesion();
+                return { error: false, mensaje: "Cuenta eliminada correctamente" };
+            }
+            return { error: true, mensaje: "Error al eliminar la cuenta" };
+        }
+        catch (error) {
+            console.error("Error al eliminar la cuenta:", error);
+            return { error: true, mensaje: error.message };
+        }
+                    
+    }
 
     async obtenerProductos(categoria, filtro = "") {
         try {
