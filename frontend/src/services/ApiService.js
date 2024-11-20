@@ -54,7 +54,7 @@ class ApiService {
     async agregarACarrito(datosCarrito) {
         const token = this.obtenerToken();
         try {
-            const respuesta = await fetch(`${this.baseURL}/ventas/carrito`, {
+            const respuesta = await fetch(`${this.baseURL}/ventas/carrito/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -19,7 +19,7 @@
 
                   <div v-for="tipoIngrediente in producto.seleccion_ingredientes" :key="tipoIngrediente.id_tipo">
                       <h3 class="titulo-tipo-ingrediente" style="cursor: pointer;"
-                      @click="collapsesVisibles[tipoIngrediente.id_tipo] = !collapsesVisibles[tipoIngrediente.id_tipo]"> 
+                      @click="clickColapse(tipoIngrediente.id_tipo)"> 
                         {{ tipoIngrediente.titulo }}
                       </h3>
 
@@ -29,7 +29,7 @@
 
                     <ul v-else>
                       <li v-for="ingrediente in tipoIngrediente.ingredientes" :key="ingrediente.id" class="ingrediente">
-                        <span>{{ ingrediente.nombre }} + ${{ ingrediente.precio }}</span>
+                        <span>{{ ingrediente.nombre }} + ${{ ingrediente.precio.toFixed(2) }}</span>
                         <div class="quantity-controls">
                           <button @click="restarIngrediente(ingrediente.id, tipoIngrediente.id_tipo)">-</button>
                           <span v-if="ingredienteSeleccionado = tipoIngrediente.ingredientes_seleccionados.find(ing => ing.id === ingrediente.id)">
@@ -358,7 +358,9 @@ export default{
     };
   },
   methods: {
-    
+    clickColapse(idTipo) {
+      this.collapsesVisibles[idTipo] = !this.collapsesVisibles[idTipo];
+    },
     sumarCantidad() {
       this.cantidad++;
     },
@@ -396,7 +398,7 @@ export default{
     },
 
     async agregarACarrito() {
-      let ingredientes = {};
+      let ingredientes = [];
       this.producto.seleccion_ingredientes.forEach((tipoIngrediente) => {
         if (tipoIngrediente.minimo === 1 && tipoIngrediente.maximo === 1 && tipoIngrediente.ingredientes_seleccionados.length > 0) {
             ingredientes.push({
@@ -423,8 +425,10 @@ export default{
       const respuesta = await ApiService.agregarACarrito(datosCarrito);
       if (!respuesta.error) {
         console.log('Producto agregado al carrito:', respuesta.datos);
+        //Regresar a la página anterior
+        this.$router.go(-1);
       } else {
-        console.error('Error al agregar al carrito:', respuesta.mensaje);
+        Alertify.error(respuesta.mensaje);
       }
     },
     async CargarProducto(id){
@@ -436,10 +440,20 @@ export default{
           this.producto.seleccion_ingredientes.forEach((tipoIngrediente) => {
             tipoIngrediente.ingredientes_seleccionados = [];
             if (tipoIngrediente.minimo === 1 && tipoIngrediente.maximo === 1) {
+              tipoIngrediente.ingredientes_seleccionados.push(tipoIngrediente.ingredientes[0].id);
               tipoIngrediente.ingredientes_options = tipoIngrediente.ingredientes.map(ingrediente => ({
                 text: ingrediente.nombre,
                 value: ingrediente.id,
               }));
+            }
+            else {
+              tipoIngrediente.ingredientes_seleccionados = [];
+              tipoIngrediente.ingredientes.forEach((ingrediente) => {
+                tipoIngrediente.ingredientes_seleccionados.push({
+                  id: ingrediente.id,
+                  cantidad: 0,
+                });
+              });
             }
             this.collapsesVisibles[tipoIngrediente.id_tipo] = false;
           });

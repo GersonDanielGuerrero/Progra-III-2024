@@ -27,7 +27,7 @@ class Carrito_Producto(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='carritos')
     cantidad = models.IntegerField()
     detalles = models.TextField(null=True)
-    
+    seleccionado = models.BooleanField(default=False)
     class Meta:
         db_table = 'carritos_productos'
         verbose_name = 'Carrito_Producto'

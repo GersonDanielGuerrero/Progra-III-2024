@@ -87,6 +87,7 @@ class ProductoDetalleSerializer(serializers.ModelSerializer):
         relacion = Producto_Tipo_Ingrediente.objects.filter(producto=obj)
         
         for r in relacion:
+            id_tipo = r.id
             tipo_ingrediente = r.tipo_ingrediente
             ingredientes = tipo_ingrediente.ingredientes.all()
             minimo = r.minimo
@@ -97,6 +98,7 @@ class ProductoDetalleSerializer(serializers.ModelSerializer):
             # Añadir los datos a seleccion_ingredientes
 
             seleccion_ingredientes.append({
+                'id_tipo': id_tipo,
                 'titulo': titulo,
                 'minimo': minimo,
                 'maximo': maximo,

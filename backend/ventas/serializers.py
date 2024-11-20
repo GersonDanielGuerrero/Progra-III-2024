@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Carrito, Carrito_Producto, Carrito_Producto_Extra, Venta, Venta_Producto
+from .models import Carrito, Carrito_Producto, Venta, Venta_Producto
 from menu.models import Producto
 
 
@@ -18,9 +18,15 @@ class CarritoSerializer(serializers.ModelSerializer):
             id = carrito_producto.id
             nombre = carrito_producto.producto.nombre
             imagen = carrito_producto.producto.url_foto
-            precio = carrito_producto.producto.precio
             cantidad = carrito_producto.cantidad
             seleccionado = carrito_producto.seleccionado
+            precio = carrito_producto.producto.precio
+            carrto_producto_ingredientes = carrito_producto.ingredientes.all()
+            
+            for carrito_producto_ingrediente in carrto_producto_ingredientes:
+                ingrediente = carrito_producto_ingrediente.Ingrediente
+                cantidad_ingrediente = carrito_producto_ingrediente.cantidad
+                precio += ingrediente.precio * cantidad_ingrediente
             
             productos.append({
                 'id': id,

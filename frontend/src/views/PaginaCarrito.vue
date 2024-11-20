@@ -15,10 +15,13 @@
         <div class="item-info">
           <input type="checkbox" class="item-checkbox" v-model="producto.seleccionado">
           <img :src="producto.imagen" :alt="producto.nombre">
+          <a :href="'/producto/' + producto.id" style="text-decoration: none">
+            
           <div class="item-details">
             <h3>{{ producto.nombre }}</h3>
             <p>{{ producto.detalles }}</p>
           </div>
+          </a>
         </div>
         <div class="quantity">
           <button @click="restarProducto(producto.id)">-</button>
