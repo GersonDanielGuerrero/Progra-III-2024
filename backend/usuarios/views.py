@@ -63,6 +63,7 @@ class DireccionView(APIView):
     def get(self, request, id):
         usuario = request.user
         direccion = usuario.direcciones.get(id=id)
+        print(direccion)
         if not direccion:
             return Response({'mensaje': 'La dirección no existe dentro de tus direcciones'}, status=404)
         serializer = DireccionSerializer(direccion)
@@ -93,7 +94,6 @@ class DireccionView(APIView):
             return Response({'mensaje': 'La dirección no existe dentro de tus direcciones'}, status=404)
         serializer = DireccionSerializer(direccion, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.validarNombre(request.data['nombre'], usuario)
         serializer.save()
         return Response(serializer.data)
     

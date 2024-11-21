@@ -129,7 +129,7 @@ export default {
     async cargarDatos() {
       if (this.accion === "editar" && this.id) {
         try {
-          const direccionData = await ApiService.cargarDatos(this.id);
+          const direccionData = await ApiService.cargarDatosDireccion(this.id);
           this.nombre = direccionData.nombre;
           this.direccion = direccionData.direccion;
           this.indicaciones = direccionData.indicaciones || "";
@@ -189,6 +189,7 @@ export default {
       try {
         await ApiService.guardarDireccion(direccionData, this.accion, this.id);
         alertify.success("Dirección guardada con éxito.");
+        
       } catch (error) {
         alertify.error("Error al guardar la dirección.");
       }

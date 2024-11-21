@@ -626,7 +626,7 @@ async marcarPredeterminada(id) {
             url = `${this.baseURL}/usuarios/direcciones/`;
             metodo = 'POST';
         } else if (accion === 'editar' && id) {
-            url = `${this.baseURL}/usuarios/direcciones/${id}`;
+            url = `${this.baseURL}/usuarios/direcciones/${id}/`;
             metodo = 'PUT';
         }
 
@@ -655,8 +655,8 @@ async marcarPredeterminada(id) {
     }
 
     // Método para cargar datos de una dirección (GET)
-    async cargarDatos(id) {
-        const url = `${this.baseURL}/usuarios/direcciones/${id}`;
+    async cargarDatosDireccion(id) {
+        const url = `${this.baseURL}/usuarios/direcciones/${id}/`;
 
         try {
             const token = this.obtenerToken();

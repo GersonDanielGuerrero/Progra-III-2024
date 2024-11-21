@@ -51,7 +51,7 @@ const routes = [
         path: "/cuenta",
         name: "Cuenta",
         component: PaginaCuenta,
-    }
+    },
     {
         path: "/direccion/:accion/:id?",
         name: "Direccion",
