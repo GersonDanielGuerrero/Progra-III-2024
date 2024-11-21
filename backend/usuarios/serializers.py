@@ -35,10 +35,7 @@ class RegistroSerializer(serializers.ModelSerializer):
         carrito.save()
         return usuario
 
-class DireccionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Direccion
-        fields = ['id','nombre', 'direccion']
+
 class DireccionesListaSerializer(serializers.ModelSerializer):
     predeterminada = serializers.BooleanField(default=False)
     class Meta:
@@ -65,4 +62,16 @@ class UsuarioUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['correo', 'nombre', 'apellido', 'telefono']
+        
+class DireccionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Direccion
+        fields = ['id', 'nombre', 'direccion', 'lat', 'lon','indicaciones']
+        
+    def validarNombre(self, nombre, usuario):
+        #Validar que el nombre no exista en las direcciones del usuario
+        if usuario.direcciones.filter(nombre=nombre).exists():
+            print('Ya existe una dirección con ese nombre')
+            raise serializers.ValidationError('Ya existe una dirección con ese nombre')
+        return nombre
         

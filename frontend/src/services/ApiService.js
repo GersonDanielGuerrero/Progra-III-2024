@@ -616,6 +616,70 @@ async marcarPredeterminada(id) {
             return { error: true, mensaje: error.message };
         }
     }
+
+    // Método para guardar una dirección (POST o PUT según la acción)
+    async guardarDireccion(direccion, accion, id = null) {
+        let url = '';
+        let metodo = '';
+
+        if (accion === 'añadir') {
+            url = `${this.baseURL}/usuarios/direcciones/`;
+            metodo = 'POST';
+        } else if (accion === 'editar' && id) {
+            url = `${this.baseURL}/usuarios/direcciones/${id}/`;
+            metodo = 'PUT';
+        }
+
+        try {
+            const token = this.obtenerToken();
+            const response = await fetch(url, {
+                method: metodo,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json' 
+                    },
+                body: JSON.stringify(direccion),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                this.msgError = errorData.message || 'Error al guardar la dirección';
+                throw new Error(this.msgError);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error en guardarDireccion:', error);
+            throw error;
+        }
+    }
+
+    // Método para cargar datos de una dirección (GET)
+    async cargarDatosDireccion(id) {
+        const url = `${this.baseURL}/usuarios/direcciones/${id}/`;
+
+        try {
+            const token = this.obtenerToken();
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json' 
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                this.msgError = errorData.message || 'Error al cargar la dirección';
+                throw new Error(this.msgError);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error en cargarDatos:', error);
+            throw error;
+        }
+    }
 }
 
 // Exportar una instancia de la clase con la URL base

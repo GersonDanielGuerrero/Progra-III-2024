@@ -59,9 +59,9 @@ class Rol(models.Model):
 class Direccion(models.Model):
     nombre = models.CharField(max_length=50)
     direccion = models.TextField()
-    lat = models.DecimalField(max_digits=9, decimal_places=6)
-    lon = models.DecimalField(max_digits=9, decimal_places=6)
-    indicaciones = models.TextField(null=True)
+    lat = models.DecimalField(max_digits=18, decimal_places=15)
+    lon = models.DecimalField(max_digits=18, decimal_places=15)
+    indicaciones = models.TextField(null=True, blank=True)
     predeterminada = models.BooleanField(default=False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='direcciones')
     

@@ -1,7 +1,8 @@
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import RegistroSerializer, DireccionSerializer, DireccionSerializer, CuentaSerializer, UsuarioUpdateSerializer
+from .serializers import RegistroSerializer, DireccionSerializer, CuentaSerializer, UsuarioUpdateSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -37,14 +38,7 @@ class LoginView(TokenObtainPairView):
             return None
             
     
-class DireccionesView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        usuario = request.user
-        direcciones = Direccion.objects.filter(usuario=usuario)
-        serializer = DireccionSerializer(direcciones, many=True)
-        return Response(serializer.data)
+
 
 class CuentaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -63,3 +57,43 @@ class CuentaView(APIView):
         usuario = request.user
         usuario.delete()
         return Response({'El usuario ha sido eliminado con exito'})
+    
+class DireccionView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id):
+        usuario = request.user
+        direccion = usuario.direcciones.get(id=id)
+        print(direccion)
+        if not direccion:
+            return Response({'mensaje': 'La dirección no existe dentro de tus direcciones'}, status=404)
+        serializer = DireccionSerializer(direccion)
+        return Response(serializer.data)
+        
+    def post(self, request):
+        '''El serializer es:
+        class DireccionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Direccion
+        fields = ['id', 'nombre', 'direccion', 'lat', 'lon','indicaciones']
+        '''
+        usuario = request.user
+        serializer = DireccionSerializer(data=request.data)
+        print(request.data)
+        #Validar y si hay un error imprimirlo
+        if not serializer.is_valid():
+            print(serializer.errors)
+            return Response(serializer.errors, status=400)
+        serializer.validarNombre(request.data['nombre'], usuario)
+        serializer.save( usuario = usuario)
+        return Response({'Direccion guardada'}, status=201)
+    
+    def put(self, request, id):
+        usuario = request.user
+        direccion = usuario.direcciones.get(id=id)
+        if not direccion:
+            return Response({'mensaje': 'La dirección no existe dentro de tus direcciones'}, status=404)
+        serializer = DireccionSerializer(direccion, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
