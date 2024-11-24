@@ -19,7 +19,7 @@
     <span class="texto-pregunta">{{ pregunta.pregunta }}</span>
     <div class="acciones">
       <span class="icon" @click="toggleRespuesta(pregunta.id)">▼</span>
-      <button @click="editarPregunta(pregunta.id)" class="edit-logo-btn">✏️</button>
+      <Botoncomp class="lapis" @click="editarPregunta(pregunta.id)">✏️</Botoncomp>
     </div>
   </div>
  
@@ -35,7 +35,6 @@
   </div>
 </template>
   
- 
 <style scoped>
 .preguntas-item {
   background-color: #000;
@@ -80,7 +79,6 @@
   margin-bottom: 10px;
 }
 
-
 .pregunta-header {
   display: flex;
   justify-content: space-between; 
@@ -92,7 +90,6 @@
   margin-right: 10px;
   text-align: left;
 }
-
 
 .acciones {
   display: flex;
@@ -145,15 +142,6 @@
   cursor: pointer;
 
 }
-
-.edit-logo-btn {
-  background-color: transparent;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-}
-
 </style>
 
 <script>
