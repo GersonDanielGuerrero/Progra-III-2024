@@ -680,6 +680,60 @@ async marcarPredeterminada(id) {
             throw error;
         }
     }
+
+    async obtenerClientes() {
+        const token = this.obtenerToken();
+        try {
+            const response = await fetch(`${this.baseUrl}/chat/clientes`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+    
+            if (!response.ok) {
+                const error = await response.json();
+                this.msgError = error.message || "Error al obtener clientes.";
+                return [];
+            }
+    
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            this.msgError = "Error de conexión al obtener clientes.";
+            return [];
+        }
+    }
+    
+    async obtenerMensajes(versionIA, idCliente = null) {
+        const token = this.obtenerToken();
+        try {
+            const response = await fetch(`${this.baseUrl}/chat`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    id_cliente: idCliente,
+                    version_ia: versionIA
+                })
+            });
+    
+            if (!response.ok) {
+                const error = await response.json();
+                this.msgError = error.message || "Error al obtener mensajes.";
+                return [];
+            }
+    
+            const data = await response.json();
+            return data.mensajes || [];
+        } catch (error) {
+            this.msgError = "Error de conexión al obtener mensajes.";
+            return [];
+        }
+    }
 }
 
 // Exportar una instancia de la clase con la URL base
