@@ -253,7 +253,7 @@ export default {
     async cambiarVersion() {
       this.versionIA = !this.versionIA;
       try {
-        await this.obtenerMensajes(this.versionIA, this.clienteActual?.id);
+        await ApiService.obtenerMensajes(this.versionIA, this.clienteActual?.id);
       } catch (error) {
         alertify.error('Error al cambiar la versión de IA');
       }
@@ -267,7 +267,7 @@ export default {
           alertify.error('Cliente no encontrado');
           return;
         }
-        await this.obtenerMensajes(this.versionIA, this.clienteActual.id);
+        await ApiService.obtenerMensajes(this.versionIA, this.clienteActual.id);
       } catch (error) {
         alertify.error('Error al seleccionar el cliente');
       }
@@ -302,7 +302,7 @@ export default {
         this.esCliente = this.usuario.roles.includes("Atención al cliente");
         this.esEmpleado = this.usuario.roles.includes("Cliente");
         if (this.esEmpleado) {
-          await this.obtenerClientes();
+          await ApiService.obtenerClientes();
         }
         this.actualizarPantallaGrande();
         window.addEventListener("resize", this.actualizarPantallaGrande);
