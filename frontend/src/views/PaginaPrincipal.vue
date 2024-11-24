@@ -72,7 +72,7 @@
   height: 100vh;
 }
 .footer{
-  height: 62vh;
+  height: 61vh;
   background-color: #fff2;
   padding: 100px;
 }
