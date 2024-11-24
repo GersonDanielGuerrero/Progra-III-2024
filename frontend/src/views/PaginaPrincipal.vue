@@ -13,10 +13,37 @@
         </div>
     </div>
     <div class = "footer">
-      <p>
-        Esto de aquí sería el footer, pero no se nos proporcionó la informacion necesaria
-      </p>
+      <h3>¡Disfruta de una buena Burger!</h3>
+    <div class="footer-content">
+      <div class="horarios">
+        <h4>Horarios de Atención:</h4>
+        <p>Lunes a viernes: 12:00 PM - 10:00 PM</p>
+        <p>Sábado y domingo: 1:00 PM - 11:00 PM</p>
+      </div>
+      <div class="linea-vertical"></div>
+      <div class="filosofia">
+        <h4>Nuestra Filosofía:</h4>
+        <p><strong>Misión:</strong> Brindar las mejores hamburguesas artesanales con ingredientes frescos y un ambiente acogedor.</p>
+        <p><strong>Visión:</strong> Convertirnos en el restaurante favorito de la comunidad local.</p>
+      </div>
     </div>
+    <div class="footer-note">
+      <h4>© 2024 Good Burger</h4>
+      <p>
+        Muchas promociones descritas y ofrecidas en este Sitio Web son exclusivamente para la compra en línea.<br>
+        Para pedidos pagados con tarjeta de crédito, el dueño de la tarjeta deberá estar presente al momento de recibir el pedido y presentar su tarjeta de crédito y DUI.<br>
+        Good Burger jamás enviará correos pidiendo tarjetas de crédito y claves.
+      </p>
+      <div class="social-media">
+    <h4>Síguenos</h4>
+    <div class="icons">
+      <button class="icon instagram"></button>
+      <button class="icon facebook"></button>
+      <button class="icon tiktok"></button>
+    </div>
+    </div>
+    </div>
+  </div>
 </template>
  
 <style scoped>
@@ -45,19 +72,114 @@
   height: 100vh;
 }
 .footer{
-  height: 20vh;
+  height: 62vh;
   background-color: #fff2;
   padding: 100px;
 }
+
+.footer h3 {
+  color: #ffad00;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: -30px;
+}
+.horarios {
+  margin-right: auto;
+  text-align: right;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
+ margin-bottom: 10px;
+  gap: 30px;
+}
+
+.horarios, .filosofia {
+  flex: 1;
+}
+
+.linea-vertical {
+  width: 1px;
+  background-color: #fafafa;
+  height: 130px;
+  align-self: stretch;
+  margin: 0 10px;
+}
+.horarios h4, .filosofia h4 {
+  color: #ffad00;
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.footer-note {
+  font-size: 14px;
+  line-height: 1.5;
+  border-top: 1px solid #e9e9e9;
+  padding-top: 10px;
+}
+
+.footer-note h4 {
+  color: #ffad00;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.footer-note p:last-child {
+  color: #969696;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 .footer p{
   color: white;
 }
+
+.social-media {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.social-media h4 {
+  color: #ffad00;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.icons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+}
+
+.icon.instagram {
+  background-image: url('https://cdn-icons-png.flaticon.com/512/174/174855.png');
+}
+
+.icon.facebook {
+  background-image: url('https://cdn-icons-png.flaticon.com/512/174/174848.png');
+}
+
+.icon.tiktok {
+  background-image: url('https://cdn-icons-png.flaticon.com/512/174/174857.png');
+}
+
 </style>
 
-<!-- C U I D A D I T O -->
-    
-  <script>
-  import ApiService from '@/services/ApiService'; 
+<!--C U I D A D I T O-->
+
+<script>
+ 
+import ApiService from '@/services/ApiService'; 
 import BarraMenu from '@/components/BarraMenu.vue';
 import CategoriaComp from "@/components/CategoriaComp.vue";
 import CarruselComp from '@/components/CarruselComp.vue';
