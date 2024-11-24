@@ -51,7 +51,7 @@
         <CajaTexto 
           v-model="mensajeActual" 
           placeholder="Escribe tu mensaje..."
-          @keydown.enter="enviarMensaje"
+          enter="enviarMensaje"
         />
         <button 
             class="btn btn-primary enviar-btn" 
