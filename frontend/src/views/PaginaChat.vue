@@ -31,42 +31,42 @@
         </div>
       </div>
 
-      <div 
-        class="comp2 col-md-8 col-sm-12" 
-        v-if="componenteMostrado === 2 || pantallaGrande"
-      >
-        <h2>Mensajes</h2>
-        <div class="lista-mensajes">
-          <div 
-            v-for="(mensaje, index) in mensajes" 
-            :key="index" 
-            :class="['mensaje', mensaje.enviado ? 'enviado' : 'recibido']"
-          >
-            <span>{{ mensaje.contenido }}</span>
-            <small>{{ mensaje.fecha }}</small>
-          </div>
-        </div>
+      <div class="comp2 col-md-8 col-sm-12" v-if="componenteMostrado === 2 || pantallaGrande">
+  <h2>Mensajes</h2>
 
-        <div class="input-container">
-        <CajaTexto 
-          v-model="mensajeActual" 
-          placeholder="Escribe tu mensaje..."
-          
-        />
-        <button 
-            class="btn btn-primary enviar-btn" 
-            @click="enviarMensaje"
-          >
-            Enviar
-          </button>
-        </div>
-      </div>
+  <div class="lista-mensajes">
+    <div 
+      v-for="(mensaje, index) in mensajes" 
+      :key="index" 
+      :class="['mensaje', mensaje.enviado ? 'enviado' : 'recibido']"
+    >
+      <span>{{ mensaje.contenido }}</span>
+      <small>{{ mensaje.fecha }}</small>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <CajaTexto 
+      v-model="mensajeActual" 
+      placeholder="Escribe tu mensaje..."
+    />
+    <button 
+      class="btn btn-primary enviar-btn" 
+      @click="enviarMensaje"
+    >
+    <i class="fas fa-paper-plane"></i> Enviar
+    </button>
+  </div>
+</div>
     </div>
 
-    <BotonComp @click="cambiarVersion">
-      <i class="fas fa-hand-paper"></i>
-      Cambiar Versión
-    </BotonComp>
+    <div 
+    class="btn-flotante" 
+    @click="cambiarVersion"
+>
+    <i class="fas fa-hand-paper"></i>
+  </div>
+
 
     <BotonComp
       v-if="usuario.esEmpleado && !pantallaGrande" 
@@ -98,15 +98,22 @@ h1 {
 }
 
 .comp2 {
-  border-color: palevioletred;
-  color: palevioletred;
+  border-color: #ffad00;
+  color: #ffad00;
 }
 
-.lista-clientes, .lista-mensajes {
+.lista-clientes {
   height: 90%;
   display: flex;
   flex-direction: column-reverse;
   overflow-y: auto;
+}
+
+.lista-mensajes {
+  height: calc(100% - 70px); 
+  overflow-y: auto; 
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .cliente {
@@ -145,7 +152,11 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
+  position: sticky; 
+  bottom: 0;
+  background-color: white; 
+  padding: 10px;
+  border-top: 1px solid #ddd; 
 }
 
 .enviar-btn {
@@ -162,6 +173,30 @@ h1 {
   background-color: #ff8c00;
 }
 
+.btn-flotante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #ffad00;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-flotante:hover {
+  background-color: #ff8c00;
+}
+
+.btn-flotante i {
+  font-size: 24px;
+}
 </style>
 
 <script>
@@ -172,8 +207,8 @@ import ApiService from "@/services/ApiService";
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
 import BarraMenu from "@/components/BarraMenu.vue";
-import CajaTexto from "@/components/CajaTexto.vue";
 import BotonComp from "@/components/BotonComp.vue";
+import CajaTexto from "@/components/CajaTexto.vue";
 //Fin de importaciones de componentes
 
 export default {
