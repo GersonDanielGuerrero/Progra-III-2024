@@ -695,14 +695,14 @@ async marcarPredeterminada(id) {
             if (!response.ok) {
                 const error = await response.json();
                 this.msgError = error.message || "Error al obtener clientes.";
-                return [];
+                return { success: false, error: this.msgError };
             }
     
             const data = await response.json();
-            return data;
+            return { success: true, data };
         } catch (error) {
             this.msgError = "Error de conexión al obtener clientes.";
-            return [];
+            return { success: false, error: this.msgError };
         }
     }
     
@@ -724,16 +724,16 @@ async marcarPredeterminada(id) {
             if (!response.ok) {
                 const error = await response.json();
                 this.msgError = error.message || "Error al obtener mensajes.";
-                return [];
+                return { success: false, error: this.msgError };
             }
     
             const data = await response.json();
-            return data.mensajes || [];
+            return { success: true, data: data.mensajes || [] };
         } catch (error) {
             this.msgError = "Error de conexión al obtener mensajes.";
-            return [];
+            return { success: false, error: this.msgError };
         }
-    }
+    }    
 }
 
 // Exportar una instancia de la clase con la URL base
