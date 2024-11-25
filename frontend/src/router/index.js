@@ -9,6 +9,7 @@ import PaginaPrueba from "@/views/PaginaPrueba.vue";
 import PaginaProducto from "@/views/PaginaProducto.vue";
 import PaginaCuenta from "@/views/PaginaCuenta.vue";
 import PaginaDireccion from "../views/PaginaDireccion.vue";
+import PaginaUsuarios from "@/views/PaginaUsuarios.vue";
 
 const routes = [
     {
@@ -56,7 +57,13 @@ const routes = [
         path: "/direccion/:accion/:id?",
         name: "Direccion",
         component: PaginaDireccion,
-    }
+    },
+    {
+        path: "/usuarios",
+        name: "Usuarios",
+        component: PaginaUsuarios,
+    },
+
 ];
 
 const router = createRouter({
