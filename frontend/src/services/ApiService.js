@@ -684,7 +684,7 @@ async marcarPredeterminada(id) {
     async obtenerClientes() {
         const token = this.obtenerToken();
         try {
-            const response = await fetch(`${this.baseUrl}/chat/clientes`, {
+            const response = await fetch(`${this.baseURL}/chat/clientes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -709,7 +709,7 @@ async marcarPredeterminada(id) {
     async obtenerMensajes(versionIA, idCliente = null) {
         const token = this.obtenerToken();
         try {
-            const response = await fetch(`${this.baseUrl}/chat`, {
+            const response = await fetch(`${this.baseURL}/chat`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
