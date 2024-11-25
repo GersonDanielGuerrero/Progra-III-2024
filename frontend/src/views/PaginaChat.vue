@@ -63,17 +63,18 @@
       </div>
     </div>
 
-    <BotonComp @click="cambiarVersion">
-      <i class="fas fa-hand-paper"></i>
-      Cambiar Versión
-    </BotonComp>
+    <button class="btn-cambiar-version" @click="cambiarVersion">
+    <i class="fas fa-hand-paper"></i>
+  </button>
 
-    <BotonComp
-      v-if="usuario.esEmpleado && !pantallaGrande" 
-      @click="cambiarComponente"
-    >
-      {{ "Mostrar " + (componenteMostrado === 1 ? "Mensajes" : "Clientes") }}
-    </BotonComp>
+    <button 
+    class="btn-cambiar-componente" 
+    v-if="usuario.esEmpleado && !pantallaGrande" 
+    @click="cambiarComponente"
+  >
+    <i class="fas fa-exchange-alt"></i>
+  </button>
+
   </div>
 </template>
 
@@ -92,14 +93,9 @@ h1 {
 
 .comp1, .comp2 {
   padding: 20px;
-  border: 4px solid #ffad00;
+  border: 2px solid #ffad00;
+  border-radius: 10px;
   color: #ffad00;
-  overflow-y: auto;
-}
-
-.comp2 {
-  border-color: palevioletred;
-  color: palevioletred;
 }
 
 .lista-clientes, .lista-mensajes {
@@ -107,6 +103,24 @@ h1 {
   display: flex;
   flex-direction: column-reverse;
   overflow-y: auto;
+  scrollbar-color: #ffad00 #444;
+  scrollbar-width: thin;
+}
+
+.lista-clientes::-webkit-scrollbar,
+.lista-mensajes::-webkit-scrollbar {
+  width: 10px;
+}
+
+.lista-clientes::-webkit-scrollbar-thumb,
+.lista-mensajes::-webkit-scrollbar-thumb {
+  background-color: #ffad00;
+  border-radius: 10px;
+}
+
+.lista-clientes::-webkit-scrollbar-track,
+.lista-mensajes::-webkit-scrollbar-track {
+  background-color: #444;
 }
 
 .cliente {
@@ -152,7 +166,7 @@ h1 {
   background-color: #ffad00;
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 10px;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
@@ -162,6 +176,23 @@ h1 {
   background-color: #ff8c00;
 }
 
+.btn-cambiar-version {
+  background-color: transparent;
+  border: none; 
+  cursor: pointer;
+  font-size: 24px;
+  color: #ffad00;
+  margin: 10px;
+}
+
+.btn-cambiar-componente {
+  background-color: transparent; 
+  border: none;
+  cursor: pointer; 
+  font-size: 24px;
+  color: #ffad00; 
+  margin: 10px;
+}
 </style>
 
 <script>
