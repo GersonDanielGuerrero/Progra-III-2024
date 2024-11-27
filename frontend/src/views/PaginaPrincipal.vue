@@ -77,7 +77,7 @@ import CategoriaComp from "@/components/CategoriaComp.vue";
     },
     components: {
       BarraMenu,
-      CategoriaComp,
+      CategoriaComp
     },
     methods: {
       async cargarDatos() {
