@@ -108,44 +108,43 @@ class ApiService {
         }
     }
 
-// Obtener preguntas frecuentes
+ // Método para obtener las preguntas frecuentes
 async obtenerPreguntas() {
-    try {
-      const respuesta = await fetch(`${this.baseURL}/api/info/preguntas`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  try {
+    const respuesta = await fetch(`${this.baseURL}/api/info/preguntas`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      const datos = await respuesta.json();
+    const datos = await respuesta.json();
 
-      if (respuesta.ok) {
-        alertify.success("Preguntas cargadas correctamente");
-        return { error: false, datos: datos.preguntas };
-      }
-
-      this.msgError = datos.mensaje || "Error al obtener las preguntas";
-      alertify.error(this.msgError);
-      return { error: true, mensaje: this.msgError };
-    } catch (error) {
-      console.error("Error al obtener preguntas frecuentes:", error);
-      alertify.error("Error al obtener preguntas frecuentes");
-      return { error: true, mensaje: error.message };
+    if (respuesta.ok) {
+      alertify.success("Preguntas cargadas correctamente");
+      return { error: false, datos: datos.preguntas };
     }
-  }
 
-  // Guardar o editar una pregunta
-  async guardarPregunta(accion, id, datosPregunta) {
+    this.msgError = datos.mensaje || "Error al obtener las preguntas";
+    alertify.error(this.msgError);
+    return { error: true, mensaje: this.msgError };
+  } catch (error) {
+    console.error("Error al obtener preguntas frecuentes:", error);
+    alertify.error("Error al obtener preguntas frecuentes");
+    return { error: true, mensaje: error.message };
+  }
+}
+   // Guardar o editar una pregunta
+   async guardarPregunta(accion, id, datosPregunta) {
     const token = this.obtenerToken();
     try {
       let respuesta;
       let url = `${this.baseURL}/api/preguntas`;
-      let method = "POST";
+      let method = "POST"; // Acción por defecto es añadir
 
       if (accion === "Editar" && id) {
         url = `${this.baseURL}/api/preguntas/${id}`;
-        method = "PUT";
+        method = "PUT"; // Si es editar, se utiliza PUT
       }
 
       respuesta = await fetch(url, {
