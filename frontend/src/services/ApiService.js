@@ -132,6 +132,68 @@ async obtenerPreguntas() {
         return { error: true, mensaje: this.msgError };
     }
 }
+// Método para obtener una pregunta específica por su ID
+async obtenerPregunta(id) {
+    try {
+        const respuesta = await fetch(`${this.baseURL}/api/info/pregunta/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+            return { error: false, datos: datos.pregunta };
+        }
+
+        this.msgError = datos.mensaje || 'Error al obtener la pregunta';
+        return { error: true, mensaje: this.msgError };
+
+    } catch (error) {
+        console.error("Error al obtener la pregunta:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
+    }
+}
+// Método para guardar o editar una pregunta
+async guardarPregunta(accion, id, datosPregunta) {
+    const token = this.obtenerToken();
+    try {
+        let respuesta;
+        let url = `${this.baseURL}/api/preguntas`;
+        let method = "POST"; // Acción por defecto es añadir
+
+        if (accion === "Editar" && id) {
+            url = `${this.baseURL}/api/preguntas/${id}`;
+            method = "PUT"; // Si es editar, se utiliza PUT
+        }
+
+        respuesta = await fetch(url, {
+            method: method,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datosPregunta), // Enviar los datos de la pregunta
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+            return { error: false, datos: datos };
+        }
+
+        this.msgError = datos.mensaje || 'Error al guardar la pregunta';
+        return { error: true, mensaje: this.msgError };
+
+    } catch (error) {
+        console.error("Error al guardar o editar la pregunta:", error);
+        this.msgError = error.message;
+        return { error: true, mensaje: error.message };
+    }
+}
 
     async registrarUsuario(datosUsuario) {
         try {

@@ -183,6 +183,44 @@ export default {
     };
   },
   methods: {
+
+    async cargarPregunta(id) {
+        try {
+            const respuesta = await ApiService.obtenerPregunta(id);
+            if (!respuesta.error) {
+                const pregunta = respuesta.datos;
+                // Asigna los valores de la pregunta a las variables para mostrarlas
+                this.formDatosPregunta = {
+                    pregunta: pregunta.pregunta,
+                    respuesta: pregunta.respuesta,
+                };
+            } else {
+                console.error(respuesta.mensaje);
+            }
+        } catch (error) {
+            console.error("Error al cargar la pregunta:", error);
+        }
+    },
+ 
+    async guardarPregunta(accion, id) {
+        try {
+            const datosPregunta = {
+                pregunta: this.formDatosPregunta.pregunta,
+                respuesta: this.formDatosPregunta.respuesta,
+            };
+            const respuesta = await ApiService.guardarPregunta(accion, id, datosPregunta);
+
+            if (!respuesta.error) {
+                // Si la operación fue exitosa, mostrar una notificación o redirigir
+                alertify.success('Pregunta guardada correctamente');
+            } else {
+                alertify.error('Error al guardar la pregunta');
+            }
+        } catch (error) {
+            console.error("Error al guardar la pregunta:", error);
+            alertify.error('Ocurrió un error al guardar la pregunta');
+        }
+    },
     async cargarPreguntas() {
       try {
         const respuesta = await ApiService.obtenerPreguntas();
@@ -211,4 +249,5 @@ export default {
     await this.cargarPreguntas();
 }
 };
+
 </script>
