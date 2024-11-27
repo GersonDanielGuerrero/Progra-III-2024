@@ -126,7 +126,7 @@
 }
 
 .AÑADIR {
-    background-color: #ffad00;
+  background-color: #ffad00;
   color: #000;
   padding: 0 10px; 
   font-size: 0.9em; 
@@ -155,8 +155,7 @@ export default {
     name: 'PreguntasFrecuentes',
     components: {
      BarraMenu,
-     Botoncomp
-
+     Botoncomp,
     },
     data() {
         return{
@@ -186,7 +185,6 @@ export default {
     };
   },
   methods: {
-
     async obtenerPreguntas() {
     const respuesta = await ApiService.obtenerPreguntas();
     if (!respuesta.error) {
