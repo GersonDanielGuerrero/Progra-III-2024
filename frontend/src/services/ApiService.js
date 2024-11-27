@@ -132,69 +132,75 @@ async obtenerPreguntas() {
         return { error: true, mensaje: this.msgError };
     }
 }
-// Método para obtener una pregunta específica por su ID
-async obtenerPregunta(id) {
+// Obtener preguntas frecuentes
+async obtenerPreguntas() {
     try {
-        const respuesta = await fetch(`${this.baseURL}/api/info/pregunta/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+      const respuesta = await fetch(`${this.baseURL}/api/info/preguntas`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        const datos = await respuesta.json();
+      const datos = await respuesta.json();
 
-        if (respuesta.ok) {
-            return { error: false, datos: datos.pregunta };
-        }
+      if (respuesta.ok) {
+        alertify.success("Preguntas cargadas correctamente");
+        return { error: false, datos: datos.preguntas };
+      }
 
-        this.msgError = datos.mensaje || 'Error al obtener la pregunta';
-        return { error: true, mensaje: this.msgError };
-
+      this.msgError = datos.mensaje || "Error al obtener las preguntas";
+      alertify.error(this.msgError);
+      return { error: true, mensaje: this.msgError };
     } catch (error) {
-        console.error("Error al obtener la pregunta:", error);
-        this.msgError = error.message;
-        return { error: true, mensaje: error.message };
+      console.error("Error al obtener preguntas frecuentes:", error);
+      alertify.error("Error al obtener preguntas frecuentes");
+      return { error: true, mensaje: error.message };
     }
-}
-// Método para guardar o editar una pregunta
-async guardarPregunta(accion, id, datosPregunta) {
+  }
+
+  // Guardar o editar una pregunta
+  async guardarPregunta(accion, id, datosPregunta) {
     const token = this.obtenerToken();
     try {
-        let respuesta;
-        let url = `${this.baseURL}/api/preguntas`;
-        let method = "POST"; // Acción por defecto es añadir
+      let respuesta;
+      let url = `${this.baseURL}/api/preguntas`;
+      let method = "POST";
 
-        if (accion === "Editar" && id) {
-            url = `${this.baseURL}/api/preguntas/${id}`;
-            method = "PUT"; // Si es editar, se utiliza PUT
-        }
+      if (accion === "Editar" && id) {
+        url = `${this.baseURL}/api/preguntas/${id}`;
+        method = "PUT";
+      }
 
-        respuesta = await fetch(url, {
-            method: method,
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(datosPregunta), // Enviar los datos de la pregunta
-        });
+      respuesta = await fetch(url, {
+        method: method,
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datosPregunta),
+      });
 
-        const datos = await respuesta.json();
+      const datos = await respuesta.json();
 
-        if (respuesta.ok) {
-            return { error: false, datos: datos };
-        }
+      if (respuesta.ok) {
+        alertify.success(
+          accion === "Añadir"
+            ? "Pregunta añadida correctamente"
+            : "Pregunta editada correctamente"
+        );
+        return { error: false, datos: datos };
+      }
 
-        this.msgError = datos.mensaje || 'Error al guardar la pregunta';
-        return { error: true, mensaje: this.msgError };
-
+      this.msgError = datos.mensaje || "Error al guardar la pregunta";
+      alertify.error(this.msgError);
+      return { error: true, mensaje: this.msgError };
     } catch (error) {
-        console.error("Error al guardar o editar la pregunta:", error);
-        this.msgError = error.message;
-        return { error: true, mensaje: error.message };
+      console.error("Error al guardar o editar la pregunta:", error);
+      alertify.error("Error al guardar o editar la pregunta");
+      return { error: true, mensaje: error.message };
     }
-}
-
+  }
     async registrarUsuario(datosUsuario) {
         try {
             const respuesta = await fetch(`${this.baseURL}/usuarios/registro/`, {
