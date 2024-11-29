@@ -14,12 +14,14 @@ const routes = [
     {
         path: "/",
         name: "Principal",
-        component: Principal
+        component: Principal,
+        meta: { title: "Good Burger" },
     },
     {
         path: "/registro",
         name: "Registro",
         component: RegistroUsuario,
+        meta: { title: "Registro de usuario" },
     },
     {
         path: "/login",

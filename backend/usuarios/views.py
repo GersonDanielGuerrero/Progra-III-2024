@@ -98,3 +98,10 @@ class DireccionView(APIView):
         serializer.save()
         return Response(serializer.data)
     
+class DireccionListaView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        usuario = request.user
+        direcciones = usuario.direcciones.all()
+        serializer = DireccionSerializer(direcciones, many=True)
+        return Response(serializer.data)

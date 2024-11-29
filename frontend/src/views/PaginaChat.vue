@@ -361,7 +361,7 @@ export default {
         //await this.obtenerClientes();
       }
       else if (this.usuario.esCliente) {
-        //await this.obtenerMensajes(false, this.usuario.id);
+        await this.obtenerMensajes(false, this.usuario.id);
       }
       this.moverAMensajesRecientes();
       this.actualizarPantallaGrande();

@@ -8,8 +8,8 @@
             <div class="product-image col-sm-12 col-md-4 col-lg-4">
                 <img :src="producto.imagen" alt="Imagen de la Burger Clasica" class="product-img">
                 <p class="price">
-                    <span class="previous-price" v-if="producto.precio_anterior" > ${{producto.precio_anterior}} </span>
-                    <span class="current-price"> ${{producto.precio}} </span>
+                    <span class="previous-price" v-if="producto.precio_anterior" > ${{producto.precio_anterior.toFixed(2)}} </span>
+                    <span class="current-price"> ${{producto.precio.toFixed(2)}} </span>
                 </p>
                 <p class="description">{{producto.descripcion}}</p>
             </div>
@@ -427,6 +427,7 @@ export default{
         console.log('Producto agregado al carrito:', respuesta.datos);
         //Regresar a la página anterior
         this.$router.go(-1);
+        Alertify.success('Producto agregado al carrito');
       } else {
         Alertify.error(respuesta.mensaje);
       }
@@ -440,9 +441,10 @@ export default{
           this.producto.seleccion_ingredientes.forEach((tipoIngrediente) => {
             tipoIngrediente.ingredientes_seleccionados = [];
             if (tipoIngrediente.minimo === 1 && tipoIngrediente.maximo === 1) {
+
               tipoIngrediente.ingredientes_seleccionados.push(tipoIngrediente.ingredientes[0].id);
               tipoIngrediente.ingredientes_options = tipoIngrediente.ingredientes.map(ingrediente => ({
-                text: ingrediente.nombre,
+                text: ingrediente.precio === 0 ? ingrediente.nombre : `${ingrediente.nombre} + $${ingrediente.precio.toFixed(2)}`,
                 value: ingrediente.id,
               }));
             }

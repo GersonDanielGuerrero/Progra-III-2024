@@ -99,6 +99,9 @@ class VentaView(APIView):
         tipo_entrega = request.data.get('tipo_entrega')
         id_direccion = request.data.get('id_direccion')
         metodo_pago = request.data.get('metodo_pago')
+        print('id_direccion: ', id_direccion)
+        print('tipo_entrega: ', tipo_entrega)
+        print('metodo_pago: ', metodo_pago)
         if not productos:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'mensaje': 'No se enviaron productos'})
         direccion = Direccion.objects.get(id=id_direccion)

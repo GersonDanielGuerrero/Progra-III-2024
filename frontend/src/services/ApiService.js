@@ -428,10 +428,7 @@ async marcarPredeterminada(id) {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    productos: productos.map(producto => ({
-                        id: producto.id,
-                        cantidad: producto.cantidad
-                    })),
+                    productos: productos,
                     tipo_entrega: tipoEntrega,
                     id_direccion: idDireccion,
                     metodo_pago: metodoPago

@@ -379,6 +379,7 @@ export default {
         id_direccion: this.direccionSeleccionada,
         metodo_pago: this.metodoPago,
       };
+      alert(JSON.stringify(data));
       const respuesta = await ApiService.realizarPedido(data); 
       if (respuesta.error) {
         alertify.error(respuesta.mensaje);
