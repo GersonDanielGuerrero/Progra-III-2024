@@ -31,6 +31,11 @@ class RegistroSerializer(serializers.ModelSerializer):
         usuario.set_password(contraseña)
         usuario.save()
         
+        rol_usuario = Rol.objects.get(nombre='Cliente')
+        usuario.roles.add(rol_usuario)
+        
+        usuario.save()
+        
         carrito = Carrito(usuario=usuario)
         carrito.save()
         return usuario

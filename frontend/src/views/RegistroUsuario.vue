@@ -105,7 +105,8 @@
 import CajaTexto from "@/components/CajaTexto.vue";
 import BotonComp from "@/components/BotonComp.vue";
 import ApiService from '@/services/ApiService';
-
+import alertify from "alertifyjs";
+import 'alertifyjs/build/css/alertify.css';
 export default {
     name: 'RegistroUsuario',
     components: {
@@ -151,7 +152,7 @@ export default {
                     console.error('Error en el registro o login:', error);
                 }
             } else {
-                alert(Object.values(this.errores).join('\n'));
+                alertify.error(Object.values(this.errores).join('\n'));
             }
         },
 

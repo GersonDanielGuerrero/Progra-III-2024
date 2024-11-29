@@ -74,7 +74,8 @@ import {useAuthStore} from '@/stores/auth';
 import ApiService from '@/services/ApiService';
 import BusquedaComp from '@/components/BusquedaComp.vue';
 import BotonComp from '@/components/BotonComp.vue';
-
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 export default {
     name: 'PaginaMenu',
@@ -134,7 +135,7 @@ watch: {
                 this.productos = datos; // Asigna la lista de productos
                 this.productosFiltrados = datos; // Asigna la lista de productos filtrados
             } else {
-                alert(mensaje); // Manejo de eerores basico para mostrar un mensaje en la consola en caso de que la solicitud falle
+                alertify.error(mensaje); // Manejo de eerores basico para mostrar un mensaje en la consola en caso de que la solicitud falle
             }
         },
         actualizarResultados(resultados) {

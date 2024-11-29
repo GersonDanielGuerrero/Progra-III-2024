@@ -23,6 +23,7 @@ class LoginView(TokenObtainPairView):
             respuesta = super().post(request, *args, **kwargs)
             
             respuesta.data['usuario'] = {
+                'id': usuario.id,
                 'nombre': usuario.nombre,
                 'roles': usuario.roles.values_list('nombre', flat=True)
             }

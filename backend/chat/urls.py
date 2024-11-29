@@ -2,5 +2,6 @@ from django.urls import path
 from .views import ChatView
 
 urlpatterns = [
-    path('', ChatView.as_view()),
+    #version_ia=${versionIA}&idCliente=${idCliente}
+    path('mensajes', ChatView.as_view()),
 ]

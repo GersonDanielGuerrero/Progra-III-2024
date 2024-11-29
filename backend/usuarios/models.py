@@ -6,11 +6,11 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
     
     def create_user(self, correo, nombre, apellido, telefono, password = None):
-        if not correo:
+        if not correo.strip():
             raise ValueError('El correo es obligatorio')
-        if not nombre:
+        if not nombre.strip():
             raise ValueError('El nombre es obligatorio')
-        if not apellido:
+        if not apellido.strip():
             raise ValueError('El apellido es obligatorio')
         
         usuario = self.model(correo=self.normalize_email(correo),

@@ -32,3 +32,22 @@ class ChatSerializer(serializers.ModelSerializer):
             }
             for m in mensajes
         ]
+
+class ListaClientesSerializer(serializers.ModelSerializer):
+    ultimo_mensaje = serializers.SerializerMethodField()
+    fecha_ultimo_mensaje = serializers.SerializerMethodField()
+    class Meta:
+        model = Usuario
+        fields = ['id', 'nombre', 'ultimo_mensaje', 'fecha_ultimo_mensaje']
+    
+    def get_ultimo_mensaje(self, obj):
+        mensajes = Mensaje.objects.filter(cliente=obj, modo='empleado').order_by('-fecha')
+        if not mensajes.exists():
+            return "NUEVO CLIENTE"
+        return mensajes.first().contenido
+
+    def get_fecha_ultimo_mensaje(self, obj):
+        mensajes = Mensaje.objects.filter(cliente=obj, modo='empleado').order_by('-fecha')
+        if not mensajes.exists():
+            return obj.fecha_registro
+        return mensajes.first().fecha

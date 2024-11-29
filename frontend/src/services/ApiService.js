@@ -708,29 +708,35 @@ async marcarPredeterminada(id) {
     
     async obtenerMensajes(versionIA, idCliente = null) {
         const token = this.obtenerToken();
+        console.log("Obteniendo mensajes...");
+        const url = `${this.baseURL}/chat/mensajes?version_ia=${versionIA}&id_cliente=${idCliente}`;
         try {
-            const response = await fetch(`${this.baseURL}/chat`, {
+            const response = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    id_cliente: idCliente,
-                    version_ia: versionIA
-                })
+                }
             });
     
             if (!response.ok) {
                 const error = await response.json();
+                console.log("Error al obtener mensajes: ", error);
                 this.msgError = error.message || "Error al obtener mensajes.";
                 return { success: false, error: this.msgError };
             }
     
             const data = await response.json();
-            return { success: true, data: data.mensajes || [] };
+            // Convertir fechas de mensajes a objetos Date con el formato dd/MM/yyyy HH:mm, luego ordenarlos por fecha (primero los mas antiguos)
+            data.mensajes.forEach(mensaje => {
+                mensaje.fecha = new Date(mensaje.fecha);
+                mensaje.fecha = mensaje.fecha.toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" });
+            });
+            data.mensajes.sort((a, b) => a.fecha - b.fecha);
+            return { success: true, mensajes: data.mensajes || [] };
         } catch (error) {
             this.msgError = "Error de conexión al obtener mensajes.";
+            console.log("Error al obtener mensajes:", error);
             return { success: false, error: this.msgError };
         }
     }    
