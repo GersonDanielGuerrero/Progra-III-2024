@@ -286,7 +286,18 @@ export default {
         }
     },
   methods: {
-    enviarMensaje() {
+    async enviarMensaje() {
+      if (!this.mensajeActual) {
+        return;
+      }
+      try {
+          const respuesta = await ApiService.enviarMensaje(this.mensajeActual);
+          if (respuesta.success){
+            await this.obtenerMensajes(false, this.usuario.id);
+          }
+        } catch (error) {
+          alertify.error('Error aal enviar el mensaje'+ error);
+        }
     },
     // Cambiar entre la vista de clientes y mensajes
     cambiarComponente() {
@@ -316,7 +327,7 @@ export default {
           alertify.error('Cliente no encontrado');
           return;
         }
-        await this.obtenerMensajes(this.versionIA, this.clienteActual.id);
+        await this.obtenerMensajes(false, this.usuario.id);
       } catch (error) {
         alertify.error('Error al seleccionar el cliente');
       }

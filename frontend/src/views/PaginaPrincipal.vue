@@ -37,9 +37,9 @@
       <div class="social-media">
     <h4>Síguenos</h4>
     <div class="icons">
-      <button class="icon instagram"></button>
-      <button class="icon facebook"></button>
-      <button class="icon tiktok"></button>
+      <button class="icon "><i class="bi bi-instagram"></i></button>
+      <button class="icon"><i class="bi bi-facebook"></i></button>
+      <button class="icon"><i class="bi bi-tiktok"></i></button>
     </div>
     </div>
     </div>
@@ -72,7 +72,7 @@
   height: 100vh;
 }
 .footer{
-  height: 61vh;
+  height: 70vh;
   background-color: #fff2;
   padding: 100px;
 }
@@ -154,25 +154,17 @@
   justify-content: flex-start;
   gap: 15px;
 }
-
+.icons button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 .icon {
-  width: 30px;
-  height: 30px;
-  background-size: cover;
+  width: 50px;
+  height: 50px;
+  background:none;
+  color:#e9e9e9;
 }
-
-.icon.instagram {
-  background-image: url('https://cdn-icons-png.flaticon.com/512/174/174855.png');
-}
-
-.icon.facebook {
-  background-image: url('https://cdn-icons-png.flaticon.com/512/174/174848.png');
-}
-
-.icon.tiktok {
-  background-image: url('https://cdn-icons-png.flaticon.com/512/174/174857.png');
-}
-
 </style>
 
 <!--C U I D A D I T O-->

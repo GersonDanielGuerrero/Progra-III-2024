@@ -97,23 +97,29 @@ class VentaView(APIView):
         carrito = usuario.carrito
         productos = request.data.get('productos')
         tipo_entrega = request.data.get('tipo_entrega')
+        print(request.data.get('id_direccion'))
         id_direccion = request.data.get('id_direccion')
         metodo_pago = request.data.get('metodo_pago')
         print('id_direccion: ', id_direccion)
         print('tipo_entrega: ', tipo_entrega)
         print('metodo_pago: ', metodo_pago)
+        print('productos: ', productos)
         if not productos:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'mensaje': 'No se enviaron productos'})
         direccion = Direccion.objects.get(id=id_direccion)
-        venta = Venta()
-        venta.usuario = usuario
-        venta.tipo_entrega = tipo_entrega
-        venta.metodo_pago = metodo_pago
-        venta.direccion = direccion
+        venta = Venta.objects.create(
+            usuario=usuario,
+            tipo_entrega=tipo_entrega,
+            metodo_pago=metodo_pago,
+            direccion=direccion
+        )
         venta.save()
         
         for producto in productos:
-            producto_guardado = Producto.objects.get(id=producto['id'])
+            print(producto['id'])
+            producto_guardado = Producto.objects.get(id = producto['id'])
+            print("Producto guardado:")
+            print(producto_guardado)
             venta_producto = Venta_Producto()
             venta_producto.venta = venta
             venta_producto.producto = producto_guardado

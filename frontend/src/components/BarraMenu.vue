@@ -13,7 +13,7 @@
           <a href="#" @click="enviarA('/redes')">Redes</a>
         </li>
         <li :class="{ active: opcionSeleccionada === 'Atención al Cliente' }">
-          <a href="#" @click="enviarA('/preguntas')">Atención al Cliente</a>
+          <a href="#" @click="enviarA('/chat')">Atención al Cliente</a>
         </li>
         <li v-if="esAdmin" :class="{ active: opcionSeleccionada === 'Administración' }">
           <a href="#" @click="enviarA('/admin')">Administración</a>

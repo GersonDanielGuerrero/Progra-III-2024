@@ -620,10 +620,10 @@ async marcarPredeterminada(id) {
         let metodo = '';
 
         if (accion === 'añadir') {
-            url = `${this.baseURL}/usuarios/direcciones/`;
+            url = `${this.baseURL}/usuarios/direccion/`;
             metodo = 'POST';
         } else if (accion === 'editar' && id) {
-            url = `${this.baseURL}/usuarios/direcciones/${id}/`;
+            url = `${this.baseURL}/usuarios/direccion/${id}/`;
             metodo = 'PUT';
         }
 
@@ -736,7 +736,38 @@ async marcarPredeterminada(id) {
             console.log("Error al obtener mensajes:", error);
             return { success: false, error: this.msgError };
         }
-    }    
+    }  
+    async enviarMensaje(mensaje){
+        const token = this.obtenerToken();
+        const usuario = useAuthStore().getUsuario();
+        const url = `${this.baseURL}/chat/mensajes`;
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    contenido: mensaje,
+                    id_cliente: usuario.id
+                })
+            });
+            if (response.ok) {
+                return { success: true };
+            }
+            const error = await response.json();
+            this.msgError = error.message || "Error al enviar mensaje.";
+            console.log("Error al enviar mensaje: ", error);
+            return { success: false, error: this.msgError };
+        }
+        catch (error) {
+            this.msgError = "Error de conexión al enviar mensaje.";
+            console.log("Error al enviar mensaje:", error);
+            return { success: false, error: this.msgError };
+        }
+    }
 }
 
 // Exportar una instancia de la clase con la URL base
