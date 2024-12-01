@@ -202,6 +202,4 @@ DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 
 AZURE_ACCOUNT_NAME = 'proyectodb'
 
-AZURE_ACCOUNT_KEY = 'GoVHDOEWO3NaahrBebuh8up5eDIm7ruJsGNOHHwI4dxwZOS16szfIUviBh/oGsNTuTWSH3K3ATnq+ASt54pnXA=='
-
 AZURE_CONTAINER = 'imgs'
