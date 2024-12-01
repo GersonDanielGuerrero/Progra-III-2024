@@ -23,6 +23,7 @@ class LoginView(TokenObtainPairView):
             respuesta = super().post(request, *args, **kwargs)
             
             respuesta.data['usuario'] = {
+                'id': usuario.id,
                 'nombre': usuario.nombre,
                 'roles': usuario.roles.values_list('nombre', flat=True)
             }
@@ -97,3 +98,10 @@ class DireccionView(APIView):
         serializer.save()
         return Response(serializer.data)
     
+class DireccionListaView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        usuario = request.user
+        direcciones = usuario.direcciones.all()
+        serializer = DireccionSerializer(direcciones, many=True)
+        return Response(serializer.data)

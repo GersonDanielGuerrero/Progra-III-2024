@@ -189,6 +189,7 @@ export default {
       try {
         await ApiService.guardarDireccion(direccionData, this.accion, this.id);
         alertify.success("Dirección guardada con éxito.");
+        this.$router.go(-1);
         
       } catch (error) {
         alertify.error("Error al guardar la dirección.");

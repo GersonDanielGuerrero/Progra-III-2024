@@ -428,10 +428,7 @@ async marcarPredeterminada(id) {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    productos: productos.map(producto => ({
-                        id: producto.id,
-                        cantidad: producto.cantidad
-                    })),
+                    productos: productos,
                     tipo_entrega: tipoEntrega,
                     id_direccion: idDireccion,
                     metodo_pago: metodoPago
@@ -623,10 +620,10 @@ async marcarPredeterminada(id) {
         let metodo = '';
 
         if (accion === 'añadir') {
-            url = `${this.baseURL}/usuarios/direcciones/`;
+            url = `${this.baseURL}/usuarios/direccion/`;
             metodo = 'POST';
         } else if (accion === 'editar' && id) {
-            url = `${this.baseURL}/usuarios/direcciones/${id}/`;
+            url = `${this.baseURL}/usuarios/direccion/${id}/`;
             metodo = 'PUT';
         }
 
@@ -678,6 +675,97 @@ async marcarPredeterminada(id) {
         } catch (error) {
             console.error('Error en cargarDatos:', error);
             throw error;
+        }
+    }
+
+    async obtenerClientes() {
+        const token = this.obtenerToken();
+        try {
+            const response = await fetch(`${this.baseURL}/chat/clientes`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+    
+            if (!response.ok) {
+                const error = await response.json();
+                this.msgError = error.message || "Error al obtener clientes.";
+                return { success: false, error: this.msgError };
+            }
+    
+            const data = await response.json();
+            return { success: true, data };
+        } catch (error) {
+            this.msgError = "Error de conexión al obtener clientes.";
+            return { success: false, error: this.msgError };
+        }
+    }
+    
+    async obtenerMensajes(versionIA, idCliente = null) {
+        const token = this.obtenerToken();
+        console.log("Obteniendo mensajes...");
+        const url = `${this.baseURL}/chat/mensajes?version_ia=${versionIA}&id_cliente=${idCliente}`;
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+    
+            if (!response.ok) {
+                const error = await response.json();
+                console.log("Error al obtener mensajes: ", error);
+                this.msgError = error.message || "Error al obtener mensajes.";
+                return { success: false, error: this.msgError };
+            }
+    
+            const data = await response.json();
+            // Convertir fechas de mensajes a objetos Date con el formato dd/MM/yyyy HH:mm, luego ordenarlos por fecha (primero los mas antiguos)
+            data.mensajes.forEach(mensaje => {
+                mensaje.fecha = new Date(mensaje.fecha);
+                mensaje.fecha = mensaje.fecha.toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" });
+            });
+            data.mensajes.sort((a, b) => a.fecha - b.fecha);
+            return { success: true, mensajes: data.mensajes || [] };
+        } catch (error) {
+            this.msgError = "Error de conexión al obtener mensajes.";
+            console.log("Error al obtener mensajes:", error);
+            return { success: false, error: this.msgError };
+        }
+    }  
+    async enviarMensaje(mensaje){
+        const token = this.obtenerToken();
+        const usuario = useAuthStore().getUsuario();
+        const url = `${this.baseURL}/chat/mensajes`;
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    contenido: mensaje,
+                    id_cliente: usuario.id
+                })
+            });
+            if (response.ok) {
+                return { success: true };
+            }
+            const error = await response.json();
+            this.msgError = error.message || "Error al enviar mensaje.";
+            console.log("Error al enviar mensaje: ", error);
+            return { success: false, error: this.msgError };
+        }
+        catch (error) {
+            this.msgError = "Error de conexión al enviar mensaje.";
+            console.log("Error al enviar mensaje:", error);
+            return { success: false, error: this.msgError };
         }
     }
 }

@@ -9,17 +9,19 @@ import PaginaPrueba from "@/views/PaginaPrueba.vue";
 import PaginaProducto from "@/views/PaginaProducto.vue";
 import PaginaCuenta from "@/views/PaginaCuenta.vue";
 import PaginaDireccion from "../views/PaginaDireccion.vue";
-
+import PaginaChat from "@/views/PaginaChat.vue";
 const routes = [
     {
         path: "/",
         name: "Principal",
-        component: Principal
+        component: Principal,
+        meta: { title: "Good Burger" },
     },
     {
         path: "/registro",
         name: "Registro",
         component: RegistroUsuario,
+        meta: { title: "Registro de usuario" },
     },
     {
         path: "/login",
@@ -56,6 +58,11 @@ const routes = [
         path: "/direccion/:accion/:id?",
         name: "Direccion",
         component: PaginaDireccion,
+    },
+    {
+        path: "/chat",
+        name: "Chat",
+        component: PaginaChat,
     }
 ];
 

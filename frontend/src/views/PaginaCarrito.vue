@@ -379,7 +379,9 @@ export default {
         id_direccion: this.direccionSeleccionada,
         metodo_pago: this.metodoPago,
       };
-      const respuesta = await ApiService.realizarPedido(data); 
+      const respuesta = await ApiService.realizarPedido(data.productos,data.tipo_entrega,data.id_direccion,data.metodo_pago);
+      alertify.success("Pedido realizado");
+      this.$router.push('/');
       if (respuesta.error) {
         alertify.error(respuesta.mensaje);
       } else {

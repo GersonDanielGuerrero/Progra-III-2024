@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Usuario, UserManager, Direccion, Rol
 from ventas.models import Carrito
+from chat.models import Mensaje
 
 class RegistroSerializer(serializers.ModelSerializer):
     confirmar_contraseña = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -31,8 +32,27 @@ class RegistroSerializer(serializers.ModelSerializer):
         usuario.set_password(contraseña)
         usuario.save()
         
-        carrito = Carrito(usuario=usuario)
+        rol_usuario = Rol.objects.get(nombre='Cliente')
+        usuario.roles.add(rol_usuario)
+        
+        usuario.save()
+        
+        carrito = Carrito.objects.create(
+            usuario=usuario,
+            metodo_pago='efectivo',
+            tipo_entrega='local'
+        )
+            
         carrito.save()
+        
+        mensaje_bienvenida = Mensaje.objects.create(
+            cliente=usuario,
+            por='empleado',
+            modo='empleado',
+            contenido='¡Bienvenido al chat de atención al cliente de Good Burger! \n ¿En qué podemos ayudarte?'
+        )
+        mensaje_bienvenida.save()
+            
         return usuario
 
 

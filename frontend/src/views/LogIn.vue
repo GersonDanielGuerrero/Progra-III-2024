@@ -177,6 +177,8 @@ img{
 import BotonComp from '@/components/BotonComp.vue';
 import CajaTexto from '@/components/CajaTexto.vue';
 import ApiService from '@/services/ApiService';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 export default {
     name: 'LogIn',
     components: {
@@ -201,13 +203,13 @@ export default {
           // Aquí podrías redirigir al usuario a otra página
           this.$router.push('/');
         } else {
-          alert('Correo o contraseña incorrectos');
+          alertify.error("Usuario o contraseña incorrectos");
         }
       } catch (error) {
         // Manejo de error de red u otro tipo de fallo
         this.mensaje_error = 'Hubo un problema al conectar con el servidor';
         this.datos_validos = false;
-        alert(this.mensaje_error+': ' + error);
+        alertify.error(this.mensaje_error+': ' + error);
       }
     },
     registrarse() {
