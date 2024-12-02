@@ -2,7 +2,7 @@
   <header class="header">
     <div class="img">
       <img src="imagenes/image.png" alt="image" />
-      <button v-if="esAdmin" @click="editarLogo" class="edit-logo-btn">✏️</button>
+      <button v-if="esAdmin" @click="editarLogo" class="edit-logo-btn"></button>
     </div>
     <nav>
       <ul>
